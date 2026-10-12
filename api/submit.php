@@ -36,11 +36,8 @@ function send_confirmation($name, $phone) {
         'type' => 'template',
         'template' => [
             'name' => env('WACRM_TEMPLATE', 'enquiry_confirmation'),
-            'language' => ['code' => 'en'],
-            'components' => [[
-                'type' => 'body',
-                'parameters' => [['type' => 'text', 'text' => $name]],
-            ]],
+            'language' => 'en',
+            'params' => [$name],   // fills {{1}}
         ],
     ];
     $ch = curl_init(env('WACRM_BASE_URL'));
