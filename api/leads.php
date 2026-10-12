@@ -1,0 +1,22 @@
+<?php
+require __DIR__ . '/config.php';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_out(405, ['error' => 'Method not allowed']);
+$pass = env('ADMIN_PASSWORD');
+if ($pass === '') json_out(500, ['error' => 'ADMIN_PASSWORD is not set']);
+if (!hash_equals($pass, (string)(body()['password'] ?? ''))) json_out(401, ['error' => 'Wrong password']);
+
+try {
+    $rows = db()->query('SELECT * FROM leads ORDER BY id DESC')->fetchAll();
+} catch (Throwable $e) {
+    error_log('lead load failed: ' . $e->getMessage());
+    json_out(500, ['error' => 'Could not load leads']);
+}
+
+json_out(200, ['leads' => array_map(function ($r) {
+    return [
+        'time' => str_replace(' ', 'T', $r['created_at']) . 'Z',
+        'name' => $r['name'], 'phone' => $r['phone'], 'brand' => $r['brand'], 'location' => $r['location'],
+        'outlets' => $r['outlets'], 'orders' => $r['orders_day'], 'turnover' => $r['turnover'], 'budget' => $r['budget'],
+    ];
+}, $rows)]);

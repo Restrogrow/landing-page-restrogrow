@@ -683,8 +683,8 @@
 
 <script>
 (function(){
-  /* >>> EDIT: leave "" when this page is served from the same Vercel site.
-     If the page is pasted into Elementor elsewhere, set your Vercel URL, e.g. "https://landing-page-restrogrow.vercel.app" */
+  /* >>> EDIT: leave "" when this page sits in the same folder as /api on Hostinger.
+     If the page is pasted into Elementor, set the folder URL where /api lives, e.g. "https://yoursite.com/landing/" (with trailing slash) */
   var API_BASE = "";
 
   var R=document.querySelector(".rg"); if(!R) return; R.classList.add("js");
@@ -781,7 +781,7 @@
     if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":"Please fill in all fields.";bad.focus();return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
     var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent="Sending...";
-    fetch(API_BASE+"/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
+    fetch(API_BASE+"api/submit.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
       .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");F.classList.add("ok")})})
       .catch(function(x){M.textContent=x.message||"Network error. Please try again."})
       .then(function(){sb.disabled=false;if(F.classList.contains("ok"))M.textContent=""});
