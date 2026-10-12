@@ -348,6 +348,14 @@
 .rg .lb.on{display:grid}
 .rg .lb img{max-width:min(960px,100%);max-height:90vh;border-radius:14px;background:#fff}
 .rg .lb button{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:1.4rem;cursor:pointer}
+/* demo form popup */
+.rg .md{position:fixed;inset:0;z-index:10001;display:none;overflow-y:auto;background:rgba(0,0,12,.78);padding:24px 16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.rg .md.on{display:flex}
+.rg .md-b{position:relative;width:100%;max-width:580px;margin:auto;animation:rgPop .3s var(--ease)}
+.rg .md-x{position:absolute;top:14px;right:14px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:#F3EEE9;color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+.rg .md-x:hover{background:var(--o);color:#fff}
+.rg .md .form h3{padding-right:44px}
+@keyframes rgPop{from{opacity:0;transform:translateY(16px) scale(.98)}}
 /* feature cards with visuals */
 .rg .fx{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
 .rg .fc{grid-column:span 2;display:flex;flex-direction:column;padding:26px;border-radius:20px;border:1px solid var(--dln);background:var(--ink2);transition:border-color .3s,transform .3s var(--ease)}
@@ -679,6 +687,7 @@
 
 <div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Book My Demo</a></div>
 <div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
+<div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button></div></div>
 </div>
 
 <script>
@@ -789,8 +798,26 @@
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
   F.addEventListener("change",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
 
+  /* demo form popup: Book My Demo buttons move the bottom form into a popup, closing puts it back */
+  var md=$("rgMd"),mdb=$("rgMdB"),mph=document.createElement("div"),mlast=null;
+  function mdEsc(e){if(e.key==="Escape")closeMd()}
+  function openMd(tr){
+    if(md.classList.contains("on"))return;mlast=tr;
+    mph.style.height=F.offsetHeight+"px";F.parentNode.insertBefore(mph,F);mdb.appendChild(F);F.classList.add("show");
+    md.classList.add("on");md.scrollTop=0;document.documentElement.style.overflow="hidden";document.addEventListener("keydown",mdEsc);
+    setTimeout(function(){var i=F.querySelector("input");if(i&&!F.classList.contains("ok"))i.focus({preventScroll:true})},60);
+  }
+  function closeMd(){
+    if(!md.classList.contains("on"))return;md.classList.remove("on");
+    mph.parentNode.insertBefore(F,mph);mph.remove();document.documentElement.style.overflow="";document.removeEventListener("keydown",mdEsc);
+    if(mlast)mlast.focus({preventScroll:true});
+  }
+  md.addEventListener("click",function(e){if(e.target===md)closeMd()});
+  md.querySelector(".md-x").addEventListener("click",closeMd);
+  R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();openMd(a)})});
+
   /* smooth scroll */
-  R.querySelectorAll('a[href^="#rg-"]').forEach(function(a){a.addEventListener("click",function(e){var x=R.querySelector(a.getAttribute("href"));if(!x)return;e.preventDefault();scrollTo({top:x.getBoundingClientRect().top+pageYOffset-10,behavior:RM?"auto":"smooth"})})});
+  R.querySelectorAll('a[href^="#rg-"]:not([href="#rg-demo"])').forEach(function(a){a.addEventListener("click",function(e){var x=R.querySelector(a.getAttribute("href"));if(!x)return;e.preventDefault();scrollTo({top:x.getBoundingClientRect().top+pageYOffset-10,behavior:RM?"auto":"smooth"})})});
 
   /* mobile sticky CTA */
   if(IO){var hO=false,dI=false,st=$("rgSt"),u=function(){st.classList.toggle("on",hO&&!dI)};
