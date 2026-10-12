@@ -673,7 +673,7 @@
       <p class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/></svg>3X in 90 days, or 100% of your fee back</p>
       <p class="msg" id="rgMsg" role="status"></p>
     </div>
-    <div class="done"><b>Request received.</b><p>Our team will call you shortly to confirm your demo.</p></div>
+    <div class="done"><b>Thank you for filling the form.</b><p>Our team will get in touch with you shortly.</p></div>
   </form>
 </div></section>
 
@@ -683,9 +683,9 @@
 
 <script>
 (function(){
-  /* >>> EDIT: where demo leads go (fill one or both) */
-  var WHATSAPP_NUMBER = "";   /* e.g. "919876543210" */
-  var WEBHOOK_URL = "";       /* e.g. Google Apps Script / Zapier webhook URL */
+  /* >>> EDIT: leave "" when this page is served from the same Vercel site.
+     If the page is pasted into Elementor elsewhere, set your Vercel URL, e.g. "https://landing-page-restrogrow.vercel.app" */
+  var API_BASE = "";
 
   var R=document.querySelector(".rg"); if(!R) return; R.classList.add("js");
   var $=function(i){return R.querySelector("#"+i)};
@@ -779,11 +779,12 @@
     e.preventDefault();var bad=null;
     F.querySelectorAll("input,select").forEach(function(el){var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}el.setAttribute("aria-invalid",!ok);if(!ok&&!bad)bad=el});
     if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":"Please fill in all fields.";bad.focus();return}
-    if(!WHATSAPP_NUMBER&&!WEBHOOK_URL){M.textContent="Form isn't connected yet. Add a WhatsApp number or webhook URL in the code.";return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
-    if(WEBHOOK_URL){try{fetch(WEBHOOK_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(D)})}catch(x){}}
-    if(WHATSAPP_NUMBER){window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent("Hi RestroGrow, I'd like to book a demo.\n\nName: "+D.name+"\nPhone: "+D.phone+"\nBrand: "+D.brand+"\nLocation: "+D.location+"\nOutlets: "+D.outlets+"\nOrders/day on apps: "+D.orders+"\nMonthly turnover: "+D.turnover+"\nBudget: "+D.budget),"_blank")}
-    F.classList.add("ok");
+    var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent="Sending...";
+    fetch(API_BASE+"/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");F.classList.add("ok")})})
+      .catch(function(x){M.textContent=x.message||"Network error. Please try again."})
+      .then(function(){sb.disabled=false;if(F.classList.contains("ok"))M.textContent=""});
   });
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
   F.addEventListener("change",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});

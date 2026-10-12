@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>RestroGrow Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--o:#FC5301;--ink:#00000C;--cream:#FBF6F1;--tx:#1A1A26;--mu:#5E5E70;--ln:#ECE6DF}
+*{box-sizing:border-box}
+body{margin:0;font:400 15px/1.5 'Poppins',system-ui,sans-serif;color:var(--tx);background:var(--cream)}
+h1{font:800 1.5rem 'Montserrat',sans-serif;margin:0}
+button,input{font:inherit}
+.btn{height:44px;padding:0 18px;border:0;border-radius:10px;background:var(--o);color:#fff;font-weight:600;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--tx);border:1.5px solid var(--ln)}
+input{height:44px;padding:0 14px;border-radius:10px;border:1.5px solid #E4E0EA;background:#fff;outline:none}
+input:focus{border-color:var(--o)}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:16px}
+#login form{width:100%;max-width:360px;background:#fff;border:1px solid var(--ln);border-radius:18px;padding:28px;display:grid;gap:14px}
+#login p{margin:0;color:var(--mu);font-size:.9rem}
+#err{color:#D92D20;font-size:.86rem;min-height:1.2em}
+/* app */
+#app{display:none;max-width:1280px;margin:0 auto;padding:24px 16px 48px}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.top .r{display:flex;gap:8px;flex-wrap:wrap}
+.count{color:var(--mu);font-size:.9rem;margin-top:2px}
+#q{width:260px;max-width:100%}
+.wrap{overflow-x:auto;background:#fff;border:1px solid var(--ln);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;white-space:nowrap}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--ln)}
+th{background:#F8F6F3;font-weight:600;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td a{color:var(--o);text-decoration:none;font-weight:500}
+.empty{padding:40px;text-align:center;color:var(--mu)}
+</style>
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Admin login</h1><p>Enter the password to see form submissions.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <div class="top">
+    <div><h1>Demo requests</h1><div class="count" id="cnt"></div></div>
+    <div class="r">
+      <input id="q" type="search" placeholder="Search name, phone, brand, city">
+      <button class="btn ghost" id="ref" type="button">Refresh</button>
+      <button class="btn ghost" id="csv" type="button">Download CSV</button>
+      <button class="btn ghost" id="out" type="button">Log out</button>
+    </div>
+  </div>
+  <div class="wrap"><table>
+    <thead><tr><th>Date</th><th>Name</th><th>WhatsApp</th><th>Brand</th><th>Location</th><th>Outlets</th><th>Orders/day</th><th>Turnover</th><th>Budget</th></tr></thead>
+    <tbody id="tb"></tbody>
+  </table></div>
+</div>
+
+<script>
+(function(){
+  var KEY="rgAdminPw",pw="",leads=[];
+  var $=function(i){return document.getElementById(i)};
+  var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+  var fmt=function(t){var d=new Date(t);return isNaN(d)?"":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})};
+  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget"];
+
+  function load(p){
+    return fetch("/api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j.leads})});
+  }
+  function show(list){leads=list;$("login").style.display="none";$("app").style.display="block";render()}
+  function render(){
+    var q=$("q").value.trim().toLowerCase();
+    var rows=leads.filter(function(l){return !q||COLS.some(function(k){return String(l[k]||"").toLowerCase().indexOf(q)>-1})});
+    $("cnt").textContent=rows.length+(rows.length===leads.length?"":" of "+leads.length)+" submission"+(leads.length===1?"":"s");
+    $("tb").innerHTML=rows.length?rows.map(function(l){
+      return "<tr><td>"+esc(fmt(l.time))+"</td><td>"+esc(l.name)+'</td><td><a href="https://wa.me/91'+esc(l.phone)+'" target="_blank" rel="noopener">'+esc(l.phone)+"</a></td><td>"+esc(l.brand)+"</td><td>"+esc(l.location)+"</td><td>"+esc(l.outlets)+"</td><td>"+esc(l.orders)+"</td><td>"+esc(l.turnover)+"</td><td>"+esc(l.budget)+"</td></tr>";
+    }).join(""):'<tr><td colspan="9" class="empty">No submissions yet.</td></tr>';
+  }
+
+  $("lf").addEventListener("submit",function(e){
+    e.preventDefault();$("err").textContent="";var p=$("pw").value;
+    load(p).then(function(l){pw=p;try{sessionStorage.setItem(KEY,p)}catch(x){}show(l)}).catch(function(x){$("err").textContent=x.message});
+  });
+  $("q").addEventListener("input",render);
+  $("ref").addEventListener("click",function(){load(pw).then(show).catch(function(x){alert(x.message)})});
+  $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
+  $("csv").addEventListener("click",function(){
+    var q=function(v){return '"'+String(v==null?"":v).replace(/"/g,'""')+'"'};
+    var csv=[COLS.join(",")].concat(leads.map(function(l){return COLS.map(function(k){return q(l[k])}).join(",")})).join("\n");
+    var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="restrogrow-leads.csv";a.click();
+  });
+
+  var saved="";try{saved=sessionStorage.getItem(KEY)||""}catch(x){}
+  if(saved)load(saved).then(function(l){pw=saved;show(l)}).catch(function(){try{sessionStorage.removeItem(KEY)}catch(x){}});
+})();
+</script>
+</body>
+</html>
