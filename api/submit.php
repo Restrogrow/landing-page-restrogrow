@@ -28,11 +28,33 @@ try {
 }
 
 // Sends the WACRM_TEMPLATE WhatsApp template ({{1}} = name) to the number from the form.
-// TODO: fill in the endpoint path, auth header and body once the WACRM API details are known.
+// WACRM_BASE_URL is the full messages endpoint, e.g. https://repeatgrow.com/api/v1/messages
 function send_confirmation($name, $phone) {
     if (env('Api') === '' || env('WACRM_BASE_URL') === '') return;
-    // $to = '91' . $phone;
-    // POST to env('WACRM_BASE_URL') . '/...' with env('Api'), template env('WACRM_TEMPLATE'), param [$name]
+    $payload = [
+        'to' => '91' . $phone,
+        'type' => 'template',
+        'template' => [
+            'name' => env('WACRM_TEMPLATE', 'enquiry_confirmation'),
+            'language' => ['code' => 'en'],
+            'components' => [[
+                'type' => 'body',
+                'parameters' => [['type' => 'text', 'text' => $name]],
+            ]],
+        ],
+    ];
+    $ch = curl_init(env('WACRM_BASE_URL'));
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . env('Api'), 'Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
+    ]);
+    $res = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code < 200 || $code >= 300) error_log("whatsapp send failed ($code): $res");
 }
 try { send_confirmation($lead['name'], $phone); } catch (Throwable $e) { error_log('whatsapp failed: ' . $e->getMessage()); }
 
