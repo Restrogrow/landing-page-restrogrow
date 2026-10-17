@@ -87,11 +87,10 @@ p{margin:0 0 14px;color:var(--mu)}
   function again(){
     if(!seen){home();return}
     show();
-    fetch("api/public_config.php").then(function(r){return r.json()}).then(function(c){tags(c,null)}).catch(function(){});
+    fetch("api/public_config.php").then(function(r){return r.json()}).then(function(c){try{tags(c,null)}catch(x){}}).catch(function(){});
   }
   document.getElementById("wa").addEventListener("click",function(){
-    if(window.fbq)fbq("track","Contact");
-    if(window.gtag)gtag("event","whatsapp_click");
+    try{if(window.fbq)fbq("track","Contact");if(window.gtag)gtag("event","whatsapp_click")}catch(x){}
   });
   if(!/^[A-Za-z0-9-]{8,64}$/.test(eid)){again();return}
   fetch("api/lead_confirm.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({eid:eid})})
@@ -100,7 +99,7 @@ p{margin:0 0 14px;color:var(--mu)}
       if(!j||!j.valid){again();return}
       try{sessionStorage.setItem(KEY,"1")}catch(x){}
       show();
-      tags(j,j.fire?j:null);
+      try{tags(j,j.fire?j:null)}catch(x){}   /* an ad blocker must never break the page */
     }).catch(function(){show()});
 })();
 </script>

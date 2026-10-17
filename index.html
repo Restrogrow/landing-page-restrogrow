@@ -784,7 +784,7 @@
   function ev(mn,gn){ /* once per page view: Meta custom event + GA4 event */
     if(tg.done[mn])return;tg.done[mn]=1;
     if(!tg.ready){tg.q.push([mn,gn]);return}
-    if(window.fbq)fbq("trackCustom",mn);if(window.gtag)gtag("event",gn);
+    try{if(window.fbq)fbq("trackCustom",mn);if(window.gtag)gtag("event",gn)}catch(x){}
   }
   fetch(API_BASE+"api/public_config.php").then(function(r){return r.json()}).then(function(c){
     if(c.meta_pixel_id){

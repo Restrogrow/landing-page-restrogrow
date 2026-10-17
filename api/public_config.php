@@ -5,7 +5,7 @@ require __DIR__ . '/config.php';
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: public, max-age=300');
 echo json_encode([
-    'meta_pixel_id' => env('META_PIXEL_ID'),
-    'google_ads_id' => env('GOOGLE_ADS_ID'),
-    'ga4_id' => env('GA4_ID'),
+    'meta_pixel_id' => tag_id('META_PIXEL_ID'),
+    'google_ads_id' => tag_id('GOOGLE_ADS_ID'),
+    'ga4_id' => tag_id('GA4_ID'),
 ]);

@@ -20,6 +20,19 @@ function env($k, $default = '') {
     return ($v !== false && $v !== '') ? $v : $default;
 }
 
+// Public ad-tag IDs (not secrets). A value in .env wins; otherwise these built-in defaults are used.
+// META_CAPI_TOKEN and META_TEST_EVENT_CODE have no default and must come from .env.
+function tag_id($k) {
+    static $defaults = [
+        'META_PIXEL_ID' => '1130992032712314',
+        'GOOGLE_ADS_ID' => 'AW-18495072087',
+        'GOOGLE_ADS_LEAD_LABEL' => 'qdGWCPL-7Z8dENfOkfNE',
+        'GA4_ID' => 'G-H6FKYMRB8X',
+    ];
+    $v = env($k);
+    return $v !== '' ? $v : ($defaults[$k] ?? '');
+}
+
 function json_out($code, $data) {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');

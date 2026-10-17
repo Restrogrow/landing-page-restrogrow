@@ -127,7 +127,7 @@ function client_ip() {
     return '';
 }
 function send_meta_lead($eid, $name, $phone, $page, $attr) {
-    $pixel = env('META_PIXEL_ID');
+    $pixel = tag_id('META_PIXEL_ID');
     $token = env('META_CAPI_TOKEN');
     if ($pixel === '' || $token === '') return;
     $fbc = (string)$attr['fbc'];

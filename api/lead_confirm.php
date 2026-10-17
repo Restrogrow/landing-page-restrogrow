@@ -26,10 +26,10 @@ if (!$row) json_out(200, ['valid' => false, 'fire' => false]);
 
 $out = [
     'valid' => true, 'fire' => $fire, 'event_id' => $eid,
-    'meta_pixel_id' => env('META_PIXEL_ID'), 'google_ads_id' => env('GOOGLE_ADS_ID'), 'ga4_id' => env('GA4_ID'),
+    'meta_pixel_id' => tag_id('META_PIXEL_ID'), 'google_ads_id' => tag_id('GOOGLE_ADS_ID'), 'ga4_id' => tag_id('GA4_ID'),
 ];
 if ($fire) {
-    $out['google_ads_lead_label'] = env('GOOGLE_ADS_LEAD_LABEL');
+    $out['google_ads_lead_label'] = tag_id('GOOGLE_ADS_LEAD_LABEL');
     $out['ph_sha256'] = hash('sha256', '91' . $row['phone']);            // Meta format: 91XXXXXXXXXX
     $out['ph_e164_sha256'] = hash('sha256', '+91' . $row['phone']);      // Google enhanced conversions format: +91XXXXXXXXXX
 }
