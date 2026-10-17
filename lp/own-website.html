@@ -421,104 +421,349 @@
 }
 </style>
 <style>
-/* ===== shared widgets for the ad landing pages (all scoped under .rg) ===== */
-.rg .lp-phone{position:relative;width:min(100%,320px);margin:0 auto;border-radius:44px;background:#0B0B1A;padding:11px;box-shadow:0 44px 90px -34px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.14) inset}
-.rg .lp-phone::before{content:"";position:absolute;top:19px;left:50%;transform:translateX(-50%);width:86px;height:22px;border-radius:14px;background:#000;z-index:4}
-.rg .lp-screen{position:relative;background:#fff;color:var(--tx);border-radius:34px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
-.rg .lp-sb{height:44px;flex:none}
-.rg .lp-cap{margin-top:18px;text-align:center;font-size:.82rem;color:var(--dmu)}
-.rg .lp-cap b{color:#fff;font-weight:600}
-.rg .lp-float{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px;font-size:.8rem;line-height:1.3;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);animation:lpBob 5s ease-in-out infinite;z-index:5}
-.rg .lp-float b{display:block;font:700 .95rem var(--fh);color:var(--tx)}
-.rg .lp-float small{display:block;color:var(--mu);font-size:.72rem}
-.rg .lp-float img{width:34px;height:34px;flex:none}
-.rg .lp-float.tr{top:-6px;right:-150px}
-.rg .lp-float.bl{bottom:70px;left:-150px}
-@keyframes lpBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.rg .lp-hero-v{position:relative;padding:20px 0}
-.rg .lp-hero-v::before{content:"";position:absolute;inset:6% -4% 6% -4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.28),transparent);filter:blur(14px);z-index:0}
-.rg .lp-hero-v>.lp-phone,.rg .lp-hero-v>.lp-main{position:relative;z-index:1}
+/* ===== ad landing pages: layout, components, app screens (all scoped under .rg) ===== */
+.rg .ic{width:1.2em;height:1.2em;flex:none;display:inline-block;vertical-align:-.2em}
+.rg .x-w{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.rg .x-sec{padding:clamp(64px,8vw,104px) 0;position:relative}
+.rg .x-dark{background:var(--ink);color:#fff}
+.rg .x-cream{background:var(--cream)}
+.rg .x-dots{background-image:radial-gradient(rgba(0,0,12,.07) 1px,transparent 1px);background-size:22px 22px}
+.rg .x-dark.x-dots{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px)}
+.rg .x-head{max-width:740px;margin:0 0 clamp(30px,4vw,50px)}
+.rg .x-head.c{margin-left:auto;margin-right:auto;text-align:center}
+.rg .x-kick{display:inline-flex;align-items:center;gap:10px;font:600 .78rem var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--o);margin-bottom:14px}
+.rg .x-kick::before{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-head.c .x-kick::after{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-h2{font:700 clamp(1.8rem,3.4vw,2.7rem)/1.15 var(--fh);letter-spacing:-.02em}
+.rg .x-lead{margin-top:14px;color:var(--mu);font-size:1.05rem}
+.rg .x-dark .x-lead{color:var(--dmu)}
+.rg .o{color:var(--o)}
 
-/* cards, chips, toggles */
-.rg .lp-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
-.rg .lp-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+/* top bar */
+.rg .x-top{position:sticky;top:0;z-index:40;background:rgba(0,0,12,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.rg .x-top .x-w{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.rg .x-logo{font:800 1.2rem var(--fh);color:#fff;letter-spacing:-.01em}
+.rg .x-logo b{color:var(--o)}
+.rg .x-top .btn{height:42px;padding:0 18px;font-size:.86rem}
+.rg .x-top nav{display:flex;gap:22px;font-size:.88rem;color:#C9C9D6}
+.rg .x-top nav a:hover{color:#fff}
+@media (max-width:820px){.rg .x-top nav{display:none}}
+
+/* hero */
+.rg .x-hero{background:radial-gradient(900px 520px at 82% -8%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;padding:clamp(40px,5.5vw,80px) 0 clamp(52px,7vw,92px);overflow:hidden}
+.rg .x-hero .x-w{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(32px,5vw,72px);align-items:center}
+.rg .x-eyb{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:14px;line-height:1.4;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:.84rem;color:#D4D4E0}
+.rg .x-eyb .ic{color:var(--o)}
+.rg .x-hero h1{font:800 clamp(2.1rem,4.3vw,3.45rem)/1.1 var(--fh);letter-spacing:-.025em;margin:20px 0 0;color:#fff}
+.rg .x-sub{margin-top:20px;font-size:1.08rem;color:#CFCFDB;max-width:54ch}
+.rg .x-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.rg .x-btn2{display:inline-flex;align-items:center;gap:9px;height:56px;padding:0 24px;border-radius:12px;border:1.5px solid rgba(255,255,255,.25);color:#fff;font:600 1rem var(--fh);transition:border-color .25s,background .25s}
+.rg .x-btn2:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.rg .x-checks{margin-top:26px;display:grid;gap:10px}
+.rg .x-checks li{display:flex;gap:11px;align-items:flex-start;font-size:.96rem;color:#E4E4EE}
+.rg .x-checks .ic{color:var(--o);margin-top:2px;width:1.25em;height:1.25em}
+.rg .x-trust{display:flex;align-items:center;gap:14px;margin-top:28px}
+.rg .x-trust .avs{display:flex;padding-left:10px}
+.rg .x-trust .avs img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);margin-left:-10px}
+.rg .x-trust p{font-size:.88rem;color:var(--dmu);line-height:1.4}
+.rg .x-trust b{color:#fff;font-weight:600}
+.rg .x-hv{position:relative;min-height:420px}
+.rg .x-hv::before{content:"";position:absolute;inset:8% 4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.32),transparent);filter:blur(18px)}
+
+/* app screens (look like the real RestroGrow Partner app) */
+.rg .app{position:relative;width:min(100%,290px);border-radius:40px;background:#0B0B1A;padding:9px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12) inset}
+.rg .app::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#000;z-index:4}
+.rg .app-s{position:relative;background:#FBF6F1;color:var(--tx);border-radius:32px;overflow:hidden;min-height:540px;display:flex;flex-direction:column}
+.rg .app-hd{background:linear-gradient(165deg,#FF7A3D,#FC5301 55%,#E54A00);color:#fff;padding:42px 16px 38px;border-radius:0 0 28px 28px}
+.rg .app-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.rg .app-id{display:flex;align-items:center;gap:8px;font:600 .74rem var(--fh)}
+.rg .app-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.4);flex:none}
+.rg .app-ic{display:flex;gap:12px;opacity:.95}
+.rg .app-ic .ic{width:18px;height:18px}
+.rg .blr{filter:blur(4.5px);user-select:none;-webkit-user-select:none}
+.rg .app-tt small{display:block;font:600 .58rem var(--fh);letter-spacing:.14em;opacity:.85}
+.rg .app-tt b{display:block;font:800 1.65rem/1.1 var(--fh)}
+.rg .app-bd{padding:0 12px;margin-top:-20px;flex:1;display:flex;flex-direction:column;gap:10px}
+.rg .app-card{background:#fff;border-radius:16px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3);padding:12px 14px}
+.rg .app-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rg .app-tile{background:#fff;border-radius:16px;padding:11px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3)}
+.rg .app-tile .i{width:28px;height:28px;border-radius:9px;display:grid;place-items:center}
+.rg .app-tile .i .ic{width:16px;height:16px}
+.rg .app-tile b{display:block;font:800 1.2rem/1.1 var(--fh);margin-top:8px;font-variant-numeric:tabular-nums}
+.rg .app-tile small{display:block;font:600 .56rem var(--fh);letter-spacing:.08em;color:var(--mu);text-transform:uppercase;margin-top:2px}
+.rg .t-g{background:#DCFCE7;color:#15803D}.rg .t-b{background:#DBEAFE;color:#1D4ED8}.rg .t-y{background:#FEF3C7;color:#B45309}
+.rg .t-p{background:#EDE9FE;color:#6D28D9}.rg .t-r{background:#FEE2E2;color:#B91C1C}.rg .t-o{background:#FFEDD5;color:#C2410C}
+.rg .app-nav{display:flex;justify-content:space-around;padding:9px 4px 12px;background:#fff;border-top:1px solid #F1ECE6;margin-top:auto}
+.rg .app-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.56rem;color:#8A8A98;min-width:44px}
+.rg .app-nav .ic{width:18px;height:18px}
+.rg .app-nav .on{color:var(--o);font-weight:600}
+.rg .app-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F3EEE8;font-size:.78rem}
+.rg .app-row:last-child{border-bottom:0}
+.rg .app-row .app-av{background:#E5E7EB;width:30px;height:30px}
+.rg .app-row b{display:block;font:600 .8rem var(--fh)}
+.rg .app-row small{color:var(--mu);font-size:.68rem}
+.rg .app-row em{margin-left:auto;font-style:normal;font:700 .74rem var(--fh);color:var(--o)}
+.rg .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font:700 .62rem var(--fh);letter-spacing:.03em}
+.rg .pill.s{background:#E5E7EB;color:#374151}.rg .pill.g{background:#FEF3C7;color:#92400E}.rg .pill.p{background:#EDE9FE;color:#5B21B6}.rg .pill.ok{background:#DCFCE7;color:#166534}
+.rg .app-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border:0;border-radius:13px;background:var(--o);color:#fff;font:700 .85rem var(--fh);cursor:pointer;width:100%;transition:transform .2s,background .2s}
+.rg .app-btn:hover{background:var(--o2)}.rg .app-btn:active{transform:scale(.98)}
+
+/* real screenshot frames */
+.rg .shot-f{position:relative;border-radius:30px;overflow:hidden;border:7px solid #0B0B1A;background:#0B0B1A;box-shadow:0 36px 70px -28px rgba(0,0,0,.7);cursor:zoom-in;line-height:0}
+.rg .shot-f img{display:block;width:100%;height:auto}
+.rg .shot-f.wide{border-radius:20px;border-width:5px}
+.rg .shot-zoom{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;background:rgba(0,0,12,.78);color:#fff;font:600 .72rem var(--fh);line-height:1;pointer-events:none}
+.rg .shot-zoom .ic{width:14px;height:14px}
+
+/* floating notes and annotations */
+.rg .x-note{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px 10px 10px;font-size:.78rem;line-height:1.25;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);z-index:6;animation:xBob 5s ease-in-out infinite}
+.rg .x-note b{display:block;font:800 .95rem var(--fh);color:var(--tx)}
+.rg .x-note small{display:block;color:var(--mu);font-size:.7rem}
+.rg .x-note i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-style:normal}
+.rg .x-note i .ic{width:18px;height:18px}
+@keyframes xBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.rg .x-pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 .68rem var(--fh);cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 0 rgba(252,83,1,.6);animation:xPulse 2s infinite;z-index:3;transform:translate(-50%,-50%)}
+.rg .x-pin.on{background:var(--ink);animation:none}
+@keyframes xPulse{0%{box-shadow:0 0 0 0 rgba(252,83,1,.55)}70%{box-shadow:0 0 0 12px rgba(252,83,1,0)}100%{box-shadow:0 0 0 0 rgba(252,83,1,0)}}
+
+/* logos strip */
+.rg .x-logos{padding:34px 0 38px;background:#fff;border-bottom:1px solid var(--ln)}
+.rg .x-logos p{text-align:center;font-size:.9rem;color:var(--mu);margin-bottom:20px}
+.rg .x-logos .mq img{height:clamp(54px,6vw,70px)}
+
+/* cards, chips, toggles, inputs */
+.rg .x-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
+.rg .x-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+.rg .x-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.rg .x-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rg .x-four{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rg .x-ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:14px;background:var(--ot);color:var(--o)}
+.rg .x-ico .ic{width:24px;height:24px}
+.rg .x-card h3,.rg .x-dcard h3{font:700 1.1rem/1.35 var(--fh)}
+.rg .x-card p.m,.rg .x-dcard p.m{margin-top:8px;font-size:.94rem;color:var(--mu)}
+.rg .x-dcard p.m{color:var(--dmu)}
 .rg .seg{display:inline-flex;gap:4px;padding:5px;border-radius:14px;background:#EFE8E0;flex-wrap:wrap}
-.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
+.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s;display:inline-flex;align-items:center;gap:7px}
 .rg .seg button.on{background:#fff;color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.rg .dark .seg{background:rgba(255,255,255,.08)}
-.rg .dark .seg button{color:var(--dmu)}
-.rg .dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
+.rg .x-dark .seg{background:rgba(255,255,255,.08)}
+.rg .x-dark .seg button{color:var(--dmu)}
+.rg .x-dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
 .rg .chips{display:flex;flex-wrap:wrap;gap:8px}
-.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s}
+.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
 .rg .chips button:hover{border-color:#F6C7AE}
 .rg .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
-.rg .dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
-.rg .dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
+.rg .x-dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
+.rg .x-dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
 .rg .rng.lt{background:linear-gradient(to right,var(--o) 0 var(--p,50%),#E8E1D9 var(--p,50%))}
-.rg .lp-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-weight:500}
-.rg .lp-lbl output,.rg .lp-lbl b{font:700 1.15rem var(--fh)}
-.rg .lp-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:var(--o);font:600 .74rem var(--fh);letter-spacing:.04em}
-.rg .lp-badge.g{background:#E6F6EC;color:#15803D}
-.rg .lp-note{font-size:.78rem;color:var(--mu);margin-top:14px}
-.rg .dark .lp-note{color:var(--dmu)}
-.rg .lp-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
-.rg .lp-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.rg .lp-ico{width:56px;height:56px;border-radius:16px;background:var(--ot);display:grid;place-items:center;margin-bottom:14px}
-.rg .lp-ico img{width:36px;height:36px}
-.rg .lp-step{position:relative;padding-top:6px}
-.rg .lp-step .n{position:absolute;top:14px;right:20px;font:800 3.4rem/1 var(--fh);color:rgba(252,83,1,.12)}
-.rg .lp-step h3{font:700 1.1rem/1.35 var(--fh);margin-top:6px}
-.rg .lp-step p{color:var(--mu);font-size:.95rem;margin-top:8px}
-.rg .lp-cta-row{display:flex;justify-content:center;margin-top:34px}
-.rg .lp-confetti{position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;opacity:0}
-.rg .lp-table{width:100%;border-collapse:collapse;font-size:.94rem}
-.rg .lp-table th,.rg .lp-table td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--ln)}
-.rg .lp-table th{font:600 .78rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
-@media (max-width:900px){
- .rg .lp-two,.rg .lp-three{grid-template-columns:1fr}
- .rg .lp-float{display:none}
+.rg .x-fld{margin-bottom:24px}
+.rg .x-fld:last-child{margin-bottom:0}
+.rg .x-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;font-weight:500}
+.rg .x-lbl output,.rg .x-lbl b{font:700 1.2rem var(--fh)}
+.rg .x-fld small{display:block;color:var(--mu);font-size:.8rem;margin-top:10px}
+.rg .x-dark .x-fld small{color:var(--dmu)}
+.rg .x-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:#C2410C;font:600 .74rem var(--fh)}
+.rg .x-tag.g{background:#DCFCE7;color:#15803D}
+.rg .x-note2{font-size:.78rem;color:var(--mu);margin-top:14px}
+.rg .x-dark .x-note2{color:var(--dmu)}
+.rg .x-cta-row{display:flex;justify-content:center;margin-top:34px}
+
+/* result panel used by calculators */
+.rg .x-out{padding:clamp(22px,3vw,34px);border-radius:22px;background:#fff;color:var(--tx);display:flex;flex-direction:column;gap:16px}
+.rg .x-out .l{font-size:.94rem;color:var(--mu)}
+.rg .x-out .big{font:800 clamp(2.2rem,4.4vw,3.2rem)/1.05 var(--fh);letter-spacing:-.03em;color:#C2410C;margin-top:6px;font-variant-numeric:tabular-nums}
+.rg .x-out .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:13px 0;border-top:1px solid var(--ln);color:var(--mu);font-size:.92rem}
+.rg .x-out .row b{font:700 1.3rem var(--fh);color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rg .x-out .win{background:var(--ot);border:1.5px solid #FBD2BC;border-radius:16px;padding:16px 18px}
+.rg .x-out .win p{font-size:.94rem;color:var(--tx)}
+.rg .x-out .win strong{display:block;font:800 clamp(1.7rem,3.2vw,2.3rem)/1.1 var(--fh);color:#16A34A;margin:6px 0 2px;letter-spacing:-.02em}
+.rg .x-out .win small{font-size:.78rem;color:var(--mu)}
+
+/* real client explorer */
+.rg .cl-wrap{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(24px,4vw,56px);align-items:center}
+.rg .cl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rg .cl-tabs button{border:1.5px solid var(--ln);background:#fff;border-radius:12px;padding:9px 14px;font:600 .82rem var(--fh);cursor:pointer;color:var(--mu);transition:all .2s}
+.rg .cl-tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rg .cl-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rg .cl-st{padding:16px;border-radius:16px;background:#fff;border:1px solid var(--ln)}
+.rg .cl-st small{display:block;font:600 .68rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .cl-st b{display:block;font:800 1.6rem/1.15 var(--fh);margin-top:4px;font-variant-numeric:tabular-nums}
+.rg .cl-st.hl{background:var(--ot);border-color:#FBD2BC}.rg .cl-st.hl b{color:var(--o)}
+.rg .cl-say{margin-top:14px;padding:16px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.94rem;line-height:1.55}
+.rg .cl-say b{color:var(--o);font:800 1.15rem var(--fh)}
+.rg .cl-bars{margin-top:18px;display:grid;gap:8px}
+.rg .cl-bar{display:grid;grid-template-columns:62px 1fr 56px;gap:10px;align-items:center;font-size:.8rem;color:var(--mu)}
+.rg .cl-bar i{display:block;height:9px;border-radius:9px;background:#EFE8E0;overflow:hidden;position:relative}
+.rg .cl-bar i::after{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,#FC5301,#FF8A3D);border-radius:9px;transition:width .8s var(--ease)}
+.rg .cl-bar.on b{color:var(--o)}
+.rg .cl-bar b{text-align:right;font:700 .8rem var(--fh);color:var(--tx)}
+
+/* real payout decoder */
+.rg .po-wrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.rg .po-img{position:relative}
+.rg .po-img .shot-f{border-radius:22px;border-width:5px}
+.rg .po-tabs{margin-bottom:18px}
+.rg .po-bar{display:flex;height:46px;border-radius:12px;overflow:hidden;background:#EFE8E0;margin:14px 0 8px}
+.rg .po-bar i{display:block;height:100%;transition:width .7s var(--ease);min-width:0}
+.rg .po-leg{display:grid;gap:2px}
+.rg .po-leg li{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln);font-size:.9rem}
+.rg .po-leg li:last-child{border-bottom:0}
+.rg .po-leg li i{width:12px;height:12px;border-radius:4px}
+.rg .po-leg li em{font-style:normal;color:var(--mu);font-size:.8rem;min-width:48px;text-align:right}
+.rg .po-leg li b{font:700 .92rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .po-keep{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px 18px;border-radius:16px;background:#E6F6EC;color:#166534}
+.rg .po-keep b{font:800 1.7rem var(--fh);color:#15803D;font-variant-numeric:tabular-nums}
+.rg .po-keep small{display:block;font-size:.76rem}
+.rg .po-more{margin-top:12px;padding:14px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.92rem}
+.rg .po-more b{color:#4ADE80;font:800 1.15rem var(--fh)}
+
+/* guarantee, faq, final cta */
+.rg .gx{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(26px,4vw,48px);border-radius:28px;background:#fff;border:1px solid var(--ln);box-shadow:0 40px 80px -50px rgba(0,0,0,.35)}
+.rg .gx-seal{position:relative;width:clamp(150px,18vw,200px);aspect-ratio:1}
+.rg .gx-seal svg{width:100%;height:100%}
+.rg .gx-seal b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:800 clamp(2.4rem,4.4vw,3.4rem)/1 var(--fh);color:var(--o)}
+.rg .gx-seal small{display:block;font:600 .66rem var(--fh);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);margin-top:6px}
+.rg .gx h2{font:700 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--fh);letter-spacing:-.02em;margin:10px 0 12px}
+.rg .gx p{color:var(--mu)}
+.rg .gx-pts{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 22px}
+.rg .gx-pts li{display:flex;gap:8px;align-items:center;font-size:.9rem;font-weight:500}
+.rg .gx-pts .ic{color:var(--o)}
+.rg .x-faq{max-width:860px;margin:0 auto;display:grid;gap:12px}
+.rg .x-faq details{border:1px solid var(--ln);border-radius:16px;background:#fff;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.rg .x-faq details[open]{border-color:#F6C7AE;box-shadow:0 18px 36px -26px rgba(252,83,1,.5)}
+.rg .x-faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;cursor:pointer;list-style:none;font:600 1rem/1.4 var(--fh)}
+.rg .x-faq summary::-webkit-details-marker{display:none}
+.rg .x-faq summary .ic{color:var(--o);transition:transform .3s}
+.rg .x-faq details[open] summary .ic{transform:rotate(45deg)}
+.rg .x-faq details p{padding:0 22px 20px;color:var(--mu);font-size:.96rem}
+.rg .fin{background:radial-gradient(800px 420px at 12% 110%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;text-align:center;padding:clamp(64px,8vw,104px) 0}
+.rg .fin h2{font:800 clamp(1.9rem,3.8vw,3rem)/1.12 var(--fh);letter-spacing:-.025em;max-width:820px;margin:0 auto}
+.rg .fin p{color:#CFCFDB;margin:16px auto 0;max-width:56ch;font-size:1.05rem}
+.rg .fin .x-checks{justify-content:center;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px}
+.rg .fin .btn{margin-top:30px;height:60px;padding:0 34px;font-size:1.05rem}
+.rg .fin small{display:block;margin-top:14px;color:var(--dmu);font-size:.84rem}
+
+/* steps / timeline */
+.rg .x-step{position:relative}
+.rg .x-step .n{position:absolute;top:16px;right:20px;font:800 3.2rem/1 var(--fh);color:rgba(252,83,1,.12)}
+.rg .x-tl{position:relative;display:grid;gap:18px}
+.rg .x-tl li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:16px;border-radius:16px;border:1px solid transparent;transition:background .3s,border-color .3s;cursor:pointer}
+.rg .x-tl li .ic-b{width:44px;height:44px;border-radius:13px;background:#EFE8E0;color:var(--mu);display:grid;place-items:center;transition:background .3s,color .3s}
+.rg .x-tl li.on{background:#fff;border-color:var(--ln);box-shadow:0 20px 40px -30px rgba(0,0,0,.4)}
+.rg .x-tl li.on .ic-b{background:var(--o);color:#fff}
+.rg .x-tl li b{display:block;font:700 1rem var(--fh)}
+.rg .x-tl li span{display:block;color:var(--mu);font-size:.9rem;margin-top:3px}
+
+/* tables */
+.rg .x-tbl{width:100%;border-collapse:collapse;font-size:.94rem}
+.rg .x-tbl th,.rg .x-tbl td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+.rg .x-tbl th{font:600 .74rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .x-tbl th.hl,.rg .x-tbl td.hl{background:#FFF7F1}
+.rg .x-tbl td.no{color:#C2410C}.rg .x-tbl td.ok{color:#15803D;font-weight:600}
+.rg .x-tbl td .ic{margin-right:6px}
+.rg .x-tbl td:first-child{font-weight:600}
+.rg .x-tbl tr:last-child td{border-bottom:0}
+
+@media (max-width:980px){
+ .rg .x-hero .x-w{grid-template-columns:1fr}
+ .rg .x-hv{min-height:0;padding:10px 0}
+ .rg .x-two,.rg .x-three,.rg .x-four{grid-template-columns:1fr}
+ .rg .cl-wrap,.rg .po-wrap{grid-template-columns:1fr}
+ .rg .cl-wrap .shot-f,.rg .po-img{max-width:320px;margin:0 auto}
+ .rg .gx{grid-template-columns:1fr;text-align:center}
+ .rg .gx-seal{margin:0 auto}.rg .gx-pts{justify-content:center}
+ .rg .x-note{display:none}
 }
-@media (prefers-reduced-motion:reduce){.rg .lp-float{animation:none}}
+@media (max-width:520px){
+ .rg .btn{white-space:normal;height:auto;min-height:52px;padding:12px 20px;text-align:center;line-height:1.3}
+ .rg .x-top .btn{white-space:nowrap;min-height:40px;height:40px;padding:0 12px;font-size:.78rem}
+ .rg .x-logo{font-size:1.05rem}
+ .rg .x-four{grid-template-columns:1fr 1fr}
+ .rg .cl-stats{grid-template-columns:1fr 1fr}
+ .rg .x-tbl{font-size:.82rem}.rg .x-tbl th,.rg .x-tbl td{padding:11px 8px}
+ .rg .po-leg li{grid-template-columns:12px 1fr auto}.rg .po-leg li em{display:none}
+}
+@media (prefers-reduced-motion:reduce){.rg .x-note,.rg .x-pin{animation:none}}
 
 
-.rg .ow-screen{background:#fff}
-.rg .ow-head{display:flex;justify-content:space-between;align-items:center;padding:6px 18px 0}
-.rg .ow-head small{display:block;color:var(--mu);font-size:.72rem}
-.rg .ow-head b{font:800 1.2rem var(--fh)}
-.rg .ow-banner{margin:12px 18px 0;padding:12px 14px;border-radius:16px;background:linear-gradient(120deg,var(--o),#FF8A3D);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.rg .ow-banner b{display:block;font:800 1.05rem var(--fh)}
-.rg .ow-banner span{font-size:.74rem;opacity:.95}
-.rg .ow-banner img{width:54px;height:54px;flex:none}
-.rg .ow-menu{padding:8px 18px 0}
-.rg .ow-menu li{display:grid;grid-template-columns:50px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #F1ECE6}
-.rg .ow-menu img{width:50px;height:50px;border-radius:14px;background:#FFF1E8;padding:5px}
+.rg .ow-hero .ow-hw{display:block;text-align:center}
+.rg .ow-ht{max-width:860px;margin:0 auto}
+.rg .ow-ht .x-sub{margin-left:auto;margin-right:auto}
+.rg .ow-ht .x-cta{justify-content:center}
+.rg .ow-chips{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:24px;font-size:.92rem;color:#E4E4EE}
+.rg .ow-chips li{display:flex;gap:8px;align-items:center}
+.rg .ow-chips .ic{color:var(--o)}
+.rg .ow-stage{position:relative;max-width:1040px;margin:clamp(36px,5vw,60px) auto 0;text-align:left;padding:0 0 10px}
+.rg .ow-browser{position:relative;z-index:2;border-radius:18px;background:#fff;color:var(--tx);overflow:hidden;box-shadow:0 50px 100px -40px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.08)}
+.rg .ow-stage .ow-browser{width:calc(100% - 150px)}
+.rg .ow-bar{display:flex;align-items:center;gap:6px;padding:11px 14px;background:#F3EFEA;border-bottom:1px solid var(--ln)}
+.rg .ow-bar i{width:10px;height:10px;border-radius:50%;background:#D9D2CA}
+.rg .ow-bar span{margin-left:10px;flex:1;padding:5px 12px;border-radius:99px;background:#fff;font-size:.76rem;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rg .ow-site{padding:16px 18px 20px}
+.rg .ow-nav{display:flex;align-items:center;gap:16px;font-size:.8rem;color:var(--mu)}
+.rg .ow-nav b{font:800 1.1rem var(--fh);color:var(--bc,var(--o));margin-right:auto;transition:color .3s}
+.rg .ow-cartb{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:99px;background:var(--bc,var(--o));color:#fff;font-weight:600;transition:background .3s}
+.rg .ow-cartb .ic{width:15px;height:15px}
+.rg .ow-main{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-top:16px}
+.rg .ow-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:14px;background:linear-gradient(120deg,var(--o),#FF8A3D);color:#fff}
+.rg .ow-banner b{display:block;font:800 1rem var(--fh)}
+.rg .ow-banner span{font-size:.76rem;opacity:.95}
+.rg .ow-banner .ic{width:34px;height:34px;opacity:.9}
+.rg .ow-menu{margin-top:10px}
+.rg .ow-menu li{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #F1ECE6}
+.rg .ow-it{width:46px;height:46px;border-radius:13px;display:grid;place-items:center}
+.rg .ow-it .ic{width:24px;height:24px}
 .rg .ow-menu p{font:600 .88rem/1.25 var(--fh)}
-.rg .ow-menu small{display:block;color:var(--mu);font:500 .8rem var(--fb);margin-top:2px}
-.rg .ow-add{height:32px;min-width:64px;padding:0 12px;border-radius:10px;border:1.5px solid var(--o);background:#fff;color:var(--o);font:700 .8rem var(--fh);cursor:pointer;transition:background .2s,color .2s}
+.rg .ow-menu small{display:block;color:var(--mu);font:500 .78rem var(--fb);margin-top:2px}
+.rg .ow-add{height:32px;min-width:62px;padding:0 12px;border-radius:10px;border:1.5px solid var(--o);background:#fff;color:var(--o);font:700 .8rem var(--fh);cursor:pointer;transition:background .2s,color .2s}
 .rg .ow-add:hover{background:var(--o);color:#fff}
 .rg .ow-step{display:inline-flex;align-items:center;height:32px;border-radius:10px;background:var(--o);color:#fff;font:700 .85rem var(--fh);overflow:hidden}
-.rg .ow-step button{width:28px;height:32px;border:0;background:transparent;color:#fff;font-size:1rem;cursor:pointer}
+.rg .ow-step button{width:28px;height:32px;border:0;background:transparent;color:#fff;font-size:1rem;cursor:pointer;display:grid;place-items:center}
+.rg .ow-step button .ic{width:14px;height:14px}
 .rg .ow-step span{min-width:18px;text-align:center}
-.rg .ow-cart{margin:auto 14px 14px;padding:12px 14px;border-radius:18px;background:var(--ink);color:#fff}
-.rg .ow-cart-t{display:flex;justify-content:space-between;align-items:baseline;font-size:.82rem;color:var(--dmu)}
-.rg .ow-cart-t b{font:800 1.25rem var(--fh);color:#fff}
-.rg .ow-split{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.rg .ow-split div{padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.07)}
-.rg .ow-split div.g{background:rgba(34,197,94,.16)}
-.rg .ow-split small{display:block;font-size:.66rem;color:var(--dmu)}
-.rg .ow-split b{font:800 1.02rem var(--fh);font-variant-numeric:tabular-nums}
-.rg .ow-split .g b{color:#4ADE80}
-.rg .ow-vs-h{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.rg .ow-vs-h .lp-ico{margin:0}
-.rg .ow-vs-h b{display:block;font:700 1.15rem var(--fh)}
-.rg .ow-vs-h small{color:var(--mu)}
-.rg .ow-own{border:2px solid var(--o);box-shadow:0 30px 60px -36px rgba(252,83,1,.55)}
-.rg .ow-list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--ln);font-size:.95rem}
-.rg .ow-list li:last-child{border-bottom:0}
-.rg .ow-list i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-size:.7rem;font-weight:700;margin-top:2px}
-.rg .ow-list.bad i{background:#FDE8E1;color:#C2410C}
-.rg .ow-list.good i{background:var(--o);color:#fff}
-.rg .ow-list.dk li{border-color:var(--dln)}
+.rg .ow-cart{padding:16px;border-radius:16px;background:#FBF6F1;display:flex;flex-direction:column}
+.rg .ow-cart h4{font:700 .95rem var(--fh);margin-bottom:8px}
+.rg .ow-lines{min-height:88px}
+.rg .ow-lines li{display:flex;justify-content:space-between;gap:8px;padding:6px 0;font-size:.82rem;border-bottom:1px dashed #E3D9CF}
+.rg .ow-lines li b{font:700 .82rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .ow-empty{color:var(--mu);border:0!important;padding-top:20px!important}
+.rg .ow-tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:.88rem}
+.rg .ow-tot b{font:800 1.4rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .ow-keep{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.rg .ow-keep div{padding:10px;border-radius:12px;background:#fff;border:1px solid var(--ln)}
+.rg .ow-keep div.g{background:#E6F6EC;border-color:#BBE5C9}
+.rg .ow-keep small{display:block;font-size:.66rem;color:var(--mu)}
+.rg .ow-keep b{font:800 1.05rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .ow-keep .g b{color:#15803D}
+.rg .ow-fn{margin-top:8px;font-size:.66rem;color:var(--mu)}
+.rg .ow-real{position:absolute;right:-10px;bottom:-24px;width:165px;z-index:3;transform:rotate(4deg)}
+.rg .ow-real .shot-f{border-width:5px;border-radius:24px}
+.rg .ow-n1{left:-26px;bottom:-26px;z-index:4;animation-delay:-1s}.rg .ow-tr{display:flex;justify-content:center}.rg .ow-tr .x-trust p{text-align:left}
+.rg .ow-stats{background:#fff;border-bottom:1px solid var(--ln);padding:34px 0}
+.rg .ow-stat b{display:block;font:800 clamp(1.7rem,3vw,2.3rem)/1.1 var(--fh);letter-spacing:-.02em;color:var(--o);font-variant-numeric:tabular-nums}
+.rg .ow-stat span{display:block;font-size:.88rem;color:var(--mu);margin-top:4px}
+.rg .ow-rc-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start}
+.rg .ow-rc-ctl .x-fld{margin-bottom:22px}
+.rg .ow-real2{margin-top:6px;max-width:210px}
+.rg .ow-rc{position:relative;padding:22px 20px 26px;background:#fff;border:1px solid var(--ln);border-radius:6px 6px 0 0;box-shadow:0 24px 50px -34px rgba(0,0,0,.4);font-variant-numeric:tabular-nums}
+.rg .ow-rc::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(135deg,#fff 50%,transparent 50%) 0 0/14px 10px,linear-gradient(225deg,#fff 50%,transparent 50%) 0 0/14px 10px;filter:drop-shadow(0 4px 3px rgba(0,0,0,.08))}
+.rg .ow-rc.own{border-color:#BBE5C9;background:#FBFFFC}
+.rg .ow-rc.own::after{background:linear-gradient(135deg,#FBFFFC 50%,transparent 50%) 0 0/14px 10px,linear-gradient(225deg,#FBFFFC 50%,transparent 50%) 0 0/14px 10px}
+.rg .ow-rc-h{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:2px dashed var(--ln);margin-bottom:6px}
+.rg .ow-rc-h .ic{color:var(--o);width:22px;height:22px}
+.rg .ow-rc-h b{font:800 1rem var(--fh)}
+.rg .ow-rc li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:.88rem;border-bottom:1px dashed var(--ln)}
+.rg .ow-rc li span{color:var(--mu)}
+.rg .ow-rc li b{font-weight:600}
+.rg .ow-rc li.neg b{color:#C2410C}.rg .ow-rc li.pos b{color:#15803D}
+.rg .ow-rc-t{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:12px;border-top:2px solid var(--tx)}
+.rg .ow-rc-t span{font-weight:600}
+.rg .ow-rc-t b{font:800 1.7rem var(--fh);color:#C2410C}
+.rg .ow-rc.own .ow-rc-t b{color:#15803D}
+.rg .ow-gain{display:flex;flex-wrap:wrap;gap:18px 40px;align-items:center;justify-content:center;margin-top:44px;padding:24px 28px;border-radius:22px;background:var(--ink);color:#fff}
+.rg .ow-gain small{display:block;font-size:.8rem;color:var(--dmu)}
+.rg .ow-gain small i{font-style:normal;color:#fff;font-weight:600}
+.rg .ow-gain b{font:800 clamp(1.7rem,3vw,2.3rem) var(--fh);color:#4ADE80;font-variant-numeric:tabular-nums;margin-right:8px}
+.rg .ow-gain span{color:var(--dmu);font-size:.9rem}
 .rg .ow-f{margin-bottom:20px}
 .rg .ow-f label{display:block;font:600 .85rem var(--fh);margin-bottom:8px}
 .rg .ow-f input{width:100%;height:50px;padding:0 16px;border-radius:12px;border:1.5px solid #E4E0EA;font:500 1rem var(--fb);outline:none;background:#fff}
@@ -526,284 +771,194 @@
 .rg .ow-sw{display:flex;gap:10px;flex-wrap:wrap}
 .rg .ow-sw button{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px #D9D2CA;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .rg .ow-sw button.on{box-shadow:0 0 0 3px var(--ink);transform:scale(1.1)}
-.rg .ow-browser{--bc:#FC5301;border-radius:18px;background:#fff;border:1px solid var(--ln);overflow:hidden;box-shadow:0 36px 70px -36px rgba(0,0,0,.35);align-self:start}
-.rg .ow-bar{display:flex;align-items:center;gap:6px;padding:11px 14px;background:#F3EFEA;border-bottom:1px solid var(--ln)}
-.rg .ow-bar i{width:10px;height:10px;border-radius:50%;background:#D9D2CA}
-.rg .ow-bar span{margin-left:10px;flex:1;padding:5px 12px;border-radius:99px;background:#fff;font-size:.76rem;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rg .ow-site{padding:16px 18px 20px}
-.rg .ow-nav{display:flex;align-items:center;gap:16px;font-size:.8rem;color:var(--mu)}
-.rg .ow-nav b{font:800 1.05rem var(--fh);color:var(--bc);margin-right:auto;transition:color .3s}
-.rg .ow-cartb{padding:6px 12px;border-radius:99px;background:var(--bc);color:#fff;font-weight:600;transition:background .3s}
-.rg .ow-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;align-items:center;margin-top:16px;padding:18px;border-radius:16px;background:color-mix(in srgb,var(--bc) 12%,#fff);transition:background .3s}
-.rg .ow-hero small{color:var(--mu);font-size:.74rem}
-.rg .ow-hero h3{font:800 clamp(1.1rem,2.2vw,1.45rem)/1.2 var(--fh);margin:4px 0 12px}
-.rg .ow-cta{display:inline-block;padding:9px 16px;border-radius:10px;background:var(--bc);color:#fff;font:700 .8rem var(--fh);transition:background .3s}
-.rg .ow-hero-i img{width:100%;max-width:130px;margin-left:auto;animation:owPop .5s var(--ease)}
+.rg .ow-b2{--bc:#FC5301;align-self:start}
+.rg .ow-hero2{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;align-items:center;margin-top:16px;padding:18px;border-radius:16px;background:color-mix(in srgb,var(--bc) 12%,#fff);transition:background .3s}
+.rg .ow-hero2 small{color:var(--mu);font-size:.74rem}
+.rg .ow-hero2 h3{font:800 clamp(1.1rem,2.2vw,1.45rem)/1.2 var(--fh);margin:4px 0 12px}
+.rg .ow-cta2{display:inline-block;padding:9px 16px;border-radius:10px;background:var(--bc);color:#fff;font:700 .8rem var(--fh);transition:background .3s}
+.rg .ow-hero-i{display:grid;place-items:center}
+.rg .ow-hero-i span{width:92px;height:92px;border-radius:26px;display:grid;place-items:center;background:var(--bc);color:#fff;animation:owPop .5s var(--ease)}
+.rg .ow-hero-i .ic{width:46px;height:46px}
 @keyframes owPop{from{transform:scale(.7) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
 .rg .ow-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
 .rg .ow-cards div{padding:12px 10px;border:1px solid var(--ln);border-radius:14px;text-align:center}
-.rg .ow-cards img{width:56px;height:56px;margin:0 auto 6px}
+.rg .ow-cards .ow-it{margin:0 auto 8px}
 .rg .ow-cards p{font:600 .78rem/1.25 var(--fh)}
 .rg .ow-cards small{display:block;color:var(--bc);font:700 .8rem var(--fh);margin-top:3px}
 .rg .ow-tour{align-items:center}
-.rg .ow-tour-l h3{font:800 1.5rem var(--fh);margin:24px 0 10px}
-.rg .ow-tscreen{min-height:520px;padding:0 0 18px}
-.rg .ow-ts-h{padding:6px 18px 10px;font:800 1.1rem var(--fh);display:flex;justify-content:space-between;align-items:center}
-.rg .ow-ts-h small{font:500 .74rem var(--fb);color:var(--mu)}
+.rg .ow-tt{font:800 1.5rem var(--fh);margin:26px 0 12px}
+.rg .ow-ts{background:#fff;min-height:520px}
+.rg .ow-ts-h{padding:42px 16px 10px;font:800 1.05rem var(--fh);display:flex;justify-content:space-between;align-items:center}
+.rg .ow-ts-h small{font:500 .7rem var(--fb);color:var(--mu)}
 .rg .ow-ts-b{padding:0 16px;animation:owPop .45s var(--ease)}
-.rg .ow-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F1ECE6;font-size:.84rem}
-.rg .ow-row img{width:42px;height:42px;border-radius:12px;background:#FFF1E8;padding:4px}
+.rg .ow-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F1ECE6;font-size:.82rem}
+.rg .ow-row .ow-it{width:40px;height:40px;border-radius:12px}
+.rg .ow-row .ow-it .ic{width:20px;height:20px}
 .rg .ow-row span{flex:1;font-weight:600}
-.rg .ow-row b{font:700 .84rem var(--fh)}
-.rg .ow-tot{display:flex;justify-content:space-between;padding:12px 0;font:800 1.05rem var(--fh)}
-.rg .ow-code{display:flex;justify-content:space-between;padding:10px 12px;border-radius:12px;background:#E6F6EC;color:#15803D;font-size:.8rem;font-weight:600;margin-top:10px}
+.rg .ow-row b{font:700 .82rem var(--fh)}
+.rg .ow-ttl{display:flex;justify-content:space-between;padding:12px 0;font:800 1rem var(--fh)}
+.rg .ow-code{display:flex;justify-content:space-between;padding:10px 12px;border-radius:12px;background:#E6F6EC;color:#15803D;font-size:.78rem;font-weight:600;margin-top:10px}
 .rg .ow-pay{display:grid;gap:10px;margin:6px 0 14px}
-.rg .ow-pay div{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;border:1.5px solid var(--ln);font-size:.86rem;font-weight:600}
+.rg .ow-pay div{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;border:1.5px solid var(--ln);font-size:.84rem;font-weight:600}
 .rg .ow-pay div.on{border-color:var(--o);background:var(--ot)}
-.rg .ow-pay i{width:16px;height:16px;border-radius:50%;border:2px solid #D1D5DB}
+.rg .ow-pay i{width:16px;height:16px;border-radius:50%;border:2px solid #D1D5DB;flex:none}
 .rg .ow-pay .on i{border:5px solid var(--o)}
-.rg .ow-pbtn{display:block;text-align:center;padding:14px;border-radius:14px;background:var(--o);color:#fff;font:700 .95rem var(--fh)}
+.rg .ow-pbtn{display:block;text-align:center;padding:13px;border-radius:14px;background:var(--o);color:#fff;font:700 .92rem var(--fh)}
 .rg .ow-track{padding:6px 4px}
-.rg .ow-track li{display:flex;gap:12px;align-items:flex-start;padding-bottom:20px;position:relative;font-size:.86rem}
+.rg .ow-track li{display:flex;gap:12px;align-items:flex-start;padding-bottom:20px;position:relative;font-size:.84rem}
 .rg .ow-track li::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:#E5E7EB}
 .rg .ow-track li:last-child::before{display:none}
-.rg .ow-track i{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-size:.7rem;background:#E5E7EB;color:#9CA3AF;transition:background .5s,color .5s}
+.rg .ow-track i{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;background:#E5E7EB;color:#9CA3AF;transition:background .5s,color .5s}
+.rg .ow-track i .ic{width:13px;height:13px}
 .rg .ow-track li.on i{background:var(--o);color:#fff}
 .rg .ow-track li.on::before{background:var(--o)}
-.rg .ow-track b{display:block;font:700 .9rem var(--fh)}
+.rg .ow-track b{display:block;font:700 .88rem var(--fh)}
 .rg .ow-track small{color:var(--mu)}
-.rg .ow-eta{margin-top:6px;padding:12px 14px;border-radius:14px;background:var(--ink);color:#fff;font-size:.82rem}
+.rg .ow-eta{margin-top:4px;padding:12px 14px;border-radius:14px;background:var(--ink);color:#fff;font-size:.8rem}
 .rg .ow-eta b{font:800 1.2rem var(--fh);color:var(--o)}
-@media (max-width:760px){.rg .ow-hero{grid-template-columns:1fr}.rg .ow-hero-i img{margin:0 auto}.rg .ow-cards{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){
+ .rg .ow-stage .ow-browser{width:100%}.rg .ow-real,.rg .ow-n1{display:none}
+ .rg .ow-main{grid-template-columns:1fr}.rg .ow-rc-wrap{grid-template-columns:1fr}
+}
+@media (max-width:560px){.rg .ow-nav span:not(.ow-cartb){display:none}.rg .ow-hero2{grid-template-columns:1fr}.rg .ow-hero-i{display:none}}
 </style>
 
 <div class="rg" id="rg-top">
 
-<!-- ================= HERO ================= -->
-<section class="hero" id="rg-hero"><div class="w">
-  <div class="copy">
-    <p class="eyb rv">For <b>restaurants, cafes &amp; cloud kitchens</b> tired of paying the apps on every order</p>
-    <h1 class="rv" style="--dl:.06s">Get Your Own Ordering Website, Like Zomato's. <span class="o">Keep 100% of Every Order.</span></h1>
-    <p class="sub rv" style="--dl:.12s">A branded ordering website with your menu, your prices and online payments, set up for you by RestroGrow. Customers order in a few taps. Not a rupee goes to commission.</p>
-    <div class="cta rv" style="--dl:.18s">
-      <a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a class="btn btn-g" href="#rg-brand">Try It: Build My Storefront</a>
-    </div>
-    <p class="wait rv" style="--dl:.22s">An outlet doing 300 orders a day loses <b>₹30,000 every single day</b> it sells only through the apps.</p>
-    <div class="proof rv" style="--dl:.26s"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div>
-  </div>
-  <div class="lp-hero-v rv" style="--dl:.15s">
+<header class="x-top"><div class="x-w"><a class="x-logo" href="#rg-hero">Restro<b>Grow</b></a><nav><a href="#rg-receipt">The receipts</a><a href="#rg-brand">Brand it</a><a href="#clx">Real results</a><a href="#rg-faq">FAQ</a></nav><a class="btn btn-p" href="#rg-demo">Get My Ordering Website</a></div></header>
 
-    <div class="lp-phone"><div class="lp-screen ow-screen">
-      <div class="lp-sb"></div>
-      <div class="ow-head"><div><small>Order online</small><b>Spice Route</b></div><span class="lp-badge g">Open now</span></div>
-      <div class="ow-banner"><div><b>0% commission</b><span>10% off your first direct order</span></div><img class="" src="img/biryani.svg" alt="" loading="lazy" decoding="async"></div>
-      <ul class="ow-menu" id="owMenu"></ul>
-      <div class="ow-cart">
-        <div class="ow-cart-t"><span id="owCnt">Add items to try it</span><b id="owTot">₹0</b></div>
-        <div class="ow-split">
-          <div><small>You keep on an app</small><b id="owApp">₹0</b></div>
-          <div class="g"><small>You keep here</small><b id="owOwn">₹0</b></div>
+
+<section class="x-hero ow-hero" id="rg-hero"><div class="x-w ow-hw">
+  <div class="ow-ht">
+    <span class="x-eyb rv"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/></svg>For restaurants, cafes and cloud kitchens tired of paying the apps on every order</span>
+    <h1 class="rv" style="--dl:.06s">Get Your Own Ordering Website, Like Zomato's. <span class="o">Keep 100% of Every Order.</span></h1>
+    <p class="x-sub rv" style="--dl:.12s">A branded ordering website with your menu, your prices and online payments, set up for you by RestroGrow. Customers order in a few taps. Not a rupee goes to commission.</p>
+    <div class="x-cta rv" style="--dl:.18s"><a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="x-btn2" href="#rg-brand"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Build my storefront</a></div>
+    <ul class="ow-chips rv" style="--dl:.22s"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Your menu and prices</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Online payments</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>QR menu and WhatsApp</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days or 100% back</li></ul>
+    <div class="ow-tr rv" style="--dl:.26s"><div class="x-trust"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div></div>
+  </div>
+  <div class="ow-stage rv" style="--dl:.14s">
+    <div class="ow-browser">
+      <div class="ow-bar"><i></i><i></i><i></i><span>www.spiceroute.com</span></div>
+      <div class="ow-site">
+        <div class="ow-nav"><b>Spice Route</b><span>Menu</span><span>Offers</span><span>Track order</span><span class="ow-cartb" id="owCartB"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Cart (0)</span></div>
+        <div class="ow-main">
+          <div>
+            <div class="ow-banner"><div><b>0% commission, 100% yours</b><span>Order direct and get 10% off your first order</span></div><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/></svg></div>
+            <ul class="ow-menu" id="owMenu"></ul>
+          </div>
+          <aside class="ow-cart">
+            <h4>Your order</h4>
+            <ul class="ow-lines" id="owLines"><li class="ow-empty">Add something from the menu</li></ul>
+            <div class="ow-tot"><span>Total</span><b id="owTot">₹0</b></div>
+            <div class="ow-keep"><div><small>You keep on an app</small><b id="owApp">₹0</b></div><div class="g"><small>You keep here</small><b id="owOwn">₹0</b></div></div>
+            <p class="ow-fn">App figure uses the 60% a real payout kept. Direct assumes a 2% payment fee.</p>
+          </aside>
         </div>
       </div>
     </div>
-    <div class="lp-float tr"><img class="" src="img/heart.svg" alt="" loading="lazy" decoding="async"><span><b>No commission</b><small>On direct orders</small></span></div>
-    <div class="lp-float bl" style="animation-delay:-2.2s"><img class="" src="img/rider.svg" alt="" loading="lazy" decoding="async"><span><b>Your delivery</b><small>Your riders or a partner</small></span></div></div>
-  </div>
-</div>
-<div class="w wimp">
-  <div class="impact rv">
-    <div class="imp"><b><span class="cu" data-to="140">0</span>+</b><p>restaurants, cafes and cloud kitchens on RestroGrow</p></div>
-    <div class="imp"><b>₹<span class="cu" data-to="90">0</span> L+</b><p>commission saved for our clients, and counting</p></div>
-    <div class="imp"><b><span class="cu" data-from="30" data-to="0">30</span>%</b><p>commission on every direct order</p></div>
-    <div class="imp"><b><span class="cu" data-to="3">0</span>X</b><p>returns in 90 days, or 100% of your money back</p></div>
-  </div>
-</div></section>
-
-<section class="logos cream" aria-label="Brands using RestroGrow">
-  <p>Trusted by 140+ restaurants, cafes and cloud kitchens</p>
-  <div class="mq"><div class="mq-t" id="rgMq"></div></div>
-</section>
-
-
-<!-- ================= PROBLEM ================= -->
-<section class="sec" id="rg-problem"><div class="w">
-  <div class="head rv"><span class="kick">Rented vs owned</span><h2 class="h2">You Built the Menu. <span class="o">The Apps Own the Storefront.</span></h2><p>Selling only on delivery apps means renting your own business.</p></div>
-  <div class="lp-two ow-vs">
-    <div class="lp-card rv">
-      <div class="ow-vs-h"><div class="lp-ico"><img class="" src="img/receipt.svg" alt="" loading="lazy" decoding="async"></div><div><b>Selling only on the apps</b><small>Renting a storefront</small></div></div>
-      <ul class="ow-list bad">
-        <li><i>✕</i>25 to 30% commission, plus GST on it, on every order</li>
-        <li><i>✕</i>Customer numbers and data stay with the app</li>
-        <li><i>✕</i>Your sales depend on their ranking and rules</li>
-        <li><i>✕</i>Discounts and visibility follow their terms</li>
-      </ul>
-    </div>
-    <div class="lp-card ow-own rv" style="--dl:.08s">
-      <div class="ow-vs-h"><div class="lp-ico"><img class="" src="img/qr.svg" alt="" loading="lazy" decoding="async"></div><div><b>Your own ordering website</b><small>Owning the storefront</small></div></div>
-      <ul class="ow-list good">
-        <li><i>✓</i>0% commission. Only a small payment gateway fee</li>
-        <li><i>✓</i>Every customer's number saved in your own CRM</li>
-        <li><i>✓</i>Your brand, your menu, your prices</li>
-        <li><i>✓</i>Found through QR codes, WhatsApp and Google</li>
-      </ul>
-    </div>
-  </div>
-  <p class="verdict rv">You don't need more orders. <span class="o">You need a storefront you own.</span></p>
-</div></section>
-<section class="sec dark" id="rg-calc"><div class="w">
-  <div class="head rv"><span class="kick">Find your number</span><h2 class="h2">How Much Do the Apps Take From You?</h2><p>See what Zomato and Swiggy keep every month, money your own ordering website lets you keep. Takes 10 seconds.</p></div>
-  <div class="calc">
-    <div class="cin rv">
-      <div class="fld"><div class="t"><label for="rgO">Orders per day on Zomato/Swiggy</label><output id="rgOv">300</output></div><input class="rng" type="range" id="rgO" min="20" max="2000" step="10" value="300"></div>
-      <div class="fld"><div class="t"><label for="rgA">Average order value</label><output id="rgAv">₹400</output></div><input class="rng" type="range" id="rgA" min="100" max="1500" step="10" value="400"></div>
-      <div class="fld"><div class="t"><label for="rgC">Commission rate</label><output id="rgCv">25%</output></div><input class="rng" type="range" id="rgC" min="10" max="50" step="1" value="25"><small>Include everything the app deducts: commission, fees, GST and ads.</small></div>
-    </div>
-    <div class="cout rv" style="--dl:.08s" aria-live="polite">
-      <div><p class="l">You pay the apps every month</p><p class="big" id="rgM">₹0</p></div>
-      <div class="yr"><span>Every year</span><b id="rgY">₹0</b></div>
-      <div class="save"><p>Move just <b>30% of these orders</b> direct with RestroGrow and you keep</p><strong><span id="rgS">₹0</span> / year</strong><small>Money you've already earned. Now it stays with you.</small></div>
-      <a class="btn btn-p btn-full" href="#rg-demo">Show Me How to Keep It <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    </div>
+    <div class="ow-real"><div class="shot-f" data-zoom="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-5.png"><img src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-5.png" alt="Real RestroGrow client dashboard: 914 orders in three months"></div></div>
+    <div class="x-note ow-n1"><i class="t-g"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></i><span><b>914 orders in 3 months</b><small>Real client dashboard</small></span></div>
   </div>
 </div></section>
 
 
+<section class="ow-stats"><div class="x-w"><div class="x-four">
+  <div class="ow-stat rv"><b data-count="914">0</b><span>direct orders in 3 months at one real client</span></div>
+  <div class="ow-stat rv" style="--dl:.06s"><b>₹3,48,960</b><span>in sales through the same client's own ordering</span></div>
+  <div class="ow-stat rv" style="--dl:.12s"><b>43.65%</b><span>of those orders came from returning customers</span></div>
+  <div class="ow-stat rv" style="--dl:.18s"><b>0%</b><span>commission on every direct order</span></div>
+</div></div></section>
 
-<!-- ================= BRAND IT ================= -->
-<section class="sec cream dots" id="rg-brand"><div class="w">
-  <div class="head rv"><span class="kick">See it with your name</span><h2 class="h2">Your Brand. <span class="o">Your Storefront.</span></h2><p>Type your restaurant's name and pick a style. This is the kind of website we build for you.</p></div>
-  <div class="lp-two ow-brand">
-    <div class="lp-card rv">
+<section class="x-logos"><p>Trusted by 140+ restaurants, cafes and cloud kitchens</p><div class="mq"><div class="mq-t" id="rgMq"></div></div></section>
+
+
+<section class="x-sec" id="rg-receipt"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">Rented vs owned</span><h2 class="x-h2">The Same Order. <span class="o">Two Very Different Receipts.</span></h2><p class="x-lead">The delivery app receipt below uses the real percentages from an actual payout statement. Move the sliders to your own order value and volume.</p></div>
+  <div class="ow-rc-wrap">
+    <div class="ow-rc-ctl x-card rv">
+      <div class="x-fld"><div class="x-lbl"><label for="rcV">Order value</label><output id="rcVv">₹500</output></div><input class="rng lt" type="range" id="rcV" min="150" max="2000" step="10" value="500"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="rcN">Orders per day</label><output id="rcNv">100</output></div><input class="rng lt" type="range" id="rcN" min="10" max="800" step="10" value="100"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="rcS">Share you move to your own website</label><output id="rcSv">30%</output></div><input class="rng lt" type="range" id="rcS" min="10" max="100" step="5" value="30"></div>
+      <div class="ow-real2"><div class="shot-f wide" data-zoom="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png"><img src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png" alt="Real delivery app payout statement"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>Real payout</span></div></div>
+    </div>
+    <div class="ow-rc rv" style="--dl:.06s">
+      <div class="ow-rc-h"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><b>Delivery app receipt</b></div>
+      <ul id="rcApp"></ul>
+      <div class="ow-rc-t"><span>You receive</span><b id="rcAppT">₹0</b></div>
+    </div>
+    <div class="ow-rc own rv" style="--dl:.12s">
+      <div class="ow-rc-h"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/></svg><b>Your own website</b></div>
+      <ul id="rcOwn"></ul>
+      <div class="ow-rc-t"><span>You receive</span><b id="rcOwnT">₹0</b></div>
+    </div>
+  </div>
+  <div class="ow-gain rv"><div><small>On this one order you keep</small><b id="rcGain">₹0</b><span>more</span></div><div><small>Every month, moving <i id="rcShare">30%</i> of orders</small><b id="rcMonth">₹0</b><span>more</span></div><a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div></section>
+
+
+<section class="x-sec x-cream x-dots" id="rg-brand"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">See it with your name</span><h2 class="x-h2">Your Brand. <span class="o">Your Storefront.</span></h2><p class="x-lead">Type your restaurant's name and pick a style. This is the kind of website we build for you.</p></div>
+  <div class="x-two ow-brand">
+    <div class="x-card rv">
       <div class="ow-f"><label for="owName">Restaurant name</label><input id="owName" type="text" value="Spice Route" maxlength="24" autocomplete="off"></div>
-      <div class="ow-f"><label>What do you serve?</label><div class="chips" id="owCui"><button class="on" data-v="biryani" type="button">Biryani</button><button data-v="pizza" type="button">Pizza &amp; Burgers</button><button data-v="cafe" type="button">Cafe &amp; Bakery</button><button data-v="momos" type="button">Momos &amp; Chinese</button></div></div>
+      <div class="ow-f"><label>What do you serve?</label><div class="chips" id="owCui"><button class="on" data-v="biryani" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-9 9 9 9 0 0 1-9-9z"/><path d="M8 7c0-1.5 1.5-1.5 1.5-3M12 7c0-1.5 1.5-1.5 1.5-3"/></svg>Biryani</button><button data-v="pizza" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21L4 6c5-3.5 11-3.5 16 0z"/><circle cx="10" cy="10" r="1.2"/><circle cx="14" cy="12" r="1.2"/><circle cx="11.5" cy="15" r="1.1"/></svg>Pizza and burgers</button><button data-v="cafe" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v2M12 3v2"/></svg>Cafe and bakery</button><button data-v="momos" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg>Momos and Chinese</button></div></div>
       <div class="ow-f"><label>Brand colour</label><div class="ow-sw" id="owCol"></div></div>
-      <p class="lp-note">A live preview. We build your real website with your actual menu, photos and prices.</p>
-      <a class="btn btn-p" href="#rg-demo" style="margin-top:8px">Get My Ordering Website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="x-note2">A live preview. We build your real website with your actual menu, photos and prices.</p>
+      <a class="btn btn-p" href="#rg-demo" style="margin-top:10px">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
-    <div class="ow-browser rv" style="--dl:.08s" id="owBr">
+    <div class="ow-browser ow-b2 rv" style="--dl:.08s" id="owBr">
       <div class="ow-bar"><i></i><i></i><i></i><span id="owUrl">www.spiceroute.com</span></div>
       <div class="ow-site">
-        <div class="ow-nav"><b id="owLogo">Spice Route</b><span>Menu</span><span>Offers</span><span class="ow-cartb">Cart (0)</span></div>
-        <div class="ow-hero"><div><small>Order direct and save</small><h3 id="owH">Hungry? Order from Spice Route</h3><span class="ow-cta">Order now</span></div><div class="ow-hero-i" id="owHi"></div></div>
+        <div class="ow-nav"><b id="owLogo">Spice Route</b><span>Menu</span><span>Offers</span><span class="ow-cartb"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Cart (0)</span></div>
+        <div class="ow-hero2"><div><small>Order direct and save</small><h3 id="owH">Hungry? Order from Spice Route</h3><span class="ow-cta2">Order now</span></div><div class="ow-hero-i" id="owHi"></div></div>
         <div class="ow-cards" id="owCards"></div>
       </div>
     </div>
   </div>
 </div></section>
 
-<!-- ================= HOW ================= -->
-<section class="sec" id="rg-how"><div class="w">
-  <div class="head rv"><span class="kick">How it works</span><h2 class="h2">From Renting a Storefront <span class="o">to Owning One</span></h2></div>
-  <div class="lp-three">
-    <div class="lp-card lp-step rv"><span class="n">1</span><div class="lp-ico"><img class="" src="img/burger.svg" alt="" loading="lazy" decoding="async"></div><h3>We build your ordering website</h3><p>Your brand, your menu, your real prices and online payments, live and ready for orders. You don't touch any tech.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.08s"><span class="n">2</span><div class="lp-ico"><img class="" src="img/qr.svg" alt="" loading="lazy" decoding="async"></div><h3>We send your customers to it</h3><p>Parcel inserts, table QR codes, WhatsApp offers and your Google profile point your existing customers to your site.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.16s"><span class="n">3</span><div class="lp-ico"><img class="" src="img/gift.svg" alt="" loading="lazy" decoding="async"></div><h3>You get paid in full</h3><p>Every direct order pays you the whole bill, and each customer's number lands in your own CRM.</p></div>
-  </div>
-  <p class="stay rv" style="margin-top:34px;text-align:center;font:600 1.1rem var(--fh)">You don't leave Zomato or Swiggy. <span class="o">You stop depending on them.</span></p>
-</div></section>
-<!-- ================= 4. BEFORE / AFTER ================= -->
-<section class="sec cream dots" id="rg-proof"><div class="w">
-  <div class="head rv"><span class="kick">Before vs. after RestroGrow</span><h2 class="h2">Same Sales. <span class="o">₹37,491 More in Your Pocket.</span></h2><p>A real Zomato payout, next to the same ₹98,640 in sales through RestroGrow.</p></div>
-  <div class="ba" id="rgBA">
-    <div class="bac bef rv">
-      <div class="bac-h"><span>Before</span><h3>Only on delivery apps</h3></div>
-      <ul class="bl"><li><i>✕</i>25 to 30% commission plus GST on every order</li><li><i>✕</i>Zero customer numbers or data</li><li><i>✕</i>Repeat orders cost commission again</li><li><i>✕</i>Discounts and visibility on the app's terms</li></ul>
-      <div class="shots" id="rgShots">
-        <span class="mark">Actual delivery app payout</span>
-        <div class="shots-t" id="rgShT">
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png" alt="Zomato payout: ₹98,640 sales, ₹59,175.70 payout"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary.png" alt="Delivery app payout summary"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Dark-Earnings-Breakdown-UI.png" alt="Delivery app earnings breakdown"></figure>
-        </div>
-      </div>
-      <div class="sdots" id="rgSd"><button class="on" aria-label="Payout 1"></button><button aria-label="Payout 2"></button><button aria-label="Payout 3"></button></div>
-    </div>
-    <div class="bac aft rv" style="--dl:.08s">
-      <div class="bac-h"><span>After</span><h3>With RestroGrow</h3></div>
-      <ul class="bl"><li><i>✓</i>0% commission on every direct order</li><li><i>✓</i>Every customer's number in your own CRM</li><li><i>✓</i>Repeat orders through WhatsApp and loyalty</li><li><i>✓</i>Your prices, your offers, your brand</li></ul>
-      <div class="pay">
-        <h4>Payout breakdown</h4><p class="s">Same sales, as direct orders via RestroGrow</p>
-        <div class="pr"><span>Total sales</span><b>₹98,640.00</b></div>
-        <div class="pr z"><span>Platform commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Tax on commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Investments in growth</span><b>₹0</b></div>
-        <div class="pr"><span>Payment gateway, approx. 2%</span><b style="color:#C2410C">₹1,972.80</b></div>
-        <div class="net"><span>You receive</span><b>₹96,667</b></div>
-        <p class="s" style="margin:10px 0 0;text-align:center;font-weight:600;color:#0E8A45">₹37,491 more than the app payout of ₹59,175</p>
-      </div>
-    </div>
-  </div>
-  <p class="bacap">Comparison based on the first payout. Swipe to see more real app payouts.</p>
-</div></section>
-
-<!-- ================= 5. RESULTS ================= -->
-<section class="sec" id="rg-results"><div class="w">
-  <div class="head rv"><span class="kick">Real client results</span><h2 class="h2">₹90 Lakh+ Saved for 140+ Restaurants. <span class="o">And Counting.</span></h2><p>Real dashboards from restaurants running on RestroGrow. Tap any to see it full size.</p></div>
-  <div class="gal rv" id="rgGal"></div>
-</div></section>
+<section class="x-sec x-cream x-dots" id="clx" data-focus="orders"><div class="x-w"><div class="x-head rv"><span class="x-kick">Real numbers</span><h2 class="x-h2">Direct Orders at <span class="o">Real Restaurants</span></h2><p class="x-lead">Real dashboards from restaurants taking orders on their own RestroGrow ordering system. Tap a client to see its orders and what the apps would have charged.</p></div><div class="cl-wrap"><div class="rv"><div class="shot-f" data-zoom=""><img id="clxImg" alt="Real RestroGrow client dashboard, names blurred" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-2.png"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>View full size</span></div></div><div class="rv" style="--dl:.08s"><div class="cl-tabs" id="clxTabs"></div><div class="cl-stats"><div class="cl-st"><small>Total sales</small><b id="clS">0</b></div><div class="cl-st"><small>Orders</small><b id="clO">0</b></div><div class="cl-st"><small>Customers saved</small><b id="clC">0</b></div><div class="cl-st"><small>Repeat orders</small><b id="clR">0</b></div><div class="cl-st hl" style="grid-column:1/-1"><small>Repeat ratio</small><b id="clP">0</b></div></div><div class="cl-say" id="clxSay"></div><div class="cl-bars" id="clxBars"></div></div></div><p class="x-note2" style="text-align:center;margin-top:28px">Real dashboards from restaurants running on RestroGrow, last three months, names blurred. The 25% app commission is a typical rate used for comparison.</p></div></section>
 
 
-<!-- ================= TOUR ================= -->
-<section class="sec dark dots-d" id="rg-tour"><div class="w">
-  <div class="head rv"><span class="kick">What your customers see</span><h2 class="h2">An Ordering Experience <span class="o">They Already Know</span></h2><p>Tap through the four screens every customer goes through, from menu to doorstep.</p></div>
-  <div class="lp-two ow-tour rv">
-    <div class="ow-tour-l">
-      <div class="seg" id="owTabs"><button class="on" data-v="0" type="button">Menu</button><button data-v="1" type="button">Cart</button><button data-v="2" type="button">Payment</button><button data-v="3" type="button">Tracking</button></div>
-      <h3 id="owTt"></h3>
-      <ul class="ow-list good dk" id="owTl"></ul>
-    </div>
-    <div><div class="lp-phone" style="width:min(100%,300px)"><div class="lp-screen ow-tscreen" id="owTs"></div></div></div>
-  </div>
-  <div class="lp-cta-row"><a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-</div></section>
-<!-- ================= 8. GUARANTEE ================= -->
-<section class="sec cream dots" id="rg-guarantee"><div class="w">
-  <div class="gbox rv">
-    <div class="seal"><b>3X</b><small>in 90 days<br>or 100% back</small></div>
+<section class="x-sec x-dark x-dots" id="rg-tour"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">What your customers see</span><h2 class="x-h2">An Ordering Experience <span class="o">They Already Know</span></h2><p class="x-lead">Tap through the four screens every customer goes through, from menu to doorstep.</p></div>
+  <div class="x-two ow-tour rv">
     <div>
-      <span class="kick">Our guarantee</span>
-      <h2 class="h2">Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2>
-      <p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it doesn't, we refund 100% of what you paid. You either grow your profit, or you lose nothing.</p>
-      <a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="seg" id="owTabs"><button class="on" data-v="0" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Menu</button><button data-v="1" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Cart</button><button data-v="2" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>Payment</button><button data-v="3" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>Tracking</button></div>
+      <h3 class="ow-tt" id="owTt"></h3>
+      <ul class="x-checks" id="owTl"></ul>
+      <a class="btn btn-p" href="#rg-demo" style="margin-top:26px">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
+    <div><div class="app" style="width:min(100%,290px);margin:0 auto"><div class="app-s ow-ts" id="owTs"></div></div></div>
   </div>
 </div></section>
 
-<!-- ================= 9. WHO IT'S FOR ================= -->
-<section class="sec" style="padding-bottom:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">Is this for you?</span><h2 class="h2">Built for Restaurants That Are Already Selling</h2></div>
-  <div class="fit">
-    <div class="fitc yes rv"><h3>RestroGrow is for you if</h3><ul>
-      <li><i>✓</i>You get steady orders on Zomato or Swiggy every day</li>
-      <li><i>✓</i>You have regulars who keep ordering your food</li>
-      <li><i>✓</i>You want more profit from orders you already get</li>
-      <li><i>✓</i>You run a restaurant, cafe, cloud kitchen or multi outlet brand</li></ul></div>
-    <div class="fitc no rv" style="--dl:.08s"><h3>It's not for you if</h3><ul>
-      <li><i>✕</i>You're just starting out and have no regular orders yet</li>
-      <li><i>✕</i>You want a quick discount trick, not a channel you own</li></ul></div>
+
+<section class="x-sec" id="rg-feat"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">The complete system</span><h2 class="x-h2">More Than a Website. <span class="o">A Full Direct-Order Engine.</span></h2><p class="x-lead">Everything that brings customers to your site and makes every order bigger.</p></div>
+  <div class="x-three ow-feat">
+    <div class="x-card rv"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg></div><h3>QR menu</h3><p class="m">Guests scan, browse and order from the table. Every dine-in guest becomes a customer you can reach again.</p></div>
+    <div class="x-card rv" style="--dl:.06s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M8.7 8.5c.3 3.2 3.1 5.8 6.3 6.2l1.3-1.4-2-1-1 .8a5 5 0 0 1-2.2-2.2l.8-1-1-2z"/></svg></div><h3>WhatsApp CRM</h3><p class="m">Every number saved. Send offers, festive deals and review requests whenever you want.</p></div>
+    <div class="x-card rv" style="--dl:.12s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5L7 21l5-2.5 5 2.5-1.5-7.5"/></svg></div><h3>Loyalty program</h3><p class="m">Points and rewards that give regulars a reason to order from you and not the next restaurant.</p></div>
+    <div class="x-card rv"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-9h8v8l-9 9z"/><circle cx="16" cy="8" r="1.4"/></svg></div><h3>Combos and upsells</h3><p class="m">Smart add-ons at checkout so every customer spends a little more on every order.</p></div>
+    <div class="x-card rv" style="--dl:.06s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Google Business Profile</h3><p class="m">Posts and review replies so nearby customers find you first and order direct.</p></div>
+    <div class="x-card rv" style="--dl:.12s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Mobile app and POS</h3><p class="m">Track orders, customers and stock from your phone, with billing connected to every order.</p></div>
   </div>
 </div></section>
 
-<!-- ================= FAQ ================= -->
-<section class="sec" id="rg-faq" style="padding-top:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">FAQs</span><h2 class="h2">Questions Owners Ask Us First</h2></div>
-  <div class="faq rv">
-    <details><summary>Is it like the Zomato or Swiggy ordering experience?<i>+</i></summary><p>Yes. Customers browse your menu, add items and pay online in a few taps, on your own branded website.</p></details>
-    <details><summary>Do I have to stop selling on Zomato and Swiggy?<i>+</i></summary><p>No. Keep them for new customers and move your regulars to direct ordering.</p></details>
-    <details><summary>Does RestroGrow take a commission on my orders?<i>+</i></summary><p>No. There is no per order platform commission to RestroGrow. Every direct order is yours. A small payment gateway fee applies on online payments.</p></details>
-    <details><summary>How will customers find my website?<i>+</i></summary><p>We put it where they already see you: inserts in app parcels, QR codes on tables, WhatsApp, your Google profile and social media.</p></details>
-    <details><summary>Who delivers direct orders?<i>+</i></summary><p>We set up delivery to fit your outlet, with your own riders or a delivery partner. We walk you through the options in the demo.</p></details>
-    <details><summary>How does the 3X guarantee work?<i>+</i></summary><p>Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details>
-  </div>
-</div></section>
+<section class="x-sec x-cream"><div class="x-w"><div class="gx rv"><div class="gx-seal"><svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="92" stroke="#FC5301" stroke-width="3" stroke-dasharray="3 7"/><circle cx="100" cy="100" r="78" fill="#FFF1E8" stroke="#FC5301" stroke-width="2"/></svg><b><span>3X<small>in 90 days</small></span></b></div><div><span class="x-kick">Our guarantee</span><h2>Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2><p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it does not, we refund 100% of what you paid.</p><ul class="gx-pts"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Written into your agreement</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12v4"/><path d="M4 7v10a2 2 0 0 0 2 2h14v-4"/><path d="M21 9h-5a2 2 0 0 0 0 4h5z"/></svg>100% of your fee back</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Measured over 90 days</li></ul><a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></div></section>
+
+<section class="x-sec" id="rg-faq"><div class="x-w"><div class="x-head c rv"><span class="x-kick">FAQs</span><h2 class="x-h2">Questions Owners Ask Us First</h2></div><div class="x-faq rv"><details><summary>Is it like the Zomato or Swiggy ordering experience?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Yes. Customers browse your menu, add items and pay online in a few taps, on your own branded website.</p></details><details><summary>Do I have to stop selling on Zomato and Swiggy?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>No. Keep them for new customers and move your regulars to direct ordering.</p></details><details><summary>Does RestroGrow take a commission on my orders?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>No. There is no per order platform commission to RestroGrow. Every direct order is yours. A small payment gateway fee applies on online payments.</p></details><details><summary>How will customers find my website?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>We put it where they already see you: inserts in app parcels, QR codes on tables, WhatsApp, your Google profile and social media.</p></details><details><summary>Who delivers direct orders?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>We set up delivery to fit your outlet, with your own riders or a delivery partner. We walk you through the options in the demo.</p></details><details><summary>How does the 3X guarantee work?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details></div></div></section>
+
+<section class="fin"><div class="x-w"><h2>Own the Storefront. Keep the Profit.</h2><p>See your own ordering website with your menu on it in a 30 minute demo.</p><ul class="x-checks"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Your brand, menu and prices</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Online payments included</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days or 100% back</li></ul><a class="btn btn-p" href="#rg-demo">Get My Ordering Website <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><small>Our team will call you to fix a time that suits you.</small></div></section>
 
 <footer class="lf"><div class="w">
   <span>&copy; <b id="rgYr">2026</b> Restro Grow. All rights reserved.</span>
   <nav aria-label="Legal"><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-services">Terms &amp; Services</a><a href="/refund-policy">Refund &amp; Cancellation</a></nav>
 </div></footer>
 
-<div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Get My Ordering Website</a></div>
+<div class="sticky" id="rgSt"><p><b>Free demo</b> See your own ordering website</p><a class="btn btn-p" href="#rg-demo">Get My Ordering Website</a></div>
 <div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
 <div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
 <form class="form rv" id="rgF" novalidate>
@@ -828,7 +983,6 @@
     <div class="done"><b>Thank you for filling the form.</b><p>Our team will get in touch with you shortly.</p></div>
   </form>
 </div></div>
-<div hidden aria-hidden="true"><div id="rgPs"><div id="rgPt"></div></div><div id="rgPd"></div><div id="rgPh"></div><span id="rgCart"></span><button id="rgUp" type="button"></button><span id="rgUt"></span><svg id="rgQr"></svg></div>
 </div>
 
 <script>
@@ -845,83 +999,6 @@
   var once=function(el,fn,th){if(!IO||RM){fn();return}var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){fn();o.disconnect()}},{threshold:th||.3});o.observe(el)};
   var tw={},tk=0;
   function tween(el,to,fmt,dur){var fr=+el.getAttribute("data-v")||0;el.setAttribute("data-v",to);if(RM){el.textContent=fmt(to);return}var s=null,k=el.id||("t"+(tk++));if(!el.id)el.id=k;cancelAnimationFrame(tw[k]);(function st(t){if(!s)s=t;var p=Math.min((t-s)/(dur||500),1);el.textContent=fmt(fr+(to-fr)*(1-Math.pow(1-p,3)));if(p<1)tw[k]=requestAnimationFrame(st)})(performance.now())}
-
-  var U="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
-  /* lightbox */
-  var lb=$("rgLb"),lbi=lb.querySelector("img");
-  function openLb(src){lbi.src=src;lb.classList.add("on");document.addEventListener("keydown",esc)}
-  function closeLb(){lb.classList.remove("on");document.removeEventListener("keydown",esc)}
-  function esc(e){if(e.key==="Escape")closeLb()}
-  lb.addEventListener("click",closeLb);
-
-  /* client proof dashboards */
-  var PR=[1,2,3,4,5].map(function(i){return U+"restaurent-proof-"+i+".png"});
-  var ps=$("rgPs"),pd=$("rgPd"),pi=0,pt=null;
-  $("rgPt").innerHTML=PR.map(function(s,i){return '<img src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"'+(i?' loading="lazy"':'')+' decoding="async">'}).join("");
-  pd.innerHTML=PR.map(function(s,i){return '<button'+(i?'':' class="on"')+' aria-label="Dashboard '+(i+1)+'"></button>'}).join("");
-  var pbtn=pd.querySelectorAll("button"),ptk=$("rgPt"),px=null,moved=false;
-  function pgo(i){pi=(i+PR.length)%PR.length;ptk.style.transform="translateX("+(-pi*100)+"%)";pbtn.forEach(function(b,k){b.classList.toggle("on",k===pi)})}
-  ps.addEventListener("pointerdown",function(e){px=e.clientX;moved=false});
-  ps.addEventListener("pointerup",function(e){if(px===null)return;var dx=e.clientX-px;if(Math.abs(dx)>40){moved=true;pgo(pi+(dx<0?1:-1));clearInterval(pt)}px=null});
-  pbtn.forEach(function(b,i){b.addEventListener("click",function(){pgo(i);clearInterval(pt)})});
-  ps.addEventListener("click",function(){if(!moved)openLb(PR[pi])});
-  ps.addEventListener("keydown",function(e){if(e.key==="Enter")openLb(PR[pi])});
-  if(!RM)pt=setInterval(function(){if(!document.hidden&&!lb.classList.contains("on"))pgo(pi+1)},3500);
-  /* results gallery */
-  var gal=$("rgGal");
-  gal.innerHTML=PR.map(function(s,i){return '<button type="button" aria-label="View client dashboard '+(i+1)+'"><img loading="lazy" decoding="async" src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"></button>'}).join("");
-  gal.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){openLb(PR[i])})});
-
-  /* logos */
-  var L=["01-Kohuke","02-Food-Station","03-Tastea-Food-and-Beverages","04-Naso-Restaurants-and-Bar","05-Ganesh-Restaurant","06-Delhi-Darbar-Restaurant-Copy","07-Atea-Spot","08-Desert-Delight-Copy-1","09-Pin-Point-Family-Restaurant","10-Chaska-Cafe","11-Chinees-Corner","12-House-of-Dossapamm","13-RJ-Food-Cafe","14-Arya-Cafe","15-Sadhiska-Bakery-and-Cafe"];
-  var nm=function(f){return f.replace(/^\d+-/,"").replace(/-Copy(-\d)?$/,"").replace(/-/g," ")};
-  var h=L.map(function(f){return '<img loading="lazy" decoding="async" src="'+U+f+'.png" alt="'+nm(f)+'">'}).join("");
-  $("rgMq").innerHTML=h+h.replace(/alt="[^"]*"/g,'alt=""');
-  $("rgAvs").innerHTML=[6,4,9,0,13].map(function(i){return '<img src="'+U+L[i]+'.png" alt="" width="40" height="40">'}).join("");
-
-  /* reveal */
-  var rv=R.querySelectorAll(".rv");
-  if(IO&&!RM){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("show");io.unobserve(e.target)}})},{threshold:.12,rootMargin:"0px 0px -30px 0px"});rv.forEach(function(el){io.observe(el)})}
-  else rv.forEach(function(el){el.classList.add("show")});
-
-  /* impact count up */
-  R.querySelectorAll(".impact .cu").forEach(function(el){var fr=+(el.getAttribute("data-from")||0);el.setAttribute("data-v",fr);el.textContent=fr});
-  once(R.querySelector(".impact"),function(){R.querySelectorAll(".impact .cu").forEach(function(el){tween(el,+el.getAttribute("data-to"),function(v){return Math.round(v)},2000)})},.5);
-
-  /* plate phases */
-  once($("rgPh"),function(){R.querySelectorAll(".ph").forEach(function(p,i){setTimeout(function(){p.querySelector(".plate i").style.setProperty("--k",p.getAttribute("data-k"))},RM?0:250+i*320)})});
-
-  /* calculator */
-  var f=[$("rgO"),$("rgA"),$("rgC")];
-  function calc(){
-    f.forEach(function(r){r.style.setProperty("--p",(r.value-r.min)/(r.max-r.min)*100+"%")});
-    var o=+f[0].value,a=+f[1].value,c=+f[2].value/100,m=o*a*30*c;
-    $("rgOv").textContent=o.toLocaleString("en-IN");$("rgAv").textContent=inr(a);$("rgCv").textContent=Math.round(c*100)+"%";
-    tween($("rgM"),m,inr);tween($("rgY"),m*12,sh);tween($("rgS"),m*12*.3,sh);
-    $("rgStL").textContent=sh(m)+" / month";
-  }
-  f.forEach(function(r){r.addEventListener("input",calc)});calc();
-
-  /* before/after tabs (mobile) */
-
-
-  /* payout screenshots: dots + swipe */
-  var t=$("rgShT"),ds=$("rgSd").children,n=ds.length,cur=0,sx=null,box=$("rgShots"),auto=null;
-  function go(i){cur=(i+n)%n;t.style.transform="translateX("+(-cur*100)+"%)";for(var k=0;k<n;k++)ds[k].classList.toggle("on",k===cur)}
-  var stop=function(){clearInterval(auto)};
-  Array.prototype.forEach.call(ds,function(d,i){d.addEventListener("click",function(){go(i);stop()})});
-  box.addEventListener("pointerdown",function(e){sx=e.clientX});
-  box.addEventListener("pointerup",function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>40){go(cur+(dx<0?1:-1));stop()}sx=null});
-  box.addEventListener("pointercancel",function(){sx=null});
-  once(box,function(){if(!RM)auto=setInterval(function(){if(!document.hidden)go(cur+1)},5000)});
-
-  /* feature demos */
-  var cn=0,ct=0;
-  R.querySelectorAll(".sf .it button").forEach(function(b){b.addEventListener("click",function(){var p=+b.previousElementSibling.querySelector("small").textContent.replace(/\D/g,""),on=b.classList.toggle("on");b.textContent=on?"Added":"Add";cn+=on?1:-1;ct+=on?p:-p;$("rgCart").textContent=cn?cn+(cn>1?" items, ":" item, ")+inr(ct):"Tap Add to try"})});
-  var up=$("rgUp"),uo=false;up.addEventListener("click",function(){uo=!uo;up.textContent=uo?"Added":"Add ₹99";$("rgUt").textContent=uo?"₹739":"₹640"});
-  var q=$("rgQr"),sd=7,rn=function(){sd=(sd*9301+49297)%233280;return sd/233280},fi=function(x,y){return'<rect x="'+x+'" y="'+y+'" width="7" height="7"/><rect x="'+(x+1)+'" y="'+(y+1)+'" width="5" height="5" fill="#fff"/><rect x="'+(x+2)+'" y="'+(y+2)+'" width="3" height="3"/>'},s="";
-  for(var y=0;y<21;y++)for(var x=0;x<21;x++)if(!((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12))&&rn()>.52)s+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
-  q.innerHTML='<g fill="#00000C">'+s+fi(0,0)+fi(14,0)+fi(0,14)+'</g><rect x="9" y="9" width="3" height="3" fill="#FC5301"/>';
 
   /* ad tracking: IDs come from api/public_config.php, so a tag stays off while its ID is empty.
      No Lead / conversion here: that fires once, on the thank-you page. */
@@ -954,7 +1031,7 @@
   R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(){ev("DemoOpen","demo_open")})});
   /* FormStart: first real typing/choice (not the popup auto-focusing the first field) */
   ["input","change"].forEach(function(t){$("rgF").addEventListener(t,function(){ev("FormStart","form_start")})});
-  ["rgO","rgA","rgC"].forEach(function(id){$(id).addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
+  R.querySelectorAll('input[type="range"]').forEach(function(r){r.addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
 
   /* form */
   var F=$("rgF"),M=$("rgMsg");
@@ -978,7 +1055,7 @@
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
   F.addEventListener("change",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
 
-  /* demo form popup: Get My Ordering Website buttons move the bottom form into a popup, closing puts it back */
+  /* demo form popup: Book My Demo buttons move the bottom form into a popup, closing puts it back */
   var md=$("rgMd"),mdb=$("rgMdB"),mph=document.createElement("div"),mlast=null;
   function mdEsc(e){if(e.key==="Escape")closeMd()}
   function openMd(tr){
@@ -1007,15 +1084,19 @@
     u()}
 })();
 </script>
+<script>window.LPD={"base":"https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/","proofs":[{"file":"restaurent-proof-1.png","sales":151238,"orders":398,"items":935,"customers":252,"repeat":146,"ratio":36.68},{"file":"restaurent-proof-2.png","sales":203475,"orders":529,"items":1271,"customers":318,"repeat":211,"ratio":39.89},{"file":"restaurent-proof-3.png","sales":224836,"orders":592,"items":1449,"customers":342,"repeat":250,"ratio":42.23},{"file":"restaurent-proof-4.png","sales":302280,"orders":782,"items":1922,"customers":488,"repeat":294,"ratio":37.6},{"file":"restaurent-proof-5.png","sales":348960,"orders":914,"items":2255,"customers":515,"repeat":399,"ratio":43.65}],"payouts":[{"file":"Minimalist-Payout-Breakdown-Summary1.png","A":98640,"B":120,"base":21950,"ld":1850,"pay":1980,"disc":361.2,"tax":5921.4,"growth":8244.1,"payout":59175.7},{"file":"Dark-Earnings-Breakdown-UI.png","A":124980.5,"B":84.3,"base":27544.47,"ld":2800,"pay":2415.28,"disc":724.63,"tax":11248.25,"growth":18497.4,"payout":63284.03}]};</script>
 <script>
 /* ===== shared helpers for the ad landing pages (runs after the main page script) ===== */
 (function () {
   var R = document.querySelector(".rg"); if (!R) return;
   var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var IO = "IntersectionObserver" in window;
   var $ = function (i) { return R.querySelector("#" + i); };
   var inr = function (n) { return "₹" + Math.round(n).toLocaleString("en-IN"); };
   var sh = function (n) { return n >= 1e7 ? "₹" + (n / 1e7).toFixed(2) + " Cr" : n >= 1e5 ? "₹" + (n / 1e5).toFixed(1) + " L" : inr(n); };
+  var D = window.LPD || { proofs: [], payouts: [], base: "" };
   var tw = {};
+
   /* animate a number inside an element */
   function num(el, to, fmt, dur) {
     if (!el) return;
@@ -1030,29 +1111,24 @@
       if (p < 1) tw[id] = requestAnimationFrame(step);
     })();
   }
-  /* paint the filled part of a range slider */
   function fill(r) { r.style.setProperty("--p", (r.value - r.min) / (r.max - r.min) * 100 + "%"); }
-  /* run fn when el scrolls into view (or at once if motion is reduced) */
   function seen(el, fn, th) {
     if (!el) return;
-    if (RM || !("IntersectionObserver" in window)) { fn(); return; }
+    if (RM || !IO) { fn(); return; }
     var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: th || .35 });
     o.observe(el);
   }
-  /* little confetti burst from an element */
   function confetti(from) {
     if (RM) return;
     var b = from.getBoundingClientRect(), cols = ["#FC5301", "#FACC15", "#22C55E", "#3B82F6", "#EC4899"], i;
     for (i = 0; i < 26; i++) {
-      var d = document.createElement("i"); d.className = "lp-confetti"; d.style.background = cols[i % cols.length];
-      d.style.left = (b.left + b.width / 2) + "px"; d.style.top = (b.top + b.height / 2) + "px";
-      R.appendChild(d);
+      var d = document.createElement("i"); d.style.cssText = "position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;background:" + cols[i % cols.length] + ";left:" + (b.left + b.width / 2) + "px;top:" + (b.top + b.height / 2) + "px";
+      document.body.appendChild(d);
       var ang = Math.random() * Math.PI * 2, v = 90 + Math.random() * 150;
       var a = d.animate([{ opacity: 1, transform: "translate(0,0) rotate(0)" }, { opacity: 0, transform: "translate(" + Math.cos(ang) * v + "px," + (Math.sin(ang) * v + 120) + "px) rotate(" + (Math.random() * 540) + "deg)" }], { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.3,1)" });
       a.onfinish = (function (n) { return function () { n.remove(); }; })(d);
     }
   }
-  /* segmented / chip groups: one active button, callback with its data-v */
   function pick(box, cb) {
     if (!box) return;
     box.addEventListener("click", function (e) {
@@ -1061,12 +1137,102 @@
       cb(b.getAttribute("data-v"), b);
     });
   }
-  /* tag the scripted "?shot" mode used for screenshots: show every reveal block at once */
+
+  /* full-size view of a real screenshot (uses the page's existing lightbox) */
+  var lb = $("rgLb");
+  function zoom(src) {
+    if (!lb) return;
+    lb.querySelector("img").src = src; lb.classList.add("on");
+    var esc = function (e) { if (e.key === "Escape") { lb.classList.remove("on"); document.removeEventListener("keydown", esc); } };
+    document.addEventListener("keydown", esc);
+  }
+  if (lb) lb.addEventListener("click", function () { lb.classList.remove("on"); });
+  R.addEventListener("click", function (e) { var z = e.target.closest("[data-zoom]"); if (z) zoom(z.getAttribute("data-zoom")); });
+
+  /* scroll reveal (.rv) */
+  var rv = R.querySelectorAll(".rv");
+  if (IO && !RM) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("show"); io.unobserve(e.target); } }); }, { threshold: .1, rootMargin: "0px 0px -30px 0px" });
+    rv.forEach(function (el) { io.observe(el); });
+  } else rv.forEach(function (el) { el.classList.add("show"); });
+
+  /* real client logos: strip + avatars */
+  var U = "https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
+  var L = ["01-Kohuke", "02-Food-Station", "03-Tastea-Food-and-Beverages", "04-Naso-Restaurants-and-Bar", "05-Ganesh-Restaurant", "06-Delhi-Darbar-Restaurant-Copy", "07-Atea-Spot", "08-Desert-Delight-Copy-1", "09-Pin-Point-Family-Restaurant", "10-Chaska-Cafe", "11-Chinees-Corner", "12-House-of-Dossapamm", "13-RJ-Food-Cafe", "14-Arya-Cafe", "15-Sadhiska-Bakery-and-Cafe"];
+  var nm = function (f) { return f.replace(/^\d+-/, "").replace(/-Copy(-\d)?$/, "").replace(/-/g, " "); };
+  var mq = $("rgMq");
+  if (mq) { var h = L.map(function (f) { return '<img loading="lazy" decoding="async" src="' + U + f + '.png" alt="' + nm(f) + '">'; }).join(""); mq.innerHTML = h + h.replace(/alt="[^"]*"/g, 'alt=""'); }
+  var av = $("rgAvs"); if (av) av.innerHTML = [6, 4, 9, 0, 13].map(function (i) { return '<img src="' + U + L[i] + '.png" alt="" width="38" height="38">'; }).join("");
+
+  /* count-up numbers: <b data-count="140" data-suffix="+"> */
+  R.querySelectorAll("[data-count]").forEach(function (el) {
+    var to = +el.getAttribute("data-count"), suf = el.getAttribute("data-suffix") || "", pre = el.getAttribute("data-prefix") || "", dec = +(el.getAttribute("data-dec") || 0);
+    seen(el, function () { num(el, to, function (v) { return pre + (dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-IN")) + suf; }, 1600); }, .5);
+  });
+
+  /* ===== real client explorer (#clx) ===== */
+  var clx = $("clx");
+  if (clx && D.proofs.length) {
+    var focus = clx.getAttribute("data-focus") || "repeat", cur = 0;
+    var tabs = $("clxTabs"), img = $("clxImg"), say = $("clxSay"), bars = $("clxBars");
+    tabs.innerHTML = D.proofs.map(function (p, i) { return '<button type="button" data-i="' + i + '"' + (i ? "" : ' class="on"') + '>Client ' + (i + 1) + "</button>"; }).join("");
+    var M = { repeat: ["Repeat ratio", function (p) { return p.ratio; }, function (v) { return v.toFixed(2) + "%"; }, 100],
+              customers: ["Customers saved", function (p) { return p.customers; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              orders: ["Orders", function (p) { return p.orders; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              sales: ["Total sales", function (p) { return p.sales; }, function (v) { return sh(v); }, 0] };
+    var mm = M[focus], mx = Math.max.apply(null, D.proofs.map(mm[1])) * 1.08;
+    bars.innerHTML = D.proofs.map(function (p, i) { return '<div class="cl-bar" data-i="' + i + '"><span>Client ' + (i + 1) + '</span><i style="--w:' + (mm[1](p) / mx * 100) + '%"></i><b>' + mm[2](mm[1](p)) + "</b></div>"; }).join("");
+    function show(i) {
+      cur = i; var p = D.proofs[i];
+      Array.prototype.forEach.call(tabs.children, function (b, k) { b.classList.toggle("on", k === i); });
+      Array.prototype.forEach.call(bars.children, function (b, k) { b.classList.toggle("on", k === i); });
+      img.src = D.base + p.file; img.parentNode.setAttribute("data-zoom", D.base + p.file);
+      var s = { sales: [$("clS"), p.sales, inr], orders: [$("clO"), p.orders, function (v) { return Math.round(v).toLocaleString("en-IN"); }], customers: [$("clC"), p.customers, function (v) { return Math.round(v).toLocaleString("en-IN"); }], repeat: [$("clR"), p.repeat, function (v) { return Math.round(v).toLocaleString("en-IN"); }], ratio: [$("clP"), p.ratio, function (v) { return v.toFixed(2) + "%"; }] };
+      Object.keys(s).forEach(function (k) { num(s[k][0], s[k][1], s[k][2], 500); });
+      var aov = p.sales / p.orders, rc = p.repeat * aov * 0.25, ac = p.sales * 0.25;
+      say.innerHTML = focus === "repeat" ? "<b>" + p.repeat + " of " + p.orders + " orders</b> came from returning customers. At a typical 25% app commission, those repeat orders alone would have cost about <b>" + inr(rc) + "</b>."
+        : focus === "customers" ? "<b>" + p.customers + " customers</b> saved to this restaurant's own list in 3 months. Every one is a number the owner can message, with no app in between."
+        : "<b>" + p.orders + " direct orders</b> in 3 months, about " + (p.orders / 90).toFixed(1) + " a day. At a typical 25% app commission, <b>" + inr(ac) + "</b> of this would have gone to the apps.";
+    }
+    tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) show(+b.getAttribute("data-i")); });
+    bars.addEventListener("click", function (e) { var b = e.target.closest(".cl-bar"); if (b) show(+b.getAttribute("data-i")); });
+    seen(clx, function () { show(0); }, .15);
+    show(0);
+  }
+
+  /* ===== real payout decoder (#pod) ===== */
+  var pod = $("pod");
+  if (pod && D.payouts.length) {
+    var pi = 0, mode = "app";
+    var SEG = [["base", "Base service fee", "#FC5301"], ["ld", "Long distance fee", "#FF8A3D"], ["pay", "Payment mechanism fee", "#F5B66B"], ["tax", "Tax deductions", "#9A3412"], ["growth", "Investments in growth", "#B45309"]];
+    function pdraw() {
+      var p = D.payouts[pi], A = p.A;
+      $("podImg").src = D.base + p.file; $("podImg").parentNode.setAttribute("data-zoom", D.base + p.file);
+      var items, keep;
+      if (mode === "app") {
+        items = SEG.map(function (s) { return [s[1], p[s[0]], s[2]]; }); keep = p.payout;
+        var credits = p.B + p.disc; items.push(["Credits and additions", -credits, "#94A3B8"]);
+      } else {
+        items = [["Payment gateway, about 2%", A * 0.02, "#FC5301"]]; keep = A * 0.98;
+      }
+      var tot = items.reduce(function (a, it) { return a + Math.max(0, it[1]); }, 0) + keep;
+      $("podBar").innerHTML = items.filter(function (it) { return it[1] > 0; }).map(function (it) { return '<i style="width:' + it[1] / tot * 100 + '%;background:' + it[2] + '" title="' + it[0] + '"></i>'; }).join("") + '<i style="width:' + keep / tot * 100 + '%;background:#16A34A" title="You keep"></i>';
+      $("podLeg").innerHTML = items.map(function (it) { return '<li><i style="background:' + it[2] + '"></i><span>' + it[0] + "</span><em>" + (it[1] / A * 100).toFixed(1) + "%</em><b>" + (it[1] < 0 ? "+" : "−") + inr(Math.abs(it[1])) + "</b></li>"; }).join("");
+      num($("podKeep"), keep, inr, 600); $("podKeepP").textContent = (keep / A * 100).toFixed(1) + "% of " + inr(A) + " in sales";
+      $("podMore").innerHTML = mode === "app" ? "Of every ₹100 customers paid, this restaurant kept <b>₹" + (keep / A * 100).toFixed(0) + "</b>. The rest went to fees, tax and growth charges."
+        : "Same sales through your own ordering system: you keep <b>" + inr(A * 0.98 - p.payout) + " more</b> in this month alone.";
+    }
+    pick($("podTabs"), function (v) { pi = +v; pdraw(); });
+    pick($("podMode"), function (v) { mode = v; pdraw(); });
+    pdraw();
+  }
+
+  /* "?shot" mode used for screenshots: show every reveal block and load every image at once */
   if (/[?&]shot\b/.test(location.search)) {
     R.querySelectorAll(".rv").forEach(function (e) { e.classList.add("show"); });
     Array.prototype.forEach.call(document.images, function (i) { i.loading = "eager"; });
   }
-  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM };
+  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM, zoom: zoom, D: D };
 })();
 
 </script>
@@ -1075,25 +1241,49 @@
   var LP=window.LP; if(!LP) return;
   var R=LP.R,$=LP.$,inr=LP.inr,sh=LP.sh,num=LP.num,fill=LP.fill,seen=LP.seen,confetti=LP.confetti,pick=LP.pick,RM=LP.RM;
 
+  var SV={ic:function(p){return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'}};
+  var IP={bowl:'<path d="M3 11h18a9 9 0 0 1-9 9 9 9 0 0 1-9-9z"/><path d="M8 7c0-1.5 1.5-1.5 1.5-3M12 7c0-1.5 1.5-1.5 1.5-3"/>',
+    pizza:'<path d="M12 21L4 6c5-3.5 11-3.5 16 0z"/><circle cx="10" cy="10" r="1.2"/><circle cx="14" cy="12" r="1.2"/><circle cx="11.5" cy="15" r="1.1"/>',
+    utensils:'<path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/>',
+    coffee:'<path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v2M12 3v2"/>',
+    cake:'<path d="M4 20h16v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M12 12V9M12 9c-1-1-1-2.2 0-3.2 1 1 1 2.2 0 3.2z"/><path d="M4 16c2 1.5 3.5 1.5 4 0 .5 1.5 3.5 1.5 4 0 .5 1.5 3.5 1.5 4 0 .5 1.5 2 1.5 4 0"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',check:'<path d="M5 12.5l4.5 4.5L19 7"/>',store:'<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/>',
+    bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'};
+  var TINT=['t-o','t-y','t-g','t-b','t-p','t-r'];
   /* ---- hero storefront ---- */
-  var M=[['biryani','Chicken Biryani',320],['pizza','Paneer Pizza',280],['burger','Classic Burger',180],['coffee','Filter Coffee',90]],q=[0,0,0,0];
-  var menu=$('owMenu');
+  var M=[['bowl','Chicken Biryani',320],['pizza','Paneer Pizza',280],['utensils','Veg Burger',180],['coffee','Filter Coffee',90],['cake','Brownie',120]],q=[0,0,0,0,0],menu=$('owMenu');
   function drawMenu(){
-    menu.innerHTML=M.map(function(m,i){return '<li><img src="img/'+m[0]+'.svg" alt=""><div><p>'+m[1]+'</p><small>'+inr(m[2])+'</small></div>'+
-      (q[i]?'<span class="ow-step"><button type="button" data-i="'+i+'" data-d="-1" aria-label="Less">−</button><span>'+q[i]+'</span><button type="button" data-i="'+i+'" data-d="1" aria-label="More">+</button></span>':'<button class="ow-add" type="button" data-i="'+i+'" data-d="1">Add</button>')+'</li>'}).join('');
-    var n=0,t=0;q.forEach(function(v,i){n+=v;t+=v*M[i][2]});
-    $('owCnt').textContent=n?n+' item'+(n>1?'s':'')+' in your cart':'Add items to try it';
-    num($('owTot'),t,inr,400);num($('owApp'),t*0.705,inr,400);num($('owOwn'),t*0.98,inr,400);
+    menu.innerHTML=M.map(function(m,i){return '<li><span class="ow-it '+TINT[i]+'">'+SV.ic(IP[m[0]])+'</span><div><p>'+m[1]+'</p><small>'+inr(m[2])+'</small></div>'+
+      (q[i]?'<span class="ow-step"><button type="button" data-i="'+i+'" data-d="-1" aria-label="Less">'+SV.ic(IP.minus)+'</button><span>'+q[i]+'</span><button type="button" data-i="'+i+'" data-d="1" aria-label="More">'+SV.ic(IP.plus)+'</button></span>':'<button class="ow-add" type="button" data-i="'+i+'" data-d="1">Add</button>')+'</li>'}).join('');
+    var n=0,t=0,lines='';q.forEach(function(v,i){if(v){n+=v;t+=v*M[i][2];lines+='<li><span>'+M[i][1]+' x'+v+'</span><b>'+inr(v*M[i][2])+'</b></li>'}});
+    $('owLines').innerHTML=lines||'<li class="ow-empty">Add something from the menu</li>';
+    $('owCartB').innerHTML=SV.ic(IP.bag)+'Cart ('+n+')';
+    num($('owTot'),t,inr,400);num($('owApp'),t*0.60,inr,400);num($('owOwn'),t*0.98,inr,400);
   }
   menu.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var i=+b.getAttribute('data-i');q[i]=Math.max(0,q[i]+(+b.getAttribute('data-d')));drawMenu()});
   drawMenu();
 
+  /* ---- receipts (percentages come from a real payout: base 22.25, long distance 1.88, payment 2.01, tax 6.00, growth 8.36, credits +0.49) ---- */
+  var RC=[['Platform service fee',22.25],['Long distance fee',1.88],['Payment mechanism fee',2.01],['Tax deductions',6.00],['Investments in growth',8.36],['Credits and additions',-0.49]],rids=['rcV','rcN','rcS'];
+  function rc(){
+    rids.forEach(function(i){fill($(i))});
+    var v=+$('rcV').value,n=+$('rcN').value,s=+$('rcS').value/100;
+    $('rcVv').textContent=inr(v);$('rcNv').textContent=n;$('rcSv').textContent=Math.round(s*100)+'%';$('rcShare').textContent=Math.round(s*100)+'%';
+    var tot=RC.reduce(function(a,r){return a+r[1]},0),appKeep=v*(1-tot/100);
+    $('rcApp').innerHTML='<li><span>Order value</span><b>'+inr(v)+'</b></li>'+RC.map(function(r){var a=v*r[1]/100;return '<li class="'+(a<0?'pos':'neg')+'"><span>'+r[0]+'</span><b>'+(a<0?'+':'−')+'₹'+Math.abs(a).toFixed(2)+'</b></li>'}).join('');
+    $('rcOwn').innerHTML='<li><span>Order value</span><b>'+inr(v)+'</b></li><li class="neg"><span>Platform commission</span><b>₹0.00</b></li><li class="neg"><span>Tax on commission</span><b>₹0.00</b></li><li class="neg"><span>Growth and ad charges</span><b>₹0.00</b></li><li class="neg"><span>Payment gateway, about 2%</span><b>−₹'+(v*0.02).toFixed(2)+'</b></li>';
+    num($('rcAppT'),appKeep,function(x){return '₹'+x.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},500);
+    num($('rcOwnT'),v*0.98,function(x){return '₹'+x.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},500);
+    var gain=v*0.98-appKeep;num($('rcGain'),gain,inr,500);num($('rcMonth'),gain*n*30*s,inr,500);
+  }
+  rids.forEach(function(i){$(i).addEventListener('input',rc)});rc();
+
   /* ---- brand it ---- */
   var CU={
-    biryani:{h:'Hungry? Order biryani from ',items:[['biryani','Chicken Dum Biryani',360],['biryani','Veg Biryani',280],['cupcake','Brownie Box',120]]},
-    pizza:{h:'Fresh pizza and burgers from ',items:[['pizza','Margherita Pizza',299],['burger','Classic Burger',189],['cupcake','Choco Lava Cake',99]]},
-    cafe:{h:'Your daily coffee from ',items:[['coffee','Cappuccino',140],['coffee','Cold Coffee',160],['cupcake','Blueberry Muffin',110]]},
-    momos:{h:'Hot momos and noodles from ',items:[['momos','Steamed Momos',120],['momos','Fried Momos',140],['biryani','Hakka Noodles',180]]}
+    biryani:{h:'Hungry? Order biryani from ',ic:'bowl',items:[['bowl','Chicken Dum Biryani',360],['bowl','Veg Biryani',280],['cake','Brownie Box',120]]},
+    pizza:{h:'Fresh pizza and burgers from ',ic:'pizza',items:[['pizza','Margherita Pizza',299],['utensils','Classic Burger',189],['cake','Choco Lava Cake',99]]},
+    cafe:{h:'Your daily coffee from ',ic:'coffee',items:[['coffee','Cappuccino',140],['coffee','Cold Coffee',160],['cake','Blueberry Muffin',110]]},
+    momos:{h:'Hot momos and noodles from ',ic:'utensils',items:[['utensils','Steamed Momos',120],['utensils','Fried Momos',140],['bowl','Hakka Noodles',180]]}
   };
   var COL=['#FC5301','#DC2626','#16A34A','#2563EB','#7C3AED','#111827'],cu='biryani',nm=$('owName'),br=$('owBr');
   $('owCol').innerHTML=COL.map(function(k,i){return '<button type="button" aria-label="Colour '+(i+1)+'" data-c="'+k+'" style="background:'+k+'"'+(i?'':' class="on"')+'></button>'}).join('');
@@ -1101,8 +1291,8 @@
     var n=(nm.value.trim()||'Your Restaurant'),slug=n.toLowerCase().replace(/[^a-z0-9]+/g,'');
     $('owLogo').textContent=n;$('owUrl').textContent='www.'+(slug||'yourrestaurant')+'.com';
     $('owH').textContent=CU[cu].h+n;
-    $('owHi').innerHTML='<img src="img/'+CU[cu].items[0][0]+'.svg" alt="">';
-    $('owCards').innerHTML=CU[cu].items.map(function(it){return '<div><img src="img/'+it[0]+'.svg" alt=""><p>'+it[1]+'</p><small>'+inr(it[2])+'</small></div>'}).join('');
+    $('owHi').innerHTML='<span>'+SV.ic(IP[CU[cu].ic])+'</span>';
+    $('owCards').innerHTML=CU[cu].items.map(function(it,i){return '<div><span class="ow-it '+TINT[i]+'">'+SV.ic(IP[it[0]])+'</span><p>'+it[1]+'</p><small>'+inr(it[2])+'</small></div>'}).join('');
   }
   nm.addEventListener('input',drawBrand);
   pick($('owCui'),function(v){cu=v;drawBrand()});
@@ -1111,22 +1301,24 @@
   drawBrand();
 
   /* ---- customer tour ---- */
+  var CKI='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+  function row(m,qty){return '<div class="ow-row"><span class="ow-it '+TINT[m[3]]+'">'+SV.ic(IP[m[0]])+'</span><span>'+m[1]+(qty?' x'+qty:'')+'</span><b>'+inr(m[2]*(qty||1))+'</b></div>'}
   var TT=[
     {t:'Browse a menu they already know',l:['Photos, prices and categories, just like the apps','Search and filters for fast ordering','Offers shown right on the menu'],
-     s:function(){return '<div class="ow-ts-h"><span>Spice Route</span><small>Open now</small></div><div class="ow-ts-b">'+[['biryani','Chicken Biryani',320],['pizza','Paneer Pizza',280],['burger','Classic Burger',180],['coffee','Filter Coffee',90]].map(function(m){return '<div class="ow-row"><img src="img/'+m[0]+'.svg" alt=""><span>'+m[1]+'</span><b>'+inr(m[2])+'</b></div>'}).join('')+'</div>'}},
+     s:function(){return '<div class="ow-ts-h"><span>Spice Route</span><small>Open now</small></div><div class="ow-ts-b">'+M.slice(0,4).map(function(m,i){return row([m[0],m[1],m[2],i])}).join('')+'</div>'}},
     {t:'A cart that nudges them to add more',l:['Smart add-ons and combos at checkout','Coupons applied in one tap','Clear totals, no surprise charges'],
-     s:function(){return '<div class="ow-ts-h"><span>Your cart</span><small>2 items</small></div><div class="ow-ts-b"><div class="ow-row"><img src="img/biryani.svg" alt=""><span>Chicken Biryani x1</span><b>₹320</b></div><div class="ow-row"><img src="img/burger.svg" alt=""><span>Classic Burger x2</span><b>₹360</b></div><div class="ow-code"><span>FIRST10 applied</span><span>−₹68</span></div><div class="ow-tot"><span>Total</span><span>₹612</span></div><span class="ow-pbtn">Proceed to pay</span></div>'}},
+     s:function(){return '<div class="ow-ts-h"><span>Your cart</span><small>3 items</small></div><div class="ow-ts-b">'+row(['bowl','Chicken Biryani',320,0],1)+row(['utensils','Veg Burger',180,2],2)+'<div class="ow-code"><span>FIRST10 applied</span><span>−₹68</span></div><div class="ow-ttl"><span>Total</span><span>₹612</span></div><span class="ow-pbtn">Proceed to pay</span></div>'}},
     {t:'Pay the way they like',l:['UPI, cards and wallets through a secure gateway','Cash on delivery if you want it','Money settles to your own account'],
      s:function(){return '<div class="ow-ts-h"><span>Payment</span><small>Secure</small></div><div class="ow-ts-b"><div class="ow-pay"><div class="on"><i></i>UPI (GPay, PhonePe, Paytm)</div><div><i></i>Credit or debit card</div><div><i></i>Cash on delivery</div></div><span class="ow-pbtn">Pay ₹612</span></div>'}},
     {t:'Track every order, live',l:['Customers see each step from kitchen to door','You see all orders in one place','Every customer saved to your CRM'],
-     s:function(){return '<div class="ow-ts-h"><span>Order #1042</span><small>Live</small></div><div class="ow-ts-b"><ul class="ow-track"><li data-k="0"><i>✓</i><div><b>Order accepted</b><small>7:41 pm</small></div></li><li data-k="1"><i>✓</i><div><b>Being prepared</b><small>Chef is on it</small></div></li><li data-k="2"><i>3</i><div><b>On the way</b><small>Rider picked it up</small></div></li><li data-k="3"><i>4</i><div><b>Delivered</b><small>Enjoy your meal</small></div></li></ul><div class="ow-eta">Arriving in <b>18 min</b></div></div>'}}
+     s:function(){var st=[['Order accepted','7:41 pm'],['Being prepared','Chef is on it'],['On the way','Rider picked it up'],['Delivered','Enjoy your meal']];return '<div class="ow-ts-h"><span>Order #1042</span><small>Live</small></div><div class="ow-ts-b"><ul class="ow-track">'+st.map(function(x){return '<li><i>'+CKI+'</i><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div></li>'}).join('')+'</ul><div class="ow-eta">Arriving in <b>18 min</b></div></div>'}}
   ];
   var tt=null;
   function drawTour(k){
     var t=TT[+k];clearInterval(tt);
     $('owTt').textContent=t.t;
-    $('owTl').innerHTML=t.l.map(function(x){return '<li><i>✓</i>'+x+'</li>'}).join('');
-    $('owTs').innerHTML='<div class="lp-sb"></div>'+t.s();
+    $('owTl').innerHTML=t.l.map(function(x){return '<li>'+CKI+x+'</li>'}).join('');
+    $('owTs').innerHTML=t.s();
     if(+k===3){var lis=$('owTs').querySelectorAll('.ow-track li'),n=0;(function step(){if(n<lis.length){lis[n].classList.add('on');n++;if(RM)step()}})();
       if(!RM)tt=setInterval(function(){if(n<lis.length){lis[n].classList.add('on');n++}else clearInterval(tt)},900)}
   }

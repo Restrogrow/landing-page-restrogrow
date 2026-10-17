@@ -1,23 +1,21 @@
-// Builds the ad landing pages in lp/ from index.html (shared proof, form, tracking) plus each page's own
-// hero, interactive sections, CSS and JS in tools/lp/pages/*.js.
+// Builds the ad landing pages in lp/ from the page modules in tools/lp/pages/*.js.
+// Each page has its own layout, interactive tools, copy, CSS and JS; the main page (index.html) only supplies
+// the shared plumbing (fonts, form, demo popup, tracking, footer). Real client dashboards and payout
+// screenshots come from tools/lp/shared.js.
 // Run:  node tools/build-lps.js      then      node tools/check-lps.js
 'use strict';
 var fs = require('fs'), path = require('path');
 var base = require('./lp/base.js');
 
 var outDir = path.join(base.root, 'lp');
-var imgDir = path.join(outDir, 'img');
-[outDir, imgDir].forEach(function (d) { if (!fs.existsSync(d)) fs.mkdirSync(d); });
-
-Object.keys(base.ART).forEach(function (k) { fs.writeFileSync(path.join(imgDir, k + '.svg'), base.ART[k]); });
-console.log('wrote ' + Object.keys(base.ART).length + ' images to lp/img/');
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
 
 var SLUGS = ['loyalty', 'own-website', 'whatsapp', 'profit-audit'];
 var built = [];
 SLUGS.forEach(function (s) {
   var file = path.join(__dirname, 'lp', 'pages', s + '.js');
   if (!fs.existsSync(file)) return;
-  var page = require(file)(base.ctx);
+  var page = require(file)(base.shared);
   fs.writeFileSync(path.join(outDir, s + '.html'), base.assemble(page));
   built.push([s + '.html', page.name, 'lp/' + s + '.html']);
   console.log('wrote lp/' + s + '.html');

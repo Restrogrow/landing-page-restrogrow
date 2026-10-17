@@ -421,90 +421,300 @@
 }
 </style>
 <style>
-/* ===== shared widgets for the ad landing pages (all scoped under .rg) ===== */
-.rg .lp-phone{position:relative;width:min(100%,320px);margin:0 auto;border-radius:44px;background:#0B0B1A;padding:11px;box-shadow:0 44px 90px -34px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.14) inset}
-.rg .lp-phone::before{content:"";position:absolute;top:19px;left:50%;transform:translateX(-50%);width:86px;height:22px;border-radius:14px;background:#000;z-index:4}
-.rg .lp-screen{position:relative;background:#fff;color:var(--tx);border-radius:34px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
-.rg .lp-sb{height:44px;flex:none}
-.rg .lp-cap{margin-top:18px;text-align:center;font-size:.82rem;color:var(--dmu)}
-.rg .lp-cap b{color:#fff;font-weight:600}
-.rg .lp-float{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px;font-size:.8rem;line-height:1.3;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);animation:lpBob 5s ease-in-out infinite;z-index:5}
-.rg .lp-float b{display:block;font:700 .95rem var(--fh);color:var(--tx)}
-.rg .lp-float small{display:block;color:var(--mu);font-size:.72rem}
-.rg .lp-float img{width:34px;height:34px;flex:none}
-.rg .lp-float.tr{top:-6px;right:-150px}
-.rg .lp-float.bl{bottom:70px;left:-150px}
-@keyframes lpBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.rg .lp-hero-v{position:relative;padding:20px 0}
-.rg .lp-hero-v::before{content:"";position:absolute;inset:6% -4% 6% -4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.28),transparent);filter:blur(14px);z-index:0}
-.rg .lp-hero-v>.lp-phone,.rg .lp-hero-v>.lp-main{position:relative;z-index:1}
+/* ===== ad landing pages: layout, components, app screens (all scoped under .rg) ===== */
+.rg .ic{width:1.2em;height:1.2em;flex:none;display:inline-block;vertical-align:-.2em}
+.rg .x-w{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.rg .x-sec{padding:clamp(64px,8vw,104px) 0;position:relative}
+.rg .x-dark{background:var(--ink);color:#fff}
+.rg .x-cream{background:var(--cream)}
+.rg .x-dots{background-image:radial-gradient(rgba(0,0,12,.07) 1px,transparent 1px);background-size:22px 22px}
+.rg .x-dark.x-dots{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px)}
+.rg .x-head{max-width:740px;margin:0 0 clamp(30px,4vw,50px)}
+.rg .x-head.c{margin-left:auto;margin-right:auto;text-align:center}
+.rg .x-kick{display:inline-flex;align-items:center;gap:10px;font:600 .78rem var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--o);margin-bottom:14px}
+.rg .x-kick::before{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-head.c .x-kick::after{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-h2{font:700 clamp(1.8rem,3.4vw,2.7rem)/1.15 var(--fh);letter-spacing:-.02em}
+.rg .x-lead{margin-top:14px;color:var(--mu);font-size:1.05rem}
+.rg .x-dark .x-lead{color:var(--dmu)}
+.rg .o{color:var(--o)}
 
-/* cards, chips, toggles */
-.rg .lp-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
-.rg .lp-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+/* top bar */
+.rg .x-top{position:sticky;top:0;z-index:40;background:rgba(0,0,12,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.rg .x-top .x-w{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.rg .x-logo{font:800 1.2rem var(--fh);color:#fff;letter-spacing:-.01em}
+.rg .x-logo b{color:var(--o)}
+.rg .x-top .btn{height:42px;padding:0 18px;font-size:.86rem}
+.rg .x-top nav{display:flex;gap:22px;font-size:.88rem;color:#C9C9D6}
+.rg .x-top nav a:hover{color:#fff}
+@media (max-width:820px){.rg .x-top nav{display:none}}
+
+/* hero */
+.rg .x-hero{background:radial-gradient(900px 520px at 82% -8%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;padding:clamp(40px,5.5vw,80px) 0 clamp(52px,7vw,92px);overflow:hidden}
+.rg .x-hero .x-w{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(32px,5vw,72px);align-items:center}
+.rg .x-eyb{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:14px;line-height:1.4;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:.84rem;color:#D4D4E0}
+.rg .x-eyb .ic{color:var(--o)}
+.rg .x-hero h1{font:800 clamp(2.1rem,4.3vw,3.45rem)/1.1 var(--fh);letter-spacing:-.025em;margin:20px 0 0;color:#fff}
+.rg .x-sub{margin-top:20px;font-size:1.08rem;color:#CFCFDB;max-width:54ch}
+.rg .x-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.rg .x-btn2{display:inline-flex;align-items:center;gap:9px;height:56px;padding:0 24px;border-radius:12px;border:1.5px solid rgba(255,255,255,.25);color:#fff;font:600 1rem var(--fh);transition:border-color .25s,background .25s}
+.rg .x-btn2:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.rg .x-checks{margin-top:26px;display:grid;gap:10px}
+.rg .x-checks li{display:flex;gap:11px;align-items:flex-start;font-size:.96rem;color:#E4E4EE}
+.rg .x-checks .ic{color:var(--o);margin-top:2px;width:1.25em;height:1.25em}
+.rg .x-trust{display:flex;align-items:center;gap:14px;margin-top:28px}
+.rg .x-trust .avs{display:flex;padding-left:10px}
+.rg .x-trust .avs img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);margin-left:-10px}
+.rg .x-trust p{font-size:.88rem;color:var(--dmu);line-height:1.4}
+.rg .x-trust b{color:#fff;font-weight:600}
+.rg .x-hv{position:relative;min-height:420px}
+.rg .x-hv::before{content:"";position:absolute;inset:8% 4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.32),transparent);filter:blur(18px)}
+
+/* app screens (look like the real RestroGrow Partner app) */
+.rg .app{position:relative;width:min(100%,290px);border-radius:40px;background:#0B0B1A;padding:9px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12) inset}
+.rg .app::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#000;z-index:4}
+.rg .app-s{position:relative;background:#FBF6F1;color:var(--tx);border-radius:32px;overflow:hidden;min-height:540px;display:flex;flex-direction:column}
+.rg .app-hd{background:linear-gradient(165deg,#FF7A3D,#FC5301 55%,#E54A00);color:#fff;padding:42px 16px 38px;border-radius:0 0 28px 28px}
+.rg .app-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.rg .app-id{display:flex;align-items:center;gap:8px;font:600 .74rem var(--fh)}
+.rg .app-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.4);flex:none}
+.rg .app-ic{display:flex;gap:12px;opacity:.95}
+.rg .app-ic .ic{width:18px;height:18px}
+.rg .blr{filter:blur(4.5px);user-select:none;-webkit-user-select:none}
+.rg .app-tt small{display:block;font:600 .58rem var(--fh);letter-spacing:.14em;opacity:.85}
+.rg .app-tt b{display:block;font:800 1.65rem/1.1 var(--fh)}
+.rg .app-bd{padding:0 12px;margin-top:-20px;flex:1;display:flex;flex-direction:column;gap:10px}
+.rg .app-card{background:#fff;border-radius:16px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3);padding:12px 14px}
+.rg .app-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rg .app-tile{background:#fff;border-radius:16px;padding:11px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3)}
+.rg .app-tile .i{width:28px;height:28px;border-radius:9px;display:grid;place-items:center}
+.rg .app-tile .i .ic{width:16px;height:16px}
+.rg .app-tile b{display:block;font:800 1.2rem/1.1 var(--fh);margin-top:8px;font-variant-numeric:tabular-nums}
+.rg .app-tile small{display:block;font:600 .56rem var(--fh);letter-spacing:.08em;color:var(--mu);text-transform:uppercase;margin-top:2px}
+.rg .t-g{background:#DCFCE7;color:#15803D}.rg .t-b{background:#DBEAFE;color:#1D4ED8}.rg .t-y{background:#FEF3C7;color:#B45309}
+.rg .t-p{background:#EDE9FE;color:#6D28D9}.rg .t-r{background:#FEE2E2;color:#B91C1C}.rg .t-o{background:#FFEDD5;color:#C2410C}
+.rg .app-nav{display:flex;justify-content:space-around;padding:9px 4px 12px;background:#fff;border-top:1px solid #F1ECE6;margin-top:auto}
+.rg .app-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.56rem;color:#8A8A98;min-width:44px}
+.rg .app-nav .ic{width:18px;height:18px}
+.rg .app-nav .on{color:var(--o);font-weight:600}
+.rg .app-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F3EEE8;font-size:.78rem}
+.rg .app-row:last-child{border-bottom:0}
+.rg .app-row .app-av{background:#E5E7EB;width:30px;height:30px}
+.rg .app-row b{display:block;font:600 .8rem var(--fh)}
+.rg .app-row small{color:var(--mu);font-size:.68rem}
+.rg .app-row em{margin-left:auto;font-style:normal;font:700 .74rem var(--fh);color:var(--o)}
+.rg .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font:700 .62rem var(--fh);letter-spacing:.03em}
+.rg .pill.s{background:#E5E7EB;color:#374151}.rg .pill.g{background:#FEF3C7;color:#92400E}.rg .pill.p{background:#EDE9FE;color:#5B21B6}.rg .pill.ok{background:#DCFCE7;color:#166534}
+.rg .app-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border:0;border-radius:13px;background:var(--o);color:#fff;font:700 .85rem var(--fh);cursor:pointer;width:100%;transition:transform .2s,background .2s}
+.rg .app-btn:hover{background:var(--o2)}.rg .app-btn:active{transform:scale(.98)}
+
+/* real screenshot frames */
+.rg .shot-f{position:relative;border-radius:30px;overflow:hidden;border:7px solid #0B0B1A;background:#0B0B1A;box-shadow:0 36px 70px -28px rgba(0,0,0,.7);cursor:zoom-in;line-height:0}
+.rg .shot-f img{display:block;width:100%;height:auto}
+.rg .shot-f.wide{border-radius:20px;border-width:5px}
+.rg .shot-zoom{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;background:rgba(0,0,12,.78);color:#fff;font:600 .72rem var(--fh);line-height:1;pointer-events:none}
+.rg .shot-zoom .ic{width:14px;height:14px}
+
+/* floating notes and annotations */
+.rg .x-note{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px 10px 10px;font-size:.78rem;line-height:1.25;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);z-index:6;animation:xBob 5s ease-in-out infinite}
+.rg .x-note b{display:block;font:800 .95rem var(--fh);color:var(--tx)}
+.rg .x-note small{display:block;color:var(--mu);font-size:.7rem}
+.rg .x-note i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-style:normal}
+.rg .x-note i .ic{width:18px;height:18px}
+@keyframes xBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.rg .x-pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 .68rem var(--fh);cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 0 rgba(252,83,1,.6);animation:xPulse 2s infinite;z-index:3;transform:translate(-50%,-50%)}
+.rg .x-pin.on{background:var(--ink);animation:none}
+@keyframes xPulse{0%{box-shadow:0 0 0 0 rgba(252,83,1,.55)}70%{box-shadow:0 0 0 12px rgba(252,83,1,0)}100%{box-shadow:0 0 0 0 rgba(252,83,1,0)}}
+
+/* logos strip */
+.rg .x-logos{padding:34px 0 38px;background:#fff;border-bottom:1px solid var(--ln)}
+.rg .x-logos p{text-align:center;font-size:.9rem;color:var(--mu);margin-bottom:20px}
+.rg .x-logos .mq img{height:clamp(54px,6vw,70px)}
+
+/* cards, chips, toggles, inputs */
+.rg .x-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
+.rg .x-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+.rg .x-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.rg .x-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rg .x-four{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rg .x-ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:14px;background:var(--ot);color:var(--o)}
+.rg .x-ico .ic{width:24px;height:24px}
+.rg .x-card h3,.rg .x-dcard h3{font:700 1.1rem/1.35 var(--fh)}
+.rg .x-card p.m,.rg .x-dcard p.m{margin-top:8px;font-size:.94rem;color:var(--mu)}
+.rg .x-dcard p.m{color:var(--dmu)}
 .rg .seg{display:inline-flex;gap:4px;padding:5px;border-radius:14px;background:#EFE8E0;flex-wrap:wrap}
-.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
+.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s;display:inline-flex;align-items:center;gap:7px}
 .rg .seg button.on{background:#fff;color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.rg .dark .seg{background:rgba(255,255,255,.08)}
-.rg .dark .seg button{color:var(--dmu)}
-.rg .dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
+.rg .x-dark .seg{background:rgba(255,255,255,.08)}
+.rg .x-dark .seg button{color:var(--dmu)}
+.rg .x-dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
 .rg .chips{display:flex;flex-wrap:wrap;gap:8px}
-.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s}
+.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
 .rg .chips button:hover{border-color:#F6C7AE}
 .rg .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
-.rg .dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
-.rg .dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
+.rg .x-dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
+.rg .x-dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
 .rg .rng.lt{background:linear-gradient(to right,var(--o) 0 var(--p,50%),#E8E1D9 var(--p,50%))}
-.rg .lp-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-weight:500}
-.rg .lp-lbl output,.rg .lp-lbl b{font:700 1.15rem var(--fh)}
-.rg .lp-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:var(--o);font:600 .74rem var(--fh);letter-spacing:.04em}
-.rg .lp-badge.g{background:#E6F6EC;color:#15803D}
-.rg .lp-note{font-size:.78rem;color:var(--mu);margin-top:14px}
-.rg .dark .lp-note{color:var(--dmu)}
-.rg .lp-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
-.rg .lp-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.rg .lp-ico{width:56px;height:56px;border-radius:16px;background:var(--ot);display:grid;place-items:center;margin-bottom:14px}
-.rg .lp-ico img{width:36px;height:36px}
-.rg .lp-step{position:relative;padding-top:6px}
-.rg .lp-step .n{position:absolute;top:14px;right:20px;font:800 3.4rem/1 var(--fh);color:rgba(252,83,1,.12)}
-.rg .lp-step h3{font:700 1.1rem/1.35 var(--fh);margin-top:6px}
-.rg .lp-step p{color:var(--mu);font-size:.95rem;margin-top:8px}
-.rg .lp-cta-row{display:flex;justify-content:center;margin-top:34px}
-.rg .lp-confetti{position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;opacity:0}
-.rg .lp-table{width:100%;border-collapse:collapse;font-size:.94rem}
-.rg .lp-table th,.rg .lp-table td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--ln)}
-.rg .lp-table th{font:600 .78rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
-@media (max-width:900px){
- .rg .lp-two,.rg .lp-three{grid-template-columns:1fr}
- .rg .lp-float{display:none}
+.rg .x-fld{margin-bottom:24px}
+.rg .x-fld:last-child{margin-bottom:0}
+.rg .x-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;font-weight:500}
+.rg .x-lbl output,.rg .x-lbl b{font:700 1.2rem var(--fh)}
+.rg .x-fld small{display:block;color:var(--mu);font-size:.8rem;margin-top:10px}
+.rg .x-dark .x-fld small{color:var(--dmu)}
+.rg .x-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:#C2410C;font:600 .74rem var(--fh)}
+.rg .x-tag.g{background:#DCFCE7;color:#15803D}
+.rg .x-note2{font-size:.78rem;color:var(--mu);margin-top:14px}
+.rg .x-dark .x-note2{color:var(--dmu)}
+.rg .x-cta-row{display:flex;justify-content:center;margin-top:34px}
+
+/* result panel used by calculators */
+.rg .x-out{padding:clamp(22px,3vw,34px);border-radius:22px;background:#fff;color:var(--tx);display:flex;flex-direction:column;gap:16px}
+.rg .x-out .l{font-size:.94rem;color:var(--mu)}
+.rg .x-out .big{font:800 clamp(2.2rem,4.4vw,3.2rem)/1.05 var(--fh);letter-spacing:-.03em;color:#C2410C;margin-top:6px;font-variant-numeric:tabular-nums}
+.rg .x-out .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:13px 0;border-top:1px solid var(--ln);color:var(--mu);font-size:.92rem}
+.rg .x-out .row b{font:700 1.3rem var(--fh);color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rg .x-out .win{background:var(--ot);border:1.5px solid #FBD2BC;border-radius:16px;padding:16px 18px}
+.rg .x-out .win p{font-size:.94rem;color:var(--tx)}
+.rg .x-out .win strong{display:block;font:800 clamp(1.7rem,3.2vw,2.3rem)/1.1 var(--fh);color:#16A34A;margin:6px 0 2px;letter-spacing:-.02em}
+.rg .x-out .win small{font-size:.78rem;color:var(--mu)}
+
+/* real client explorer */
+.rg .cl-wrap{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(24px,4vw,56px);align-items:center}
+.rg .cl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rg .cl-tabs button{border:1.5px solid var(--ln);background:#fff;border-radius:12px;padding:9px 14px;font:600 .82rem var(--fh);cursor:pointer;color:var(--mu);transition:all .2s}
+.rg .cl-tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rg .cl-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rg .cl-st{padding:16px;border-radius:16px;background:#fff;border:1px solid var(--ln)}
+.rg .cl-st small{display:block;font:600 .68rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .cl-st b{display:block;font:800 1.6rem/1.15 var(--fh);margin-top:4px;font-variant-numeric:tabular-nums}
+.rg .cl-st.hl{background:var(--ot);border-color:#FBD2BC}.rg .cl-st.hl b{color:var(--o)}
+.rg .cl-say{margin-top:14px;padding:16px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.94rem;line-height:1.55}
+.rg .cl-say b{color:var(--o);font:800 1.15rem var(--fh)}
+.rg .cl-bars{margin-top:18px;display:grid;gap:8px}
+.rg .cl-bar{display:grid;grid-template-columns:62px 1fr 56px;gap:10px;align-items:center;font-size:.8rem;color:var(--mu)}
+.rg .cl-bar i{display:block;height:9px;border-radius:9px;background:#EFE8E0;overflow:hidden;position:relative}
+.rg .cl-bar i::after{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,#FC5301,#FF8A3D);border-radius:9px;transition:width .8s var(--ease)}
+.rg .cl-bar.on b{color:var(--o)}
+.rg .cl-bar b{text-align:right;font:700 .8rem var(--fh);color:var(--tx)}
+
+/* real payout decoder */
+.rg .po-wrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.rg .po-img{position:relative}
+.rg .po-img .shot-f{border-radius:22px;border-width:5px}
+.rg .po-tabs{margin-bottom:18px}
+.rg .po-bar{display:flex;height:46px;border-radius:12px;overflow:hidden;background:#EFE8E0;margin:14px 0 8px}
+.rg .po-bar i{display:block;height:100%;transition:width .7s var(--ease);min-width:0}
+.rg .po-leg{display:grid;gap:2px}
+.rg .po-leg li{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln);font-size:.9rem}
+.rg .po-leg li:last-child{border-bottom:0}
+.rg .po-leg li i{width:12px;height:12px;border-radius:4px}
+.rg .po-leg li em{font-style:normal;color:var(--mu);font-size:.8rem;min-width:48px;text-align:right}
+.rg .po-leg li b{font:700 .92rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .po-keep{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px 18px;border-radius:16px;background:#E6F6EC;color:#166534}
+.rg .po-keep b{font:800 1.7rem var(--fh);color:#15803D;font-variant-numeric:tabular-nums}
+.rg .po-keep small{display:block;font-size:.76rem}
+.rg .po-more{margin-top:12px;padding:14px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.92rem}
+.rg .po-more b{color:#4ADE80;font:800 1.15rem var(--fh)}
+
+/* guarantee, faq, final cta */
+.rg .gx{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(26px,4vw,48px);border-radius:28px;background:#fff;border:1px solid var(--ln);box-shadow:0 40px 80px -50px rgba(0,0,0,.35)}
+.rg .gx-seal{position:relative;width:clamp(150px,18vw,200px);aspect-ratio:1}
+.rg .gx-seal svg{width:100%;height:100%}
+.rg .gx-seal b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:800 clamp(2.4rem,4.4vw,3.4rem)/1 var(--fh);color:var(--o)}
+.rg .gx-seal small{display:block;font:600 .66rem var(--fh);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);margin-top:6px}
+.rg .gx h2{font:700 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--fh);letter-spacing:-.02em;margin:10px 0 12px}
+.rg .gx p{color:var(--mu)}
+.rg .gx-pts{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 22px}
+.rg .gx-pts li{display:flex;gap:8px;align-items:center;font-size:.9rem;font-weight:500}
+.rg .gx-pts .ic{color:var(--o)}
+.rg .x-faq{max-width:860px;margin:0 auto;display:grid;gap:12px}
+.rg .x-faq details{border:1px solid var(--ln);border-radius:16px;background:#fff;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.rg .x-faq details[open]{border-color:#F6C7AE;box-shadow:0 18px 36px -26px rgba(252,83,1,.5)}
+.rg .x-faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;cursor:pointer;list-style:none;font:600 1rem/1.4 var(--fh)}
+.rg .x-faq summary::-webkit-details-marker{display:none}
+.rg .x-faq summary .ic{color:var(--o);transition:transform .3s}
+.rg .x-faq details[open] summary .ic{transform:rotate(45deg)}
+.rg .x-faq details p{padding:0 22px 20px;color:var(--mu);font-size:.96rem}
+.rg .fin{background:radial-gradient(800px 420px at 12% 110%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;text-align:center;padding:clamp(64px,8vw,104px) 0}
+.rg .fin h2{font:800 clamp(1.9rem,3.8vw,3rem)/1.12 var(--fh);letter-spacing:-.025em;max-width:820px;margin:0 auto}
+.rg .fin p{color:#CFCFDB;margin:16px auto 0;max-width:56ch;font-size:1.05rem}
+.rg .fin .x-checks{justify-content:center;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px}
+.rg .fin .btn{margin-top:30px;height:60px;padding:0 34px;font-size:1.05rem}
+.rg .fin small{display:block;margin-top:14px;color:var(--dmu);font-size:.84rem}
+
+/* steps / timeline */
+.rg .x-step{position:relative}
+.rg .x-step .n{position:absolute;top:16px;right:20px;font:800 3.2rem/1 var(--fh);color:rgba(252,83,1,.12)}
+.rg .x-tl{position:relative;display:grid;gap:18px}
+.rg .x-tl li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:16px;border-radius:16px;border:1px solid transparent;transition:background .3s,border-color .3s;cursor:pointer}
+.rg .x-tl li .ic-b{width:44px;height:44px;border-radius:13px;background:#EFE8E0;color:var(--mu);display:grid;place-items:center;transition:background .3s,color .3s}
+.rg .x-tl li.on{background:#fff;border-color:var(--ln);box-shadow:0 20px 40px -30px rgba(0,0,0,.4)}
+.rg .x-tl li.on .ic-b{background:var(--o);color:#fff}
+.rg .x-tl li b{display:block;font:700 1rem var(--fh)}
+.rg .x-tl li span{display:block;color:var(--mu);font-size:.9rem;margin-top:3px}
+
+/* tables */
+.rg .x-tbl{width:100%;border-collapse:collapse;font-size:.94rem}
+.rg .x-tbl th,.rg .x-tbl td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+.rg .x-tbl th{font:600 .74rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .x-tbl th.hl,.rg .x-tbl td.hl{background:#FFF7F1}
+.rg .x-tbl td.no{color:#C2410C}.rg .x-tbl td.ok{color:#15803D;font-weight:600}
+.rg .x-tbl td .ic{margin-right:6px}
+.rg .x-tbl td:first-child{font-weight:600}
+.rg .x-tbl tr:last-child td{border-bottom:0}
+
+@media (max-width:980px){
+ .rg .x-hero .x-w{grid-template-columns:1fr}
+ .rg .x-hv{min-height:0;padding:10px 0}
+ .rg .x-two,.rg .x-three,.rg .x-four{grid-template-columns:1fr}
+ .rg .cl-wrap,.rg .po-wrap{grid-template-columns:1fr}
+ .rg .cl-wrap .shot-f,.rg .po-img{max-width:320px;margin:0 auto}
+ .rg .gx{grid-template-columns:1fr;text-align:center}
+ .rg .gx-seal{margin:0 auto}.rg .gx-pts{justify-content:center}
+ .rg .x-note{display:none}
 }
-@media (prefers-reduced-motion:reduce){.rg .lp-float{animation:none}}
+@media (max-width:520px){
+ .rg .btn{white-space:normal;height:auto;min-height:52px;padding:12px 20px;text-align:center;line-height:1.3}
+ .rg .x-top .btn{white-space:nowrap;min-height:40px;height:40px;padding:0 12px;font-size:.78rem}
+ .rg .x-logo{font-size:1.05rem}
+ .rg .x-four{grid-template-columns:1fr 1fr}
+ .rg .cl-stats{grid-template-columns:1fr 1fr}
+ .rg .x-tbl{font-size:.82rem}.rg .x-tbl th,.rg .x-tbl td{padding:11px 8px}
+ .rg .po-leg li{grid-template-columns:12px 1fr auto}.rg .po-leg li em{display:none}
+}
+@media (prefers-reduced-motion:reduce){.rg .x-note,.rg .x-pin{animation:none}}
 
 
-.rg .wa-screen{background:#0B141A}
-.rg .wa-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#075E54;color:#fff}
-.rg .wa-av{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center}
-.rg .wa-av img{width:26px;height:26px}
-.rg .wa-top b{display:block;font:700 .92rem var(--fh)}
-.rg .wa-top b i{font-style:normal;color:#25D366;font-size:.8rem;margin-left:2px}
-.rg .wa-top small{font-size:.7rem;opacity:.8}
-.rg .wa-chat{flex:1;min-height:380px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end;background:#0B141A radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/18px 18px}
-.rg .wa-m{max-width:84%;padding:8px 11px;border-radius:10px;font-size:.82rem;line-height:1.45;color:#E9EDEF;animation:waIn .45s var(--ease) both}
-.rg .wa-m small{display:block;margin-top:3px;font-size:.62rem;opacity:.65;text-align:right}
-.rg .wa-m.biz{background:#202C33;border-top-left-radius:2px}
-.rg .wa-m.me{background:#005C4B;align-self:flex-end;border-top-right-radius:2px}
-.rg .wa-m .lk{display:block;margin-top:6px;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,.07);color:#53BDEB;font-size:.76rem}
-@keyframes waIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.rg .wa-hv{min-height:600px}
+.rg .wa-back{position:absolute;left:-4%;top:48px;width:50%;transform:rotate(-4deg);opacity:.96;z-index:1}
+.rg .wa-back .app{width:100%}
+.rg .wa-front{position:absolute;right:-2%;top:0;width:56%;z-index:2}
+.rg .wa-front .app{width:100%}
+.rg .wa-n1{left:-6%;bottom:30px;animation-delay:-1.5s}
+.rg .wa-s{background:#0B141A;min-height:540px}
+.rg .wa-top{display:flex;align-items:center;gap:10px;padding:40px 14px 10px;background:#075E54;color:#fff}
+.rg .wa-av{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--o);display:grid;place-items:center;flex:none}
+.rg .wa-av .ic{width:18px;height:18px}
+.rg .wa-top b{display:block;font:700 .88rem var(--fh)}
+.rg .wa-top small{font-size:.66rem;opacity:.8}
+.rg .wa-chat{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:7px;justify-content:flex-end;background:#0B141A radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/18px 18px}
+.rg .wa-chat .wb{font-size:.78rem;padding:7px 10px}
+.rg .wb .lk{display:flex;align-items:center;gap:6px;margin-top:6px;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,.07);color:#53BDEB;font-size:.72rem}
+.rg .wb .lk .ic{width:13px;height:13px}
 .rg .wa-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 14px;background:#111B21;color:#fff}
-.rg .wa-foot small{display:block;font-size:.66rem;color:#8696A0}
-.rg .wa-foot b{font:800 1.5rem var(--fh);color:#25D366}
-.rg .wa-replay{border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;padding:8px 14px;border-radius:99px;font:600 .78rem var(--fh);cursor:pointer}
+.rg .wa-foot small{display:block;font-size:.62rem;color:#8696A0}
+.rg .wa-foot b{font:800 1.5rem var(--fh);color:#25D366;font-variant-numeric:tabular-nums}
+.rg .wa-replay{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;padding:7px 12px;border-radius:99px;font:600 .72rem var(--fh);cursor:pointer}
+.rg .wa-replay .ic{width:14px;height:14px}
 .rg .wa-replay:hover{border-color:#fff}
-.rg .wa-day{max-width:980px;margin:0 auto}
-.rg .wa-day-h{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-.rg .wa-day-h b{display:block;font:700 1.1rem var(--fh)}
+.rg .wa-stats{background:#fff;border-bottom:1px solid var(--ln);padding:34px 0}
+.rg .wa-stat b{display:block;font:800 clamp(1.7rem,3vw,2.3rem)/1.1 var(--fh);letter-spacing:-.02em;color:var(--o);font-variant-numeric:tabular-nums}
+.rg .wa-stat span{display:block;font-size:.88rem;color:var(--mu);margin-top:4px}
+.rg .wa-day{max-width:1000px;margin:0 auto}
+.rg .wa-day-h{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.rg .wa-day-h b{display:block;font:700 1.15rem var(--fh)}
 .rg .wa-day-h small{color:var(--mu)}
-.rg .wa-send{height:48px;padding:0 20px;font-size:.92rem}
+.rg .wa-send{height:48px;padding:0 20px;font-size:.92rem;gap:9px}
 .rg .wa-send.done{background:#16A34A}
 .rg .wa-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(4px,1.2vw,12px);align-items:end;height:230px}
 .rg .wa-col{display:flex;flex-direction:column;justify-content:flex-end;height:100%;text-align:center}
@@ -512,25 +722,27 @@
 .rg .wa-bar i{display:block;width:100%;border-radius:6px 6px 0 0;transition:height .9s var(--ease)}
 .rg .wa-bar i.base{background:#F1E4DA}
 .rg .wa-col.slow .wa-bar i.base{background:#FBD2BC}
-.rg .wa-bar i.add{background:var(--o);border-radius:6px 6px 0 0}
+.rg .wa-bar i.add{background:var(--o)}
 .rg .wa-bar em{position:absolute;left:0;right:0;font:700 .72rem var(--fh);font-style:normal;color:var(--o);text-align:center;opacity:0;transition:opacity .5s .5s}
 .rg .wa-bar em.on{opacity:1}
 .rg .wa-col small{margin-top:8px;font-size:.7rem;color:var(--mu)}
-.rg .wa-note{margin-top:16px;font-size:.9rem;color:var(--mu);text-align:center}
+.rg .wa-note{margin-top:16px;font-size:.92rem;color:var(--mu);text-align:center}
 .rg .wa-note b{color:#15803D}
+.rg .wa-pains{margin-top:clamp(36px,4vw,56px)}
 .rg .wa-camp{align-items:start}
-.rg .wa-f{margin-bottom:22px}
-.rg .wa-f label{display:block;font:600 .85rem var(--fh);margin-bottom:10px;color:#E8E8F0}
-.rg .wa-fld{margin-bottom:22px}
 .rg .wa-prev{padding:16px;border-radius:20px;background:#0B141A;border:1px solid var(--dln)}
 .rg .wa-prev-h{display:flex;align-items:center;gap:10px;margin-bottom:12px;color:#fff}
-.rg .wa-prev-h i{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center}
-.rg .wa-prev-h i img{width:24px;height:24px}
+.rg .wa-prev-h i{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--o);display:grid;place-items:center}
+.rg .wa-prev-h i .ic{width:18px;height:18px}
 .rg .wa-prev-h b{display:block;font:700 .9rem var(--fh)}
 .rg .wa-prev-h small{font-size:.7rem;color:#8696A0}
-.rg .wa-b{padding:11px 13px;border-radius:12px;border-top-left-radius:2px;background:#202C33;color:#E9EDEF;font-size:.9rem;line-height:1.55;min-height:96px;transition:opacity .2s}
-.rg .wa-btn{display:block;margin-top:6px;padding:10px;border-radius:12px;background:#202C33;color:#53BDEB;font:600 .85rem var(--fb);text-align:center}
-.rg .wa-res{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.rg .wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;padding:10px;border-radius:12px;background:#202C33;color:#53BDEB;font:600 .85rem var(--fb)}
+.rg .wa-fun{margin-top:14px;padding:16px;border-radius:18px;background:var(--ink2);border:1px solid var(--dln);display:grid;gap:10px}
+.rg .wa-fr{display:grid;grid-template-columns:90px 1fr 70px;gap:10px;align-items:center;font-size:.82rem;color:var(--dmu)}
+.rg .wa-fr i{display:block;height:10px;border-radius:10px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+.rg .wa-fr i::after{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,#FC5301,#FF8A3D);border-radius:10px;transition:width .6s var(--ease)}
+.rg .wa-fr b{text-align:right;color:#fff;font:700 .84rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .wa-res{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .rg .wa-res div{padding:14px 16px;border-radius:16px;background:var(--ink2);border:1px solid var(--dln)}
 .rg .wa-res div.hl{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.35)}
 .rg .wa-res small{display:block;font-size:.76rem;color:var(--dmu)}
@@ -542,210 +754,150 @@
 .rg .wa-when b{font:700 1rem var(--fh);color:#9A3412}
 .rg .wa-auto h3{font:800 1.35rem var(--fh);margin:18px 0 8px}
 .rg .wa-auto p{color:var(--mu)}
-.rg .wa-chatbox{padding:22px 18px;border-radius:22px;background:#0B141A}
-.rg .wa-chat2{display:flex;flex-direction:column;gap:9px;min-height:240px;justify-content:flex-end}
-@media (max-width:760px){.rg .wa-bars{height:190px}.rg .wa-col small{font-size:.58rem}.rg .wa-res b{font-size:1.2rem}}
+.rg .ly-wa{border-radius:24px;overflow:hidden;background:#0B141A;border:1px solid var(--dln)}
+.rg .ly-wa-h{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#075E54;color:#fff}
+.rg .ly-wa-h b{display:block;font:700 .92rem var(--fh)}
+.rg .ly-wa-h small{font-size:.7rem;opacity:.8}
+.rg .ly-logo{width:34px;height:34px;border-radius:11px;background:var(--o);color:#fff;display:grid;place-items:center;flex:none}
+.rg .ly-logo .ic{width:18px;height:18px}
+.rg .ly-wa-c{padding:18px 14px;min-height:280px;display:flex;flex-direction:column;gap:9px;justify-content:flex-end;background:#0B141A radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/18px 18px}
+.rg .wb{max-width:86%;padding:9px 12px;border-radius:10px;font-size:.88rem;line-height:1.5;color:#E9EDEF;animation:wbIn .45s var(--ease) both}
+.rg .wb small{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:3px;font-size:.64rem;opacity:.7}
+.rg .wb small .ic{width:13px;height:13px;color:#53BDEB}
+.rg .wb.biz{background:#202C33;border-top-left-radius:2px}
+.rg .wb.me{background:#005C4B;align-self:flex-end;border-top-right-radius:2px}
+@keyframes wbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media (max-width:980px){
+ .rg .wa-hv{min-height:0}.rg .wa-back,.rg .wa-n1{display:none}
+ .rg .wa-front{position:static;width:min(100%,290px);margin:0 auto}
+}
+@media (max-width:760px){.rg .wa-bars{height:190px}.rg .wa-col small{font-size:.58rem}}
 </style>
 
 <div class="rg" id="rg-top">
 
-<!-- ================= HERO ================= -->
-<section class="hero" id="rg-hero"><div class="w">
-  <div class="copy">
-    <p class="eyb rv">For <b>restaurants, cafes &amp; cloud kitchens</b> with slow days and quiet hours</p>
-    <h1 class="rv" style="--dl:.06s">Fill Your Slow Hours With One WhatsApp Message. <span class="o">Not Another Discount on the App.</span></h1>
-    <p class="sub rv" style="--dl:.12s">RestroGrow saves every direct customer's number in your own CRM and sends offers, festive deals and reminders on WhatsApp. Orders come straight to you with zero commission.</p>
-    <div class="cta rv" style="--dl:.18s">
-      <a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a class="btn btn-g" href="#rg-camp">Build a Campaign Now</a>
-    </div>
-    <p class="wait rv" style="--dl:.22s">One WhatsApp offer reaches every past customer in minutes. <b>No ad spend. No commission.</b></p>
-    <div class="proof rv" style="--dl:.26s"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div>
-  </div>
-  <div class="lp-hero-v rv" style="--dl:.15s">
+<header class="x-top"><div class="x-w"><a class="x-logo" href="#rg-hero">Restro<b>Grow</b></a><nav><a href="#rg-problem">Slow hours</a><a href="#rg-camp">Campaign builder</a><a href="#clx">Real results</a><a href="#rg-faq">FAQ</a></nav><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan</a></div></header>
 
-    <div class="lp-phone"><div class="lp-screen wa-screen">
-      <div class="lp-sb" style="background:#075E54"></div>
-      <div class="wa-top"><div class="wa-av"><img class="" src="img/biryani.svg" alt="" loading="lazy" decoding="async"></div><div><b>Spice Route <i>✓</i></b><small>Business account</small></div></div>
-      <div class="wa-chat" id="waChat"></div>
-      <div class="wa-foot"><div><small>Orders from this one message</small><b id="waOrd">0</b></div><button class="wa-replay" id="waReplay" type="button">Replay</button></div>
-    </div>
-    <div class="lp-float tr"><img class="" src="img/bell.svg" alt="" loading="lazy" decoding="async"><span><b>New order!</b><small>From your WhatsApp offer</small></span></div>
-    <div class="lp-float bl" style="animation-delay:-2s"><img class="" src="img/heart.svg" alt="" loading="lazy" decoding="async"><span><b>0% commission</b><small>Direct to your kitchen</small></span></div></div>
+
+<section class="x-hero" id="rg-hero"><div class="x-w">
+  <div>
+    <span class="x-eyb rv"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M8.7 8.5c.3 3.2 3.1 5.8 6.3 6.2l1.3-1.4-2-1-1 .8a5 5 0 0 1-2.2-2.2l.8-1-1-2z"/></svg>For restaurants, cafes and cloud kitchens with slow days and quiet hours</span>
+    <h1 class="rv" style="--dl:.06s">Fill Your Slow Hours With One WhatsApp Message. <span class="o">Not Another Discount on the App.</span></h1>
+    <p class="x-sub rv" style="--dl:.12s">RestroGrow saves every direct customer's number in your own CRM and sends offers, festive deals and reminders on WhatsApp. Orders come straight to you with zero commission.</p>
+    <div class="x-cta rv" style="--dl:.18s"><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="x-btn2" href="#rg-camp"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h3l8 4V5L7 9H4a1 1 0 0 0-1 1z"/><path d="M18.5 9a4 4 0 0 1 0 6"/></svg>Build a campaign now</a></div>
+    <ul class="x-checks rv" style="--dl:.22s"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Every direct customer saved to your own CRM automatically</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Offers, festive deals, reminders and review requests in minutes</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days, or 100% of your fee back</li></ul>
+    <div class="x-trust"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div>
   </div>
-</div>
-<div class="w wimp">
-  <div class="impact rv">
-    <div class="imp"><b><span class="cu" data-to="140">0</span>+</b><p>restaurants, cafes and cloud kitchens on RestroGrow</p></div>
-    <div class="imp"><b>₹<span class="cu" data-to="90">0</span> L+</b><p>commission saved for our clients, and counting</p></div>
-    <div class="imp"><b><span class="cu" data-from="30" data-to="0">30</span>%</b><p>commission on every direct order</p></div>
-    <div class="imp"><b><span class="cu" data-to="3">0</span>X</b><p>returns in 90 days, or 100% of your money back</p></div>
+  <div class="x-hv wa-hv rv" style="--dl:.12s">
+    <div class="wa-back">
+      <div class="app"><div class="app-s">
+        <div class="app-hd"><div class="app-top"><span class="app-id"><i class="app-av"></i><span class="blr">Spice Route</span></span><span class="app-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span></div><div class="app-tt"><small>WHATSAPP</small><b>Campaigns</b></div></div>
+        <div class="app-bd">
+          <div class="app-tiles">
+            <div class="app-tile"><span class="i t-b"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg></span><b>1,150</b><small>Sent</small></div>
+            <div class="app-tile"><span class="i t-g"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13l4 4 8-9"/><path d="M10 15l1 1 9-10"/></svg></span><b>1,128</b><small>Delivered</small></div>
+            <div class="app-tile"><span class="i t-p"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg></span><b>812</b><small>Read</small></div>
+            <div class="app-tile"><span class="i t-o"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><b>46</b><small>Orders</small></div>
+          </div>
+          <div class="app-card"><div class="app-row"><span class="app-av t-o"></span><div><b>Weekend special</b><small>Sent 4:02 pm</small></div><em>46 orders</em></div><div class="app-row"><span class="app-av t-g"></span><div><b>Reorder reminder</b><small>Automatic</small></div><em>21 orders</em></div></div>
+        </div>
+        <div class="app-nav"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Home</span><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Menu</span><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Orders</span><span class="on"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h3l8 4V5L7 9H4a1 1 0 0 0-1 1z"/><path d="M18.5 9a4 4 0 0 1 0 6"/></svg>Campaigns</span><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>More</span></div>
+      </div></div>
+    </div>
+    <div class="wa-front">
+      <div class="app"><div class="app-s wa-s">
+        <div class="wa-top"><span class="wa-av"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg></span><div><b>Spice Route</b><small>Business account</small></div></div>
+        <div class="wa-chat" id="waChat"></div>
+        <div class="wa-foot"><div><small>Orders from this one message</small><b id="waOrd">0</b></div><button class="wa-replay" id="waReplay" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4L4 9"/><path d="M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2"/><path d="M20 20v-5h-5"/></svg>Replay</button></div>
+      </div></div>
+    </div>
+    <div class="x-note wa-n1"><i class="t-o"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></i><span><b>New order</b><small>From your WhatsApp offer</small></span></div>
   </div>
 </div></section>
 
-<section class="logos cream" aria-label="Brands using RestroGrow">
-  <p>Trusted by 140+ restaurants, cafes and cloud kitchens</p>
-  <div class="mq"><div class="mq-t" id="rgMq"></div></div>
-</section>
+
+<section class="wa-stats"><div class="x-w"><div class="x-four">
+  <div class="wa-stat rv"><b>252 to 515</b><span>customers saved in 3 months at 5 real clients</span></div>
+  <div class="wa-stat rv" style="--dl:.06s"><b>0%</b><span>commission on orders from your own list</span></div>
+  <div class="wa-stat rv" style="--dl:.12s"><b data-count="140" data-suffix="+">0</b><span>restaurants on RestroGrow</span></div>
+  <div class="wa-stat rv" style="--dl:.18s"><b>10 sec</b><span>to build and preview a campaign below</span></div>
+</div></div></section>
+
+<section class="x-logos"><p>Trusted by 140+ restaurants, cafes and cloud kitchens</p><div class="mq"><div class="mq-t" id="rgMq"></div></div></section>
 
 
-<!-- ================= PROBLEM ================= -->
-<section class="sec" id="rg-problem"><div class="w">
-  <div class="head rv"><span class="kick">The slow hour problem</span><h2 class="h2">Empty Tables at 4 PM. <span class="o">And No Way to Reach Your Customers.</span></h2><p>A typical day for a restaurant that sells mostly through apps. Tap the button to see what one WhatsApp offer can do.</p></div>
-  <div class="lp-card wa-day rv">
-    <div class="wa-day-h"><div><b>Orders by hour</b><small>An example day, for illustration</small></div><button class="btn btn-p wa-send" id="waSend" type="button">Send a WhatsApp offer at 4 PM</button></div>
+<section class="x-sec" id="rg-problem"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">The slow hour problem</span><h2 class="x-h2">Empty Tables at 4 PM. <span class="o">And No Way to Reach Your Customers.</span></h2><p class="x-lead">A typical day for a restaurant that sells mostly through apps. Tap the button to see what one WhatsApp offer can do.</p></div>
+  <div class="x-card wa-day rv">
+    <div class="wa-day-h"><div><b>Orders by hour</b><small>An example day, for illustration</small></div><button class="btn btn-p wa-send" id="waSend" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg>Send a WhatsApp offer at 4 PM</button></div>
     <div class="wa-bars" id="waBars"></div>
     <p class="wa-note" id="waNote">The quiet stretch from 3 to 6 PM is where kitchens lose money on rent and staff.</p>
   </div>
-  <div class="pains" style="margin-top:clamp(40px,5vw,60px)">
-    <div class="pain rv"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M4 4l16 16"/></svg></span><div><h3>You can't message your own customers.</h3><p>The app keeps their numbers. A slow day means waiting, not calling anyone back.</p></div></div>
-    <div class="pain rv" style="--dl:.06s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span><div><h3>Boosting orders on the app costs even more.</h3><p>Promoted listings and discounts on top of 25 to 30% commission leave almost nothing on the bill.</p></div></div>
-    <div class="pain rv"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span><div><h3>Festivals and weekends pass without a plan.</h3><p>No list means no Diwali offer, no new menu launch and no weekend special you can send yourself.</p></div></div>
-    <div class="pain rv" style="--dl:.06s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7l6 6 4-4 8 8M21 11v6h-6"/></svg></span><div><h3>Your sales depend on their ranking.</h3><p>When the algorithm shifts, orders drop and you have no other lever to pull.</p></div></div>
+  <div class="x-four wa-pains">
+    <div class="x-card rv"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.5 9.5 0 0 1 12 6c5 0 8.5 4 9.5 6a12 12 0 0 1-2.6 3.3M6.6 7.6A12 12 0 0 0 2.5 12c1 2 4.5 6 9.5 6a9 9 0 0 0 3.2-.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></div><h3>You can't message your own customers</h3><p class="m">The app keeps their numbers. A slow day means waiting, not calling anyone back.</p></div>
+    <div class="x-card rv" style="--dl:.06s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/></svg></div><h3>Boosting on the app costs even more</h3><p class="m">Promoted listings and discounts on top of 25 to 30% commission leave almost nothing on the bill.</p></div>
+    <div class="x-card rv" style="--dl:.12s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><h3>Festivals pass without a plan</h3><p class="m">No list means no Diwali offer, no new menu launch and no weekend special you can send yourself.</p></div>
+    <div class="x-card rv" style="--dl:.18s"><div class="x-ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg></div><h3>Sales depend on their ranking</h3><p class="m">When the algorithm shifts, orders drop and you have no other lever to pull.</p></div>
   </div>
-  <p class="verdict rv">The fix isn't more discounts. <span class="o">It's a list you own and a message you can send.</span></p>
 </div></section>
 
-<!-- ================= CAMPAIGN BUILDER ================= -->
-<section class="sec dark" id="rg-camp"><div class="w">
-  <div class="head rv"><span class="kick">Try it yourself</span><h2 class="h2">Build a WhatsApp Campaign <span class="o">in 10 Seconds</span></h2><p>Pick an occasion and an offer. See the message your customers get and what it could be worth.</p></div>
-  <div class="lp-two wa-camp">
-    <div class="lp-dcard rv">
-      <div class="wa-f"><label>Occasion</label><div class="chips" id="waOcc"><button class="on" data-v="slow" type="button">Slow weekday</button><button data-v="weekend" type="button">Weekend special</button><button data-v="festival" type="button">Festival</button><button data-v="newdish" type="button">New dish</button><button data-v="winback" type="button">Win-back</button></div></div>
-      <div class="wa-f"><label>Offer</label><div class="chips" id="waOff"><button class="on" data-v="20% off" type="button">Flat 20% off</button><button data-v="dessert" type="button">Free dessert</button><button data-v="combo" type="button">Family combo</button><button data-v="delivery" type="button">Free delivery</button></div></div>
-      <div class="fld wa-fld"><div class="t"><label for="waN">Customers on your WhatsApp list</label><output id="waNv">1,200</output></div><input class="rng" type="range" id="waN" min="200" max="5000" step="100" value="1200"></div>
-      <div class="fld wa-fld"><div class="t"><label for="waA">Average order value</label><output id="waAv">₹400</output></div><input class="rng" type="range" id="waA" min="150" max="1000" step="10" value="400"></div>
-      <div class="fld wa-fld"><div class="t"><label for="waR">Customers who order (illustrative)</label><output id="waRv">4%</output></div><input class="rng" type="range" id="waR" min="1" max="10" step="1" value="4"><small>We can't promise a response rate. Move it to see how the numbers change.</small></div>
+
+<section class="x-sec x-dark x-dots" id="rg-camp"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Calculator</span><h2 class="x-h2">Build a WhatsApp Campaign <span class="o">in 10 Seconds</span></h2><p class="x-lead">Pick an occasion, an offer and who gets it. See the message your customers read and what it could be worth.</p></div>
+  <div class="x-two wa-camp">
+    <div class="x-dcard rv">
+      <div class="x-fld"><div class="x-lbl"><b>Occasion</b></div><div class="chips" id="waOcc"><button class="on" data-v="slow" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Slow weekday</button><button data-v="weekend" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Weekend special</button><button data-v="festival" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Festival</button><button data-v="newdish" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg>New dish</button><button data-v="winback" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.4-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.6-7.5 10-7.5 10z"/></svg>Win-back</button></div></div>
+      <div class="x-fld"><div class="x-lbl"><b>Offer</b></div><div class="chips" id="waOff"><button class="on" data-v="20% off" type="button">Flat 20% off</button><button data-v="dessert" type="button">Free dessert</button><button data-v="combo" type="button">Family combo</button><button data-v="delivery" type="button">Free delivery</button></div></div>
+      <div class="x-fld"><div class="x-lbl"><b>Who gets it</b></div><div class="chips" id="waAud"><button class="on" data-v="1" type="button">Everyone</button><button data-v="0.35" type="button">Regulars</button><button data-v="0.2" type="button">New customers</button><button data-v="0.25" type="button">Not ordered in 30 days</button></div></div>
+      <div class="x-fld"><div class="x-lbl"><label for="waN">Customers on your WhatsApp list</label><output id="waNv">1,200</output></div><input class="rng" type="range" id="waN" min="200" max="5000" step="100" value="1200"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="waA">Average order value</label><output id="waAv">₹400</output></div><input class="rng" type="range" id="waA" min="150" max="1000" step="10" value="400"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="waR">Customers who order (illustrative)</label><output id="waRv">4%</output></div><input class="rng" type="range" id="waR" min="1" max="10" step="1" value="4"><small>We can't promise a response rate. Move it to see how the numbers change.</small></div>
     </div>
     <div class="rv" style="--dl:.08s">
-      <div class="wa-prev"><div class="wa-prev-h"><i><img class="" src="img/biryani.svg" alt="" loading="lazy" decoding="async"></i><div><b>Spice Route</b><small>Business account</small></div></div>
-        <div class="wa-b" id="waMsg"></div>
-        <span class="wa-btn">Order now</span>
+      <div class="wa-prev"><div class="wa-prev-h"><i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg></i><div><b>Spice Route</b><small>Business account</small></div></div>
+        <div class="wb biz" id="waMsg" style="max-width:100%"></div>
+        <span class="wa-btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1"/><path d="M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></svg>Order now</span>
       </div>
+      <div class="wa-fun" id="waFun"></div>
       <div class="wa-res">
-        <div><small>Messages sent</small><b id="waS">0</b></div>
-        <div><small>Orders</small><b id="waO">0</b></div>
         <div><small>Revenue to you</small><b id="waRev">₹0</b></div>
         <div class="hl"><small>Commission saved vs the apps</small><b id="waSave">₹0</b></div>
       </div>
-      <a class="btn btn-p btn-full" style="margin-top:14px" href="#rg-demo">Set Up My WhatsApp Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-p btn-full" style="margin-top:14px" href="#rg-demo">Set Up My WhatsApp Marketing <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </div></section>
 
-<!-- ================= AUTOMATIONS ================= -->
-<section class="sec cream dots" id="rg-auto"><div class="w">
-  <div class="head rv"><span class="kick">Set it once</span><h2 class="h2">Messages That Send <span class="o">Themselves</span></h2><p>Pick an automation to see when it goes out and what your customer reads.</p></div>
-  <div class="lp-two wa-auto rv">
-    <div class="lp-card">
+<section class="x-sec x-cream x-dots" id="clx" data-focus="customers"><div class="x-w"><div class="x-head rv"><span class="x-kick">Real numbers</span><h2 class="x-h2">Your Customer List <span class="o">Fills Itself</span></h2><p class="x-lead">Every direct order saves the customer to your own list. These are real dashboards from restaurants on RestroGrow: how many customers each one saved in 3 months.</p></div><div class="cl-wrap"><div class="rv"><div class="shot-f" data-zoom=""><img id="clxImg" alt="Real RestroGrow client dashboard, names blurred" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-2.png"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>View full size</span></div></div><div class="rv" style="--dl:.08s"><div class="cl-tabs" id="clxTabs"></div><div class="cl-stats"><div class="cl-st"><small>Total sales</small><b id="clS">0</b></div><div class="cl-st"><small>Orders</small><b id="clO">0</b></div><div class="cl-st"><small>Customers saved</small><b id="clC">0</b></div><div class="cl-st"><small>Repeat orders</small><b id="clR">0</b></div><div class="cl-st hl" style="grid-column:1/-1"><small>Repeat ratio</small><b id="clP">0</b></div></div><div class="cl-say" id="clxSay"></div><div class="cl-bars" id="clxBars"></div></div></div><p class="x-note2" style="text-align:center;margin-top:28px">Real dashboards from restaurants running on RestroGrow, last three months, names blurred. The 25% app commission is a typical rate used for comparison.</p></div></section>
+
+
+<section class="x-sec x-cream x-dots" id="rg-auto"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Set it once</span><h2 class="x-h2">Messages That Send <span class="o">Themselves</span></h2><p class="x-lead">Pick an automation to see when it goes out and what your customer reads.</p></div>
+  <div class="x-two wa-auto rv">
+    <div class="x-card">
       <div class="seg" id="waTabs"><button class="on" data-v="0" type="button">Welcome</button><button data-v="1" type="button">Reorder</button><button data-v="2" type="button">Birthday</button><button data-v="3" type="button">Review</button><button data-v="4" type="button">Win-back</button></div>
       <div class="wa-when"><small>Sends</small><b id="waWhen"></b></div>
       <h3 id="waAt"></h3>
       <p id="waAd"></p>
     </div>
-    <div class="wa-chatbox"><div class="wa-chat2" id="waC2"></div><p class="lp-cap">Sent automatically on <b>WhatsApp</b>. You do nothing.</p></div>
+    <div class="ly-wa"><div class="ly-wa-h"><span class="ly-logo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg></span><div><b>Spice Route</b><small>Business account</small></div></div><div class="ly-wa-c" id="waC2"></div></div>
   </div>
 </div></section>
 
-<!-- ================= HOW ================= -->
-<section class="sec" id="rg-how"><div class="w">
-  <div class="head rv"><span class="kick">How it works</span><h2 class="h2">From Silent Slow Days <span class="o">to a Full Kitchen</span></h2></div>
-  <div class="lp-three">
-    <div class="lp-card lp-step rv"><span class="n">1</span><div class="lp-ico"><img class="" src="img/qr.svg" alt="" loading="lazy" decoding="async"></div><h3>We set up your CRM and ordering page</h3><p>Your own ordering website plus a CRM that saves every direct customer's number automatically.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.08s"><span class="n">2</span><div class="lp-ico"><img class="" src="img/gift.svg" alt="" loading="lazy" decoding="async"></div><h3>We grow your WhatsApp list</h3><p>Parcel inserts, table QR codes and first order rewards turn app customers into contacts you own.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.16s"><span class="n">3</span><div class="lp-ico"><img class="" src="img/bell.svg" alt="" loading="lazy" decoding="async"></div><h3>You send, they order, you keep it all</h3><p>Offers, new menus and festive deals go out in minutes. Orders land on your website with zero commission.</p></div>
-  </div>
-  <p class="stay rv" style="margin-top:34px;text-align:center;font:600 1.1rem var(--fh)">No new ad spend. <span class="o">Just the customers you already have.</span></p>
-</div></section>
-<!-- ================= 4. BEFORE / AFTER ================= -->
-<section class="sec cream dots" id="rg-proof"><div class="w">
-  <div class="head rv"><span class="kick">Before vs. after RestroGrow</span><h2 class="h2">Same Sales. <span class="o">₹37,491 More in Your Pocket.</span></h2><p>A real Zomato payout, next to the same ₹98,640 in sales through RestroGrow.</p></div>
-  <div class="ba" id="rgBA">
-    <div class="bac bef rv">
-      <div class="bac-h"><span>Before</span><h3>Only on delivery apps</h3></div>
-      <ul class="bl"><li><i>✕</i>25 to 30% commission plus GST on every order</li><li><i>✕</i>Zero customer numbers or data</li><li><i>✕</i>Repeat orders cost commission again</li><li><i>✕</i>Discounts and visibility on the app's terms</li></ul>
-      <div class="shots" id="rgShots">
-        <span class="mark">Actual delivery app payout</span>
-        <div class="shots-t" id="rgShT">
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png" alt="Zomato payout: ₹98,640 sales, ₹59,175.70 payout"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary.png" alt="Delivery app payout summary"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Dark-Earnings-Breakdown-UI.png" alt="Delivery app earnings breakdown"></figure>
-        </div>
-      </div>
-      <div class="sdots" id="rgSd"><button class="on" aria-label="Payout 1"></button><button aria-label="Payout 2"></button><button aria-label="Payout 3"></button></div>
-    </div>
-    <div class="bac aft rv" style="--dl:.08s">
-      <div class="bac-h"><span>After</span><h3>With RestroGrow</h3></div>
-      <ul class="bl"><li><i>✓</i>0% commission on every direct order</li><li><i>✓</i>Every customer's number in your own CRM</li><li><i>✓</i>Repeat orders through WhatsApp and loyalty</li><li><i>✓</i>Your prices, your offers, your brand</li></ul>
-      <div class="pay">
-        <h4>Payout breakdown</h4><p class="s">Same sales, as direct orders via RestroGrow</p>
-        <div class="pr"><span>Total sales</span><b>₹98,640.00</b></div>
-        <div class="pr z"><span>Platform commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Tax on commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Investments in growth</span><b>₹0</b></div>
-        <div class="pr"><span>Payment gateway, approx. 2%</span><b style="color:#C2410C">₹1,972.80</b></div>
-        <div class="net"><span>You receive</span><b>₹96,667</b></div>
-        <p class="s" style="margin:10px 0 0;text-align:center;font-weight:600;color:#0E8A45">₹37,491 more than the app payout of ₹59,175</p>
-      </div>
-    </div>
-  </div>
-  <p class="bacap">Comparison based on the first payout. Swipe to see more real app payouts.</p>
-</div></section>
+<section class="x-sec" id="pod"><div class="x-w"><div class="x-head rv"><span class="x-kick">What the same orders cost on an app</span><h2 class="x-h2">Every Order From Your List <span class="o">Skips the Platform Fees</span></h2><p class="x-lead">Two real delivery app payouts. See what each month of sales really paid out, then switch to the same sales through your own WhatsApp-driven orders.</p></div><div class="po-wrap"><div class="po-img rv"><div class="shot-f" data-zoom=""><img id="podImg" alt="Real delivery app payout statement" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>View full size</span></div></div><div class="rv" style="--dl:.08s"><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="seg po-tabs" id="podTabs"><button class="on" data-v="0" type="button">Payout 1</button><button data-v="1" type="button">Payout 2</button></div><div class="seg po-tabs" id="podMode"><button class="on" data-v="app" type="button">Delivery app</button><button data-v="direct" type="button">Same sales, direct</button></div></div><div class="po-bar" id="podBar"></div><ul class="po-leg" id="podLeg"></ul><div class="po-keep"><div><small>What you keep</small><b id="podKeep">0</b></div><span id="podKeepP"></span></div><p class="po-more" id="podMore"></p></div></div><p class="x-note2" style="text-align:center;margin-top:26px">Real payout statements from delivery apps. "Direct" assumes about 2% payment gateway fee and no commission.</p></div></section>
 
-<!-- ================= 5. RESULTS ================= -->
-<section class="sec" id="rg-results"><div class="w">
-  <div class="head rv"><span class="kick">Real client results</span><h2 class="h2">₹90 Lakh+ Saved for 140+ Restaurants. <span class="o">And Counting.</span></h2><p>Real dashboards from restaurants running on RestroGrow. Tap any to see it full size.</p></div>
-  <div class="gal rv" id="rgGal"></div>
-</div></section>
+<section class="x-sec x-cream"><div class="x-w"><div class="gx rv"><div class="gx-seal"><svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="92" stroke="#FC5301" stroke-width="3" stroke-dasharray="3 7"/><circle cx="100" cy="100" r="78" fill="#FFF1E8" stroke="#FC5301" stroke-width="2"/></svg><b><span>3X<small>in 90 days</small></span></b></div><div><span class="x-kick">Our guarantee</span><h2>Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2><p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it does not, we refund 100% of what you paid.</p><ul class="gx-pts"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Written into your agreement</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12v4"/><path d="M4 7v10a2 2 0 0 0 2 2h14v-4"/><path d="M21 9h-5a2 2 0 0 0 0 4h5z"/></svg>100% of your fee back</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Measured over 90 days</li></ul><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></div></section>
 
+<section class="x-sec" id="rg-faq"><div class="x-w"><div class="x-head c rv"><span class="x-kick">FAQs</span><h2 class="x-h2">Questions Owners Ask Us First</h2></div><div class="x-faq rv"><details><summary>Is WhatsApp marketing allowed?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Yes, when you message customers who have ordered from you or opted in. We set it up the proper way and help you keep messages relevant.</p></details><details><summary>How do I get my customers' numbers?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Every direct order saves the number to your CRM. QR codes, parcel inserts and first order rewards bring app customers into it.</p></details><details><summary>Can I send offers for festivals and slow days?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Yes. Send festive deals, weekend specials and new menu updates whenever you want, to the whole list or a part of it.</p></details><details><summary>Will customers get spammed?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>No. We keep the schedule sensible, and customers can opt out at any time.</p></details><details><summary>Do I have to stop selling on Zomato and Swiggy?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>No. Keep them for new customers. RestroGrow moves your regulars to direct orders.</p></details><details><summary>How does the 3X guarantee work?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details></div></div></section>
 
-<!-- ================= 8. GUARANTEE ================= -->
-<section class="sec cream dots" id="rg-guarantee"><div class="w">
-  <div class="gbox rv">
-    <div class="seal"><b>3X</b><small>in 90 days<br>or 100% back</small></div>
-    <div>
-      <span class="kick">Our guarantee</span>
-      <h2 class="h2">Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2>
-      <p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it doesn't, we refund 100% of what you paid. You either grow your profit, or you lose nothing.</p>
-      <a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    </div>
-  </div>
-</div></section>
-
-<!-- ================= 9. WHO IT'S FOR ================= -->
-<section class="sec" style="padding-bottom:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">Is this for you?</span><h2 class="h2">Built for Restaurants That Are Already Selling</h2></div>
-  <div class="fit">
-    <div class="fitc yes rv"><h3>RestroGrow is for you if</h3><ul>
-      <li><i>✓</i>You get steady orders on Zomato or Swiggy every day</li>
-      <li><i>✓</i>You have regulars who keep ordering your food</li>
-      <li><i>✓</i>You want more profit from orders you already get</li>
-      <li><i>✓</i>You run a restaurant, cafe, cloud kitchen or multi outlet brand</li></ul></div>
-    <div class="fitc no rv" style="--dl:.08s"><h3>It's not for you if</h3><ul>
-      <li><i>✕</i>You're just starting out and have no regular orders yet</li>
-      <li><i>✕</i>You want a quick discount trick, not a channel you own</li></ul></div>
-  </div>
-</div></section>
-
-<!-- ================= FAQ ================= -->
-<section class="sec" id="rg-faq" style="padding-top:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">FAQs</span><h2 class="h2">Questions Owners Ask Us First</h2></div>
-  <div class="faq rv">
-    <details><summary>Is WhatsApp marketing allowed?<i>+</i></summary><p>Yes, when you message customers who have ordered from you or opted in. We set it up the proper way and help you keep messages relevant.</p></details>
-    <details><summary>How do I get my customers' numbers?<i>+</i></summary><p>Every direct order saves the number to your CRM. QR codes, parcel inserts and first order rewards bring app customers into it.</p></details>
-    <details><summary>Can I send offers for festivals and slow days?<i>+</i></summary><p>Yes. Send festive deals, weekend specials and new menu updates whenever you want, to the whole list or a part of it.</p></details>
-    <details><summary>Will customers get spammed?<i>+</i></summary><p>No. We keep the schedule sensible, and customers can opt out at any time.</p></details>
-    <details><summary>Do I have to stop selling on Zomato and Swiggy?<i>+</i></summary><p>No. Keep them for new customers. RestroGrow moves your regulars to direct orders.</p></details>
-    <details><summary>How does the 3X guarantee work?<i>+</i></summary><p>Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details>
-  </div>
-</div></section>
+<section class="fin"><div class="x-w"><h2>Stop Waiting for the Dinner Rush.</h2><p>See a WhatsApp campaign built on your own menu in a 30 minute demo.</p><ul class="x-checks"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Your own customer list</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Campaigns and automations included</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days or 100% back</li></ul><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><small>Our team will call you to fix a time that suits you.</small></div></section>
 
 <footer class="lf"><div class="w">
   <span>&copy; <b id="rgYr">2026</b> Restro Grow. All rights reserved.</span>
   <nav aria-label="Legal"><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-services">Terms &amp; Services</a><a href="/refund-policy">Refund &amp; Cancellation</a></nav>
 </div></footer>
 
-<div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan</a></div>
+<div class="sticky" id="rgSt"><p><b>Free demo</b> See your WhatsApp plan</p><a class="btn btn-p" href="#rg-demo">Show Me the WhatsApp Plan</a></div>
 <div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
 <div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
 <form class="form rv" id="rgF" novalidate>
@@ -770,7 +922,6 @@
     <div class="done"><b>Thank you for filling the form.</b><p>Our team will get in touch with you shortly.</p></div>
   </form>
 </div></div>
-<div hidden aria-hidden="true"><div id="rgPs"><div id="rgPt"></div></div><div id="rgPd"></div><div id="rgPh"></div><input class="rng" type="range" id="rgO" min="20" max="2000" step="10" value="300"><input class="rng" type="range" id="rgA" min="100" max="1500" step="10" value="400"><input class="rng" type="range" id="rgC" min="10" max="50" step="1" value="25"><output id="rgOv"></output><output id="rgAv"></output><output id="rgCv"></output><span id="rgM"></span><span id="rgY"></span><span id="rgS"></span><span id="rgCart"></span><button id="rgUp" type="button"></button><span id="rgUt"></span><svg id="rgQr"></svg></div>
 </div>
 
 <script>
@@ -787,83 +938,6 @@
   var once=function(el,fn,th){if(!IO||RM){fn();return}var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){fn();o.disconnect()}},{threshold:th||.3});o.observe(el)};
   var tw={},tk=0;
   function tween(el,to,fmt,dur){var fr=+el.getAttribute("data-v")||0;el.setAttribute("data-v",to);if(RM){el.textContent=fmt(to);return}var s=null,k=el.id||("t"+(tk++));if(!el.id)el.id=k;cancelAnimationFrame(tw[k]);(function st(t){if(!s)s=t;var p=Math.min((t-s)/(dur||500),1);el.textContent=fmt(fr+(to-fr)*(1-Math.pow(1-p,3)));if(p<1)tw[k]=requestAnimationFrame(st)})(performance.now())}
-
-  var U="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
-  /* lightbox */
-  var lb=$("rgLb"),lbi=lb.querySelector("img");
-  function openLb(src){lbi.src=src;lb.classList.add("on");document.addEventListener("keydown",esc)}
-  function closeLb(){lb.classList.remove("on");document.removeEventListener("keydown",esc)}
-  function esc(e){if(e.key==="Escape")closeLb()}
-  lb.addEventListener("click",closeLb);
-
-  /* client proof dashboards */
-  var PR=[1,2,3,4,5].map(function(i){return U+"restaurent-proof-"+i+".png"});
-  var ps=$("rgPs"),pd=$("rgPd"),pi=0,pt=null;
-  $("rgPt").innerHTML=PR.map(function(s,i){return '<img src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"'+(i?' loading="lazy"':'')+' decoding="async">'}).join("");
-  pd.innerHTML=PR.map(function(s,i){return '<button'+(i?'':' class="on"')+' aria-label="Dashboard '+(i+1)+'"></button>'}).join("");
-  var pbtn=pd.querySelectorAll("button"),ptk=$("rgPt"),px=null,moved=false;
-  function pgo(i){pi=(i+PR.length)%PR.length;ptk.style.transform="translateX("+(-pi*100)+"%)";pbtn.forEach(function(b,k){b.classList.toggle("on",k===pi)})}
-  ps.addEventListener("pointerdown",function(e){px=e.clientX;moved=false});
-  ps.addEventListener("pointerup",function(e){if(px===null)return;var dx=e.clientX-px;if(Math.abs(dx)>40){moved=true;pgo(pi+(dx<0?1:-1));clearInterval(pt)}px=null});
-  pbtn.forEach(function(b,i){b.addEventListener("click",function(){pgo(i);clearInterval(pt)})});
-  ps.addEventListener("click",function(){if(!moved)openLb(PR[pi])});
-  ps.addEventListener("keydown",function(e){if(e.key==="Enter")openLb(PR[pi])});
-  if(!RM)pt=setInterval(function(){if(!document.hidden&&!lb.classList.contains("on"))pgo(pi+1)},3500);
-  /* results gallery */
-  var gal=$("rgGal");
-  gal.innerHTML=PR.map(function(s,i){return '<button type="button" aria-label="View client dashboard '+(i+1)+'"><img loading="lazy" decoding="async" src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"></button>'}).join("");
-  gal.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){openLb(PR[i])})});
-
-  /* logos */
-  var L=["01-Kohuke","02-Food-Station","03-Tastea-Food-and-Beverages","04-Naso-Restaurants-and-Bar","05-Ganesh-Restaurant","06-Delhi-Darbar-Restaurant-Copy","07-Atea-Spot","08-Desert-Delight-Copy-1","09-Pin-Point-Family-Restaurant","10-Chaska-Cafe","11-Chinees-Corner","12-House-of-Dossapamm","13-RJ-Food-Cafe","14-Arya-Cafe","15-Sadhiska-Bakery-and-Cafe"];
-  var nm=function(f){return f.replace(/^\d+-/,"").replace(/-Copy(-\d)?$/,"").replace(/-/g," ")};
-  var h=L.map(function(f){return '<img loading="lazy" decoding="async" src="'+U+f+'.png" alt="'+nm(f)+'">'}).join("");
-  $("rgMq").innerHTML=h+h.replace(/alt="[^"]*"/g,'alt=""');
-  $("rgAvs").innerHTML=[6,4,9,0,13].map(function(i){return '<img src="'+U+L[i]+'.png" alt="" width="40" height="40">'}).join("");
-
-  /* reveal */
-  var rv=R.querySelectorAll(".rv");
-  if(IO&&!RM){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("show");io.unobserve(e.target)}})},{threshold:.12,rootMargin:"0px 0px -30px 0px"});rv.forEach(function(el){io.observe(el)})}
-  else rv.forEach(function(el){el.classList.add("show")});
-
-  /* impact count up */
-  R.querySelectorAll(".impact .cu").forEach(function(el){var fr=+(el.getAttribute("data-from")||0);el.setAttribute("data-v",fr);el.textContent=fr});
-  once(R.querySelector(".impact"),function(){R.querySelectorAll(".impact .cu").forEach(function(el){tween(el,+el.getAttribute("data-to"),function(v){return Math.round(v)},2000)})},.5);
-
-  /* plate phases */
-  once($("rgPh"),function(){R.querySelectorAll(".ph").forEach(function(p,i){setTimeout(function(){p.querySelector(".plate i").style.setProperty("--k",p.getAttribute("data-k"))},RM?0:250+i*320)})});
-
-  /* calculator */
-  var f=[$("rgO"),$("rgA"),$("rgC")];
-  function calc(){
-    f.forEach(function(r){r.style.setProperty("--p",(r.value-r.min)/(r.max-r.min)*100+"%")});
-    var o=+f[0].value,a=+f[1].value,c=+f[2].value/100,m=o*a*30*c;
-    $("rgOv").textContent=o.toLocaleString("en-IN");$("rgAv").textContent=inr(a);$("rgCv").textContent=Math.round(c*100)+"%";
-    tween($("rgM"),m,inr);tween($("rgY"),m*12,sh);tween($("rgS"),m*12*.3,sh);
-    $("rgStL").textContent=sh(m)+" / month";
-  }
-  f.forEach(function(r){r.addEventListener("input",calc)});calc();
-
-  /* before/after tabs (mobile) */
-
-
-  /* payout screenshots: dots + swipe */
-  var t=$("rgShT"),ds=$("rgSd").children,n=ds.length,cur=0,sx=null,box=$("rgShots"),auto=null;
-  function go(i){cur=(i+n)%n;t.style.transform="translateX("+(-cur*100)+"%)";for(var k=0;k<n;k++)ds[k].classList.toggle("on",k===cur)}
-  var stop=function(){clearInterval(auto)};
-  Array.prototype.forEach.call(ds,function(d,i){d.addEventListener("click",function(){go(i);stop()})});
-  box.addEventListener("pointerdown",function(e){sx=e.clientX});
-  box.addEventListener("pointerup",function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>40){go(cur+(dx<0?1:-1));stop()}sx=null});
-  box.addEventListener("pointercancel",function(){sx=null});
-  once(box,function(){if(!RM)auto=setInterval(function(){if(!document.hidden)go(cur+1)},5000)});
-
-  /* feature demos */
-  var cn=0,ct=0;
-  R.querySelectorAll(".sf .it button").forEach(function(b){b.addEventListener("click",function(){var p=+b.previousElementSibling.querySelector("small").textContent.replace(/\D/g,""),on=b.classList.toggle("on");b.textContent=on?"Added":"Add";cn+=on?1:-1;ct+=on?p:-p;$("rgCart").textContent=cn?cn+(cn>1?" items, ":" item, ")+inr(ct):"Tap Add to try"})});
-  var up=$("rgUp"),uo=false;up.addEventListener("click",function(){uo=!uo;up.textContent=uo?"Added":"Add ₹99";$("rgUt").textContent=uo?"₹739":"₹640"});
-  var q=$("rgQr"),sd=7,rn=function(){sd=(sd*9301+49297)%233280;return sd/233280},fi=function(x,y){return'<rect x="'+x+'" y="'+y+'" width="7" height="7"/><rect x="'+(x+1)+'" y="'+(y+1)+'" width="5" height="5" fill="#fff"/><rect x="'+(x+2)+'" y="'+(y+2)+'" width="3" height="3"/>'},s="";
-  for(var y=0;y<21;y++)for(var x=0;x<21;x++)if(!((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12))&&rn()>.52)s+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
-  q.innerHTML='<g fill="#00000C">'+s+fi(0,0)+fi(14,0)+fi(0,14)+'</g><rect x="9" y="9" width="3" height="3" fill="#FC5301"/>';
 
   /* ad tracking: IDs come from api/public_config.php, so a tag stays off while its ID is empty.
      No Lead / conversion here: that fires once, on the thank-you page. */
@@ -896,7 +970,7 @@
   R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(){ev("DemoOpen","demo_open")})});
   /* FormStart: first real typing/choice (not the popup auto-focusing the first field) */
   ["input","change"].forEach(function(t){$("rgF").addEventListener(t,function(){ev("FormStart","form_start")})});
-  ["rgO","rgA","rgC"].forEach(function(id){$(id).addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
+  R.querySelectorAll('input[type="range"]').forEach(function(r){r.addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
 
   /* form */
   var F=$("rgF"),M=$("rgMsg");
@@ -920,7 +994,7 @@
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
   F.addEventListener("change",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
 
-  /* demo form popup: Show Me the WhatsApp Plan buttons move the bottom form into a popup, closing puts it back */
+  /* demo form popup: Book My Demo buttons move the bottom form into a popup, closing puts it back */
   var md=$("rgMd"),mdb=$("rgMdB"),mph=document.createElement("div"),mlast=null;
   function mdEsc(e){if(e.key==="Escape")closeMd()}
   function openMd(tr){
@@ -949,15 +1023,19 @@
     u()}
 })();
 </script>
+<script>window.LPD={"base":"https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/","proofs":[{"file":"restaurent-proof-1.png","sales":151238,"orders":398,"items":935,"customers":252,"repeat":146,"ratio":36.68},{"file":"restaurent-proof-2.png","sales":203475,"orders":529,"items":1271,"customers":318,"repeat":211,"ratio":39.89},{"file":"restaurent-proof-3.png","sales":224836,"orders":592,"items":1449,"customers":342,"repeat":250,"ratio":42.23},{"file":"restaurent-proof-4.png","sales":302280,"orders":782,"items":1922,"customers":488,"repeat":294,"ratio":37.6},{"file":"restaurent-proof-5.png","sales":348960,"orders":914,"items":2255,"customers":515,"repeat":399,"ratio":43.65}],"payouts":[{"file":"Minimalist-Payout-Breakdown-Summary1.png","A":98640,"B":120,"base":21950,"ld":1850,"pay":1980,"disc":361.2,"tax":5921.4,"growth":8244.1,"payout":59175.7},{"file":"Dark-Earnings-Breakdown-UI.png","A":124980.5,"B":84.3,"base":27544.47,"ld":2800,"pay":2415.28,"disc":724.63,"tax":11248.25,"growth":18497.4,"payout":63284.03}]};</script>
 <script>
 /* ===== shared helpers for the ad landing pages (runs after the main page script) ===== */
 (function () {
   var R = document.querySelector(".rg"); if (!R) return;
   var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var IO = "IntersectionObserver" in window;
   var $ = function (i) { return R.querySelector("#" + i); };
   var inr = function (n) { return "₹" + Math.round(n).toLocaleString("en-IN"); };
   var sh = function (n) { return n >= 1e7 ? "₹" + (n / 1e7).toFixed(2) + " Cr" : n >= 1e5 ? "₹" + (n / 1e5).toFixed(1) + " L" : inr(n); };
+  var D = window.LPD || { proofs: [], payouts: [], base: "" };
   var tw = {};
+
   /* animate a number inside an element */
   function num(el, to, fmt, dur) {
     if (!el) return;
@@ -972,29 +1050,24 @@
       if (p < 1) tw[id] = requestAnimationFrame(step);
     })();
   }
-  /* paint the filled part of a range slider */
   function fill(r) { r.style.setProperty("--p", (r.value - r.min) / (r.max - r.min) * 100 + "%"); }
-  /* run fn when el scrolls into view (or at once if motion is reduced) */
   function seen(el, fn, th) {
     if (!el) return;
-    if (RM || !("IntersectionObserver" in window)) { fn(); return; }
+    if (RM || !IO) { fn(); return; }
     var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: th || .35 });
     o.observe(el);
   }
-  /* little confetti burst from an element */
   function confetti(from) {
     if (RM) return;
     var b = from.getBoundingClientRect(), cols = ["#FC5301", "#FACC15", "#22C55E", "#3B82F6", "#EC4899"], i;
     for (i = 0; i < 26; i++) {
-      var d = document.createElement("i"); d.className = "lp-confetti"; d.style.background = cols[i % cols.length];
-      d.style.left = (b.left + b.width / 2) + "px"; d.style.top = (b.top + b.height / 2) + "px";
-      R.appendChild(d);
+      var d = document.createElement("i"); d.style.cssText = "position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;background:" + cols[i % cols.length] + ";left:" + (b.left + b.width / 2) + "px;top:" + (b.top + b.height / 2) + "px";
+      document.body.appendChild(d);
       var ang = Math.random() * Math.PI * 2, v = 90 + Math.random() * 150;
       var a = d.animate([{ opacity: 1, transform: "translate(0,0) rotate(0)" }, { opacity: 0, transform: "translate(" + Math.cos(ang) * v + "px," + (Math.sin(ang) * v + 120) + "px) rotate(" + (Math.random() * 540) + "deg)" }], { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.3,1)" });
       a.onfinish = (function (n) { return function () { n.remove(); }; })(d);
     }
   }
-  /* segmented / chip groups: one active button, callback with its data-v */
   function pick(box, cb) {
     if (!box) return;
     box.addEventListener("click", function (e) {
@@ -1003,12 +1076,102 @@
       cb(b.getAttribute("data-v"), b);
     });
   }
-  /* tag the scripted "?shot" mode used for screenshots: show every reveal block at once */
+
+  /* full-size view of a real screenshot (uses the page's existing lightbox) */
+  var lb = $("rgLb");
+  function zoom(src) {
+    if (!lb) return;
+    lb.querySelector("img").src = src; lb.classList.add("on");
+    var esc = function (e) { if (e.key === "Escape") { lb.classList.remove("on"); document.removeEventListener("keydown", esc); } };
+    document.addEventListener("keydown", esc);
+  }
+  if (lb) lb.addEventListener("click", function () { lb.classList.remove("on"); });
+  R.addEventListener("click", function (e) { var z = e.target.closest("[data-zoom]"); if (z) zoom(z.getAttribute("data-zoom")); });
+
+  /* scroll reveal (.rv) */
+  var rv = R.querySelectorAll(".rv");
+  if (IO && !RM) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("show"); io.unobserve(e.target); } }); }, { threshold: .1, rootMargin: "0px 0px -30px 0px" });
+    rv.forEach(function (el) { io.observe(el); });
+  } else rv.forEach(function (el) { el.classList.add("show"); });
+
+  /* real client logos: strip + avatars */
+  var U = "https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
+  var L = ["01-Kohuke", "02-Food-Station", "03-Tastea-Food-and-Beverages", "04-Naso-Restaurants-and-Bar", "05-Ganesh-Restaurant", "06-Delhi-Darbar-Restaurant-Copy", "07-Atea-Spot", "08-Desert-Delight-Copy-1", "09-Pin-Point-Family-Restaurant", "10-Chaska-Cafe", "11-Chinees-Corner", "12-House-of-Dossapamm", "13-RJ-Food-Cafe", "14-Arya-Cafe", "15-Sadhiska-Bakery-and-Cafe"];
+  var nm = function (f) { return f.replace(/^\d+-/, "").replace(/-Copy(-\d)?$/, "").replace(/-/g, " "); };
+  var mq = $("rgMq");
+  if (mq) { var h = L.map(function (f) { return '<img loading="lazy" decoding="async" src="' + U + f + '.png" alt="' + nm(f) + '">'; }).join(""); mq.innerHTML = h + h.replace(/alt="[^"]*"/g, 'alt=""'); }
+  var av = $("rgAvs"); if (av) av.innerHTML = [6, 4, 9, 0, 13].map(function (i) { return '<img src="' + U + L[i] + '.png" alt="" width="38" height="38">'; }).join("");
+
+  /* count-up numbers: <b data-count="140" data-suffix="+"> */
+  R.querySelectorAll("[data-count]").forEach(function (el) {
+    var to = +el.getAttribute("data-count"), suf = el.getAttribute("data-suffix") || "", pre = el.getAttribute("data-prefix") || "", dec = +(el.getAttribute("data-dec") || 0);
+    seen(el, function () { num(el, to, function (v) { return pre + (dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-IN")) + suf; }, 1600); }, .5);
+  });
+
+  /* ===== real client explorer (#clx) ===== */
+  var clx = $("clx");
+  if (clx && D.proofs.length) {
+    var focus = clx.getAttribute("data-focus") || "repeat", cur = 0;
+    var tabs = $("clxTabs"), img = $("clxImg"), say = $("clxSay"), bars = $("clxBars");
+    tabs.innerHTML = D.proofs.map(function (p, i) { return '<button type="button" data-i="' + i + '"' + (i ? "" : ' class="on"') + '>Client ' + (i + 1) + "</button>"; }).join("");
+    var M = { repeat: ["Repeat ratio", function (p) { return p.ratio; }, function (v) { return v.toFixed(2) + "%"; }, 100],
+              customers: ["Customers saved", function (p) { return p.customers; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              orders: ["Orders", function (p) { return p.orders; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              sales: ["Total sales", function (p) { return p.sales; }, function (v) { return sh(v); }, 0] };
+    var mm = M[focus], mx = Math.max.apply(null, D.proofs.map(mm[1])) * 1.08;
+    bars.innerHTML = D.proofs.map(function (p, i) { return '<div class="cl-bar" data-i="' + i + '"><span>Client ' + (i + 1) + '</span><i style="--w:' + (mm[1](p) / mx * 100) + '%"></i><b>' + mm[2](mm[1](p)) + "</b></div>"; }).join("");
+    function show(i) {
+      cur = i; var p = D.proofs[i];
+      Array.prototype.forEach.call(tabs.children, function (b, k) { b.classList.toggle("on", k === i); });
+      Array.prototype.forEach.call(bars.children, function (b, k) { b.classList.toggle("on", k === i); });
+      img.src = D.base + p.file; img.parentNode.setAttribute("data-zoom", D.base + p.file);
+      var s = { sales: [$("clS"), p.sales, inr], orders: [$("clO"), p.orders, function (v) { return Math.round(v).toLocaleString("en-IN"); }], customers: [$("clC"), p.customers, function (v) { return Math.round(v).toLocaleString("en-IN"); }], repeat: [$("clR"), p.repeat, function (v) { return Math.round(v).toLocaleString("en-IN"); }], ratio: [$("clP"), p.ratio, function (v) { return v.toFixed(2) + "%"; }] };
+      Object.keys(s).forEach(function (k) { num(s[k][0], s[k][1], s[k][2], 500); });
+      var aov = p.sales / p.orders, rc = p.repeat * aov * 0.25, ac = p.sales * 0.25;
+      say.innerHTML = focus === "repeat" ? "<b>" + p.repeat + " of " + p.orders + " orders</b> came from returning customers. At a typical 25% app commission, those repeat orders alone would have cost about <b>" + inr(rc) + "</b>."
+        : focus === "customers" ? "<b>" + p.customers + " customers</b> saved to this restaurant's own list in 3 months. Every one is a number the owner can message, with no app in between."
+        : "<b>" + p.orders + " direct orders</b> in 3 months, about " + (p.orders / 90).toFixed(1) + " a day. At a typical 25% app commission, <b>" + inr(ac) + "</b> of this would have gone to the apps.";
+    }
+    tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) show(+b.getAttribute("data-i")); });
+    bars.addEventListener("click", function (e) { var b = e.target.closest(".cl-bar"); if (b) show(+b.getAttribute("data-i")); });
+    seen(clx, function () { show(0); }, .15);
+    show(0);
+  }
+
+  /* ===== real payout decoder (#pod) ===== */
+  var pod = $("pod");
+  if (pod && D.payouts.length) {
+    var pi = 0, mode = "app";
+    var SEG = [["base", "Base service fee", "#FC5301"], ["ld", "Long distance fee", "#FF8A3D"], ["pay", "Payment mechanism fee", "#F5B66B"], ["tax", "Tax deductions", "#9A3412"], ["growth", "Investments in growth", "#B45309"]];
+    function pdraw() {
+      var p = D.payouts[pi], A = p.A;
+      $("podImg").src = D.base + p.file; $("podImg").parentNode.setAttribute("data-zoom", D.base + p.file);
+      var items, keep;
+      if (mode === "app") {
+        items = SEG.map(function (s) { return [s[1], p[s[0]], s[2]]; }); keep = p.payout;
+        var credits = p.B + p.disc; items.push(["Credits and additions", -credits, "#94A3B8"]);
+      } else {
+        items = [["Payment gateway, about 2%", A * 0.02, "#FC5301"]]; keep = A * 0.98;
+      }
+      var tot = items.reduce(function (a, it) { return a + Math.max(0, it[1]); }, 0) + keep;
+      $("podBar").innerHTML = items.filter(function (it) { return it[1] > 0; }).map(function (it) { return '<i style="width:' + it[1] / tot * 100 + '%;background:' + it[2] + '" title="' + it[0] + '"></i>'; }).join("") + '<i style="width:' + keep / tot * 100 + '%;background:#16A34A" title="You keep"></i>';
+      $("podLeg").innerHTML = items.map(function (it) { return '<li><i style="background:' + it[2] + '"></i><span>' + it[0] + "</span><em>" + (it[1] / A * 100).toFixed(1) + "%</em><b>" + (it[1] < 0 ? "+" : "−") + inr(Math.abs(it[1])) + "</b></li>"; }).join("");
+      num($("podKeep"), keep, inr, 600); $("podKeepP").textContent = (keep / A * 100).toFixed(1) + "% of " + inr(A) + " in sales";
+      $("podMore").innerHTML = mode === "app" ? "Of every ₹100 customers paid, this restaurant kept <b>₹" + (keep / A * 100).toFixed(0) + "</b>. The rest went to fees, tax and growth charges."
+        : "Same sales through your own ordering system: you keep <b>" + inr(A * 0.98 - p.payout) + " more</b> in this month alone.";
+    }
+    pick($("podTabs"), function (v) { pi = +v; pdraw(); });
+    pick($("podMode"), function (v) { mode = v; pdraw(); });
+    pdraw();
+  }
+
+  /* "?shot" mode used for screenshots: show every reveal block and load every image at once */
   if (/[?&]shot\b/.test(location.search)) {
     R.querySelectorAll(".rv").forEach(function (e) { e.classList.add("show"); });
     Array.prototype.forEach.call(document.images, function (i) { i.loading = "eager"; });
   }
-  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM };
+  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM, zoom: zoom, D: D };
 })();
 
 </script>
@@ -1017,14 +1180,16 @@
   var LP=window.LP; if(!LP) return;
   var R=LP.R,$=LP.$,inr=LP.inr,sh=LP.sh,num=LP.num,fill=LP.fill,seen=LP.seen,confetti=LP.confetti,pick=LP.pick,RM=LP.RM;
 
+  var TK='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13l4 4 8-9"/><path d="M10 15l1 1 9-10"/></svg>';
+  var LKI='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1"/><path d="M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></svg>';
   /* ---- hero: animated chat ---- */
-  var SC=[['biz','🎉 Weekend special! Flat 20% off on family combos, today only. Order here 👇','4:02 pm',1],['me','Ordering tonight! 😍','4:03 pm'],['me','Can you send the menu?','4:03 pm'],['biz','Sure! Tap below and your first reorder gets free delivery ✅','4:04 pm',1],['me','👍 Done, thank you!','4:06 pm']];
+  var SC=[['biz','Weekend special! Flat 20% off on family combos, today only. Order here.','4:02 pm',1],['me','Ordering tonight!','4:03 pm'],['me','Can you send the menu?','4:03 pm'],['biz','Sure. Tap below and your first reorder gets free delivery.','4:04 pm',1],['me','Done, thank you!','4:06 pm']];
   var chat=$('waChat'),ord=$('waOrd'),timers=[];
   function play(){
     timers.forEach(clearTimeout);timers=[];chat.innerHTML='';ord.setAttribute('data-v',0);ord.textContent='0';
     SC.forEach(function(m,i){
       timers.push(setTimeout(function(){
-        var d=document.createElement('div');d.className='wa-m '+m[0];d.innerHTML=m[1]+(m[3]?'<span class="lk">order.spiceroute.com</span>':'')+'<small>'+m[2]+'</small>';chat.appendChild(d);
+        var d=document.createElement('div');d.className='wb '+m[0];d.innerHTML=m[1]+(m[3]?'<span class="lk">'+LKI+'order.spiceroute.com</span>':'')+'<small>'+m[2]+(m[0]==='me'?'':'')+' '+(m[0]==='biz'?TK:'')+'</small>';chat.appendChild(d);
         num(ord,[8,19,27,34,37][i],function(v){return Math.round(v)},900);
       },RM?0:600+i*1500));
     });
@@ -1032,7 +1197,7 @@
   seen($('waReplay'),play,.2);
   $('waReplay').addEventListener('click',play);
 
-  /* ---- problem: quiet hours chart ---- */
+  /* ---- quiet hours chart ---- */
   var H=['11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p'],B=[18,30,38,24,9,7,10,28,44,52,40,20],AD=[0,0,0,0,8,22,16,0,0,0,0,0],bars=$('waBars'),sent=false,MX=60;
   bars.innerHTML=H.map(function(h,i){return '<div class="wa-col'+(i>=4&&i<=6?' slow':'')+'"><div class="wa-bar"><em id="waE'+i+'"></em><i class="add" style="height:0"></i><i class="base" style="height:'+B[i]/MX*100+'%"></i></div><small>'+h+'</small></div>'}).join('');
   var adds=bars.querySelectorAll('.add');
@@ -1040,41 +1205,42 @@
     sent=!sent;
     adds.forEach(function(a,i){a.style.height=sent&&AD[i]?AD[i]/MX*100+'%':'0'});
     [4,5,6].forEach(function(i){var e=$('waE'+i);e.textContent=sent?'+'+AD[i]:'';e.className=sent?'on':'';e.style.bottom=(B[i]+(sent?AD[i]:0))/MX*100+'%'});
-    this.textContent=sent?'Undo the offer':'Send a WhatsApp offer at 4 PM';this.classList.toggle('done',sent);
+    this.lastChild.textContent=sent?'Undo the offer':'Send a WhatsApp offer at 4 PM';this.classList.toggle('done',sent);
     $('waNote').innerHTML=sent?'One message at 4 PM could bring about <b>46 extra orders</b> in the quiet stretch. Illustrative example.':'The quiet stretch from 3 to 6 PM is where kitchens lose money on rent and staff.';
   });
 
   /* ---- campaign builder ---- */
-  var OC={slow:'Hi Rohan! 😋 It\'s a quiet Tuesday at Spice Route, so here is a treat just for you: {o}. Valid till 6 PM today. Order here 👇',
-          weekend:'Weekend plans sorted! 🎉 Enjoy {o} on all orders this Saturday and Sunday. Order here 👇',
-          festival:'Happy Diwali from Spice Route! 🪔 Celebrate with {o} on our festive menu. Order here 👇',
-          newdish:'Something new just landed on our menu! 🍽️ Try the Hyderabadi Dum Biryani, and get {o} for the first 50 orders. Order here 👇',
-          winback:'We miss you, Rohan! 💛 It has been a while. Come back to Spice Route and enjoy {o}. Order here 👇'};
-  var OF={'20% off':'flat 20% off','dessert':'a free dessert with every main','combo':'our ₹499 family combo','delivery':'free delivery'};
-  var oc='slow',of='20% off',ids=['waN','waA','waR'];
+  var OC={slow:"Hi Rohan, it's a quiet Tuesday at Spice Route, so here is a treat just for you: {o}. Valid till 6 PM today. Order here.",
+          weekend:'Weekend plans sorted. Enjoy {o} on all orders this Saturday and Sunday. Order here.',
+          festival:'Happy Diwali from Spice Route. Celebrate with {o} on our festive menu. Order here.',
+          newdish:'Something new just landed on our menu: the Hyderabadi Dum Biryani. Get {o} for the first 50 orders. Order here.',
+          winback:'We miss you, Rohan. It has been a while. Come back to Spice Route and enjoy {o}. Order here.'};
+  var OF={'20% off':'flat 20% off',dessert:'a free dessert with every main',combo:'our ₹499 family combo',delivery:'free delivery'};
+  var oc='slow',of='20% off',aud=1,ids=['waN','waA','waR'];
   function camp(){
     ids.forEach(function(i){fill($(i))});
-    var n=+$('waN').value,a=+$('waA').value,r=+$('waR').value/100;
+    var n=+$('waN').value,a=+$('waA').value,r=+$('waR').value/100,sent_=Math.round(n*aud),del=Math.round(sent_*.98),rd=Math.round(sent_*.7),o=Math.round(sent_*r),rev=o*a;
     $('waNv').textContent=n.toLocaleString('en-IN');$('waAv').textContent=inr(a);$('waRv').textContent=Math.round(r*100)+'%';
     $('waMsg').textContent=OC[oc].replace('{o}',OF[of]);
-    var o=Math.round(n*r),rev=o*a;
-    num($('waS'),n,function(v){return Math.round(v).toLocaleString('en-IN')},500);num($('waO'),o,function(v){return Math.round(v)},500);num($('waRev'),rev,inr,500);num($('waSave'),rev*0.25,inr,500);
+    var rows=[['Sent',sent_,100],['Delivered',del,98],['Read',rd,70],['Ordered',o,r*100]];
+    $('waFun').innerHTML=rows.map(function(x){return '<div class="wa-fr"><span>'+x[0]+'</span><i style="--w:'+Math.max(2,x[2])+'%"></i><b>'+x[1].toLocaleString('en-IN')+'</b></div>'}).join('');
+    num($('waRev'),rev,inr,500);num($('waSave'),rev*0.25,inr,500);
   }
-  pick($('waOcc'),function(v){oc=v;camp()});pick($('waOff'),function(v){of=v;camp()});
+  pick($('waOcc'),function(v){oc=v;camp()});pick($('waOff'),function(v){of=v;camp()});pick($('waAud'),function(v){aud=+v;camp()});
   ids.forEach(function(i){$(i).addEventListener('input',camp)});camp();
 
   /* ---- automations ---- */
   var AU=[
-    {w:'Right after a customer\'s first order',t:'Welcome and thank you',d:'Greets every new direct customer, saves them to your CRM and gives them a reason to order again.',c:[['biz','Hi Rohan, welcome to Spice Route! 🎉 Thanks for your first order. Here is 10% off your next one: WELCOME10','7:42 pm'],['me','Thank you! 😊','7:44 pm']]},
-    {w:'About 2 weeks after their last order',t:'Reorder reminder',d:'Brings regulars back before they drift to another restaurant.',c:[['biz','Hey Rohan! Missing our biryani? 😋 Your favourite is one tap away, and delivery is free today.','1:10 pm'],['me','Ordering now!','1:12 pm']]},
-    {w:'On the customer\'s birthday',t:'Birthday gift',d:'A personal touch that turns a birthday into a table of guests.',c:[['biz','Happy Birthday, Rohan! 🎂 Enjoy a free dessert on us. Show this message at the restaurant or use it on your next order.','9:00 am'],['me','Wow, thanks! Booking a table 🥳','9:20 am']]},
-    {w:'A few hours after delivery',t:'Review request',d:'Asks happy customers for a Google review while the meal is fresh, so more people find you.',c:[['biz','Hope you loved your meal, Rohan! 🍽️ Would you rate us on Google? It takes 10 seconds and means a lot.','9:15 pm'],['me','Done, 5 stars ⭐','9:30 pm']]},
-    {w:'When a customer has been away for 30 days',t:'Win-back offer',d:'Wakes up customers who stopped ordering, with an offer that is yours to control.',c:[['biz','We miss you, Rohan! 💛 Here is 20% off your next order, valid for 3 days.','6:00 pm'],['me','Thanks for the nudge, ordering tonight!','6:30 pm']]}
+    {w:"Right after a customer's first order",t:'Welcome and thank you',d:'Greets every new direct customer, saves them to your CRM and gives them a reason to order again.',c:[['biz','Hi Rohan, welcome to Spice Route. Thanks for your first order. Here is 10% off your next one: WELCOME10','7:42 pm'],['me','Thank you!','7:44 pm']]},
+    {w:'About 2 weeks after their last order',t:'Reorder reminder',d:'Brings regulars back before they drift to another restaurant.',c:[['biz','Hey Rohan, missing our biryani? Your favourite is one tap away, and delivery is free today.','1:10 pm'],['me','Ordering now','1:12 pm']]},
+    {w:"On the customer's birthday",t:'Birthday gift',d:'A personal touch that turns a birthday into a table of guests.',c:[['biz','Happy Birthday, Rohan. Enjoy a free dessert on us. Show this message at the restaurant or use it on your next order.','9:00 am'],['me','Wow, thanks. Booking a table','9:20 am']]},
+    {w:'A few hours after delivery',t:'Review request',d:'Asks happy customers for a Google review while the meal is fresh, so more people find you.',c:[['biz','Hope you loved your meal, Rohan. Would you rate us on Google? It takes 10 seconds and means a lot.','9:15 pm'],['me','Done, 5 stars','9:30 pm']]},
+    {w:'When a customer has been away for 30 days',t:'Win-back offer',d:'Wakes up customers who stopped ordering, with an offer that is yours to control.',c:[['biz','We miss you, Rohan. Here is 20% off your next order, valid for 3 days.','6:00 pm'],['me','Thanks for the nudge, ordering tonight','6:30 pm']]}
   ];
   function drawAuto(k){
     var a=AU[+k];
     $('waWhen').textContent=a.w;$('waAt').textContent=a.t;$('waAd').textContent=a.d;
-    $('waC2').innerHTML=a.c.map(function(m,i){return '<div class="wa-m '+m[0]+'" style="animation-delay:'+(RM?0:i*.5)+'s">'+m[1]+'<small>'+m[2]+'</small></div>'}).join('');
+    $('waC2').innerHTML=a.c.map(function(m,i){return '<div class="wb '+m[0]+'" style="animation-delay:'+(RM?0:i*.5)+'s">'+m[1]+'<small>'+m[2]+' '+(m[0]==='biz'?TK:'')+'</small></div>'}).join('');
   }
   drawAuto(0);pick($('waTabs'),drawAuto);
   

@@ -1,113 +1,183 @@
 // Landing page: FREE PROFIT LEAK AUDIT.  Pitch: "you see the payout, not the leaks. Get every rupee explained, free".
 'use strict';
-module.exports = function (c) {
-  var img = c.img;
+var I = require('../icons.js').ic;
 
-  var hero = {
-    eyb: 'Free for <b>restaurants, cafes &amp; cloud kitchens</b> selling on Zomato and Swiggy',
-    h1: 'Is Zomato Eating Your Profit? <span class="o">Get a Free Profit Leak Audit.</span>',
-    sub: 'Share one app payout and in a 30 minute call we show exactly where your money goes and how much a direct ordering system can win back for you.',
-    cta2: { text: 'Check My Leak Score', href: '#rg-score' },
-    wait: 'Most owners only see the payout, not the leaks behind it. <b>We show you every rupee.</b>',
-    visual: `
-    <div class="pa-card">
-      <div class="pa-h"><div><small>Leak report</small><b>Where your app sales go</b></div><span class="lp-badge">Sample</span></div>
-      <div class="seg pa-seg" id="paMode"><button class="on" data-v="0" type="button">Typical month</button><button data-v="1" type="button">Heavy ads &amp; offers</button></div>
-      <div class="pa-sl"><div class="lp-lbl"><label for="paS">Monthly sales on the apps</label><output id="paSv">₹3,00,000</output></div><input class="rng lt" type="range" id="paS" min="50000" max="2000000" step="10000" value="300000"></div>
-      <ul class="pa-rows" id="paRows"></ul>
-      <div class="pa-keep"><div><small>What you actually keep</small><b id="paKeep">₹0</b></div><div class="pa-pct" id="paPct">60%</div></div>
-      <p class="pa-fn">Typical figures for delivery apps. Your audit uses your real payout.</p>
+module.exports = function (S) {
+  var B = S.BASE, PO = S.DATA.payouts;
+  var pct = function (p) { return (100 - p.payout / p.A * 100); };
+
+  var hero = `
+<section class="x-hero" id="rg-hero"><div class="x-w">
+  <div>
+    <span class="x-eyb rv">${I('receipt')}Free for restaurants, cafes and cloud kitchens selling on Zomato and Swiggy</span>
+    <h1 class="rv" style="--dl:.06s">Is Zomato Eating Your Profit? <span class="o">Get a Free Profit Leak Audit.</span></h1>
+    <p class="x-sub rv" style="--dl:.12s">Share one app payout and in a 30 minute call we show exactly where your money goes and how much a direct ordering system can win back for you.</p>
+    <div class="x-cta rv" style="--dl:.18s"><a class="btn btn-p" href="#rg-demo">Get My Free Profit Audit ${I('arrow')}</a><a class="x-btn2" href="#rg-score">${I('target')}Check my leak score</a></div>
+    <ul class="x-checks rv" style="--dl:.22s"><li>${I('check')}Every line of your payout explained in plain language</li><li>${I('check')}No logins needed, one screenshot is enough</li><li>${I('check')}No pressure, no obligation</li></ul>
+    ${S.trust()}
+  </div>
+  <div class="x-hv pa-hv rv" style="--dl:.12s">
+    <div class="pa-top"><div class="seg" id="paPick"><button class="on" data-v="0" type="button">Payout 1</button><button data-v="1" type="button">Payout 2</button></div><button class="pa-full" type="button" id="paFull">${I('search')}Full size</button></div>
+    <div class="pa-row">
+      <div class="pa-shot"><div class="shot-f wide" style="cursor:default"><img id="paImg" alt="Real delivery app payout statement" src="${B + PO[0].file}"><div id="paPins"></div></div></div>
+      <div class="pa-tip" id="paTip"></div>
     </div>
-    <div class="lp-float tr" style="animation-delay:-1s;right:-24px;top:-36px">${img('receipt', '', '')}<span><b>Every rupee</b><small>Explained line by line</small></span></div>`
-  };
+    <p class="pa-fn">Real payout statements. Tap a numbered dot to see what each line means.</p>
+  </div>
+</div></section>`;
 
-  var problem = `
-<!-- ================= PROBLEM ================= -->
-<section class="sec" id="rg-problem"><div class="w">
-  <div class="head rv"><span class="kick">Where your profit goes</span><h2 class="h2">You See the Payout. <span class="o">You Don't See the Leaks.</span></h2><p>Five places profit quietly slips away on delivery apps. Tap each one to see how it works.</p></div>
+  var stats = `
+<section class="pa-stats"><div class="x-w"><div class="x-four">
+  <div class="pa-stat rv"><b data-count="${pct(PO[0]).toFixed(1)}" data-dec="1" data-suffix="%">0</b><span>of sales never reached the restaurant in real payout 1</span></div>
+  <div class="pa-stat rv" style="--dl:.06s"><b data-count="${pct(PO[1]).toFixed(1)}" data-dec="1" data-suffix="%">0</b><span>never reached it in real payout 2</span></div>
+  <div class="pa-stat rv" style="--dl:.12s"><b>5 lines</b><span>where the money goes: fees, tax, ads and more</span></div>
+  <div class="pa-stat rv" style="--dl:.18s"><b>0%</b><span>commission on orders from your own ordering system</span></div>
+</div></div></section>`;
+
+  var compare = `
+<section class="x-sec" id="rg-cmp"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">Two real payouts, side by side</span><h2 class="x-h2">The Same Leaks. <span class="o">Different Restaurants.</span></h2><p class="x-lead">How much of every ₹100 in sales each deduction took. Hover or tap a bar to see the rupee amount.</p></div>
+  <div class="x-card pa-cmp rv" id="paCmp">
+    <div class="pa-cmp-l"><span><i style="background:#FC5301"></i>Payout 1</span><span><i style="background:#1F2937"></i>Payout 2</span></div>
+    <div class="pa-cmp-g" id="paCmpG"></div>
+    <div class="pa-cmp-k" id="paCmpK"></div>
+  </div>
+</div></section>`;
+
+  var calc = `
+<section class="x-sec x-dark x-dots" id="rg-calc"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Calculator 1</span><h2 class="x-h2">How Much Of Your Sales <span class="o">Do You Really Keep?</span></h2><p class="x-lead">Enter the net order value and the payout from your last statement. We show what you kept and what moving orders direct could add.</p></div>
+  <div class="x-two">
+    <div class="x-dcard rv">
+      <div class="x-fld"><div class="x-lbl"><label for="pcA">Net order value on the app (month)</label><output id="pcAv">₹1,00,000</output></div><input class="rng" type="range" id="pcA" min="20000" max="2000000" step="5000" value="100000"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="pcK">Payout you actually received</label><output id="pcKv">60%</output></div><input class="rng" type="range" id="pcK" min="30" max="90" step="1" value="60"><small>The slider is the payout as a percentage of net order value. Real payouts above kept 60% and 51%.</small></div>
+      <div class="x-fld"><div class="x-lbl"><label for="pcM">Share of orders you could move direct</label><output id="pcMv">30%</output></div><input class="rng" type="range" id="pcM" min="5" max="100" step="5" value="30"></div>
+    </div>
+    <div class="x-out rv" style="--dl:.08s" aria-live="polite">
+      <div><p class="l">Gone before it reached you, every month</p><p class="big" id="pcLeak">₹0</p></div>
+      <div class="row"><span>You received</span><b id="pcGot">₹0</b></div>
+      <div class="row"><span>Leak per year</span><b id="pcYear">₹0</b></div>
+      <div class="win"><p>Moving that share direct keeps you an extra</p><strong><span id="pcWin">₹0</span> / year</strong><small>Direct orders assume about 2% payment gateway fee and no commission. An estimate, not a promise.</small></div>
+      <a class="btn btn-p btn-full" href="#rg-demo">Get My Free Profit Audit ${I('arrow')}</a>
+    </div>
+  </div>
+</div></section>`;
+
+  var leaks = `
+<section class="x-sec x-cream x-dots" id="rg-leaks"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Where your profit goes</span><h2 class="x-h2">You See the Payout. <span class="o">You Don't See the Leaks.</span></h2><p class="x-lead">Five places profit quietly slips away on delivery apps. Tap each one to see how it works.</p></div>
   <div class="pa-acc rv" id="paAcc"></div>
-  <p class="verdict rv">You can't fix what you can't see. <span class="o">So we put every leak on one page.</span></p>
 </div></section>`;
 
   var score = `
-<!-- ================= SCORE ================= -->
-<section class="sec dark" id="rg-score"><div class="w">
-  <div class="head rv"><span class="kick">Quick self check</span><h2 class="h2">What's Your <span class="o">Profit Leak Score?</span></h2><p>Tick what applies to your restaurant. It takes 20 seconds and tells you how urgent an audit is.</p></div>
-  <div class="lp-two pa-score">
-    <div class="lp-dcard rv">
+<section class="x-sec x-dark x-dots" id="rg-score"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Calculator 2</span><h2 class="x-h2">What's Your <span class="o">Profit Leak Score?</span></h2><p class="x-lead">Tick what applies to your restaurant. It takes 20 seconds and tells you how urgent an audit is.</p></div>
+  <div class="x-two pa-score">
+    <div class="x-dcard rv">
       <div class="pa-checks" id="paChecks"></div>
-      <div class="fld" style="margin-top:24px"><div class="t"><label for="paShare">Share of your sales that come from apps</label><output id="paShv">50%</output></div><input class="rng" type="range" id="paShare" min="10" max="100" step="5" value="50"></div>
+      <div class="x-fld" style="margin-top:24px"><div class="x-lbl"><label for="paShare">Share of your sales that come from apps</label><output id="paShv">50%</output></div><input class="rng" type="range" id="paShare" min="10" max="100" step="5" value="50"></div>
     </div>
-    <div class="lp-card pa-gauge rv" style="--dl:.08s">
+    <div class="x-card pa-gauge rv" style="--dl:.08s">
       <svg viewBox="0 0 200 118" aria-hidden="true"><path d="M14 104A86 86 0 0 1 186 104" stroke="#EFE8E0" stroke-width="18" stroke-linecap="round" fill="none"/><path id="paArc" d="M14 104A86 86 0 0 1 186 104" stroke="#FC5301" stroke-width="18" stroke-linecap="round" fill="none" stroke-dasharray="270" stroke-dashoffset="270" style="transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1),stroke .4s"/></svg>
       <div class="pa-num"><b id="paScore">0</b><small>out of 100</small></div>
       <h3 id="paLevel">Low leakage</h3>
       <p id="paMsg"></p>
-      <a class="btn btn-p btn-full" href="#rg-demo">Get My Free Profit Audit ${c.arrow}</a>
+      <a class="btn btn-p btn-full" href="#rg-demo">Get My Free Profit Audit ${I('arrow')}</a>
     </div>
   </div>
 </div></section>`;
 
-  var sample = `
-<!-- ================= SAMPLE AUDIT ================= -->
-<section class="sec cream dots" id="rg-sample"><div class="w">
-  <div class="head rv"><span class="kick">What you get</span><h2 class="h2">A Sample Audit, <span class="o">Line by Line</span></h2><p>An example of a ₹98,640 month. Tap any line to see what we would tell the owner.</p></div>
-  <div class="lp-two pa-sample rv">
-    <div class="lp-card" style="padding:0;overflow:hidden">
-      <div class="pa-st-h"><b>Sample payout, illustrative</b><span>Sales ₹98,640</span></div>
-      <ul class="pa-st" id="paSt"></ul>
-      <div class="pa-st-f"><span>You receive</span><b>₹59,176</b></div>
-    </div>
-    <div class="lp-card pa-find" id="paFind"></div>
+  var get = `
+<section class="x-sec" id="rg-get"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">What you get</span><h2 class="x-h2">A Clear Page of Findings. <span class="o">Not a Sales Pitch.</span></h2><p class="x-lead">Here is the kind of finding the audit gives you, using the numbers from real payout 1.</p></div>
+  <div class="x-three pa-find">
+    <div class="x-card rv"><div class="x-ico">${I('percent')}</div><h3>Commission is 22.3% of sales</h3><p class="m">₹21,950 of ₹98,640 went to the base service fee alone. Moving regulars to direct orders removes it on every order they place.</p></div>
+    <div class="x-card rv" style="--dl:.06s"><div class="x-ico">${I('zap')}</div><h3>Growth charges took 8.4%</h3><p class="m">₹8,244 was charged for investments in growth. We check whether those ads and visibility fees paid for themselves.</p></div>
+    <div class="x-card rv" style="--dl:.12s"><div class="x-ico">${I('receipt')}</div><h3>Tax and fees add up to 10%</h3><p class="m">Tax deductions, long distance and payment fees together cost ₹9,751. We show which ones repeat every month.</p></div>
   </div>
-  <div class="lp-cta-row rv"><a class="btn btn-p" href="#rg-demo">Get My Free Profit Audit ${c.arrow}</a></div>
+  <div class="x-three pa-find" style="margin-top:18px">
+    <div class="x-card rv"><div class="x-ico">${I('file')}</div><h3>Line-by-line leak report</h3><p class="m">Every deduction explained, with the rupee amount and the share of sales.</p></div>
+    <div class="x-card rv" style="--dl:.06s"><div class="x-ico">${I('store')}</div><h3>Direct vs app comparison</h3><p class="m">The same sales through your own ordering system, side by side.</p></div>
+    <div class="x-card rv" style="--dl:.12s"><div class="x-ico">${I('target')}</div><h3>A simple 90 day plan</h3><p class="m">What to move first, how to bring customers over, and the 3X guarantee behind it.</p></div>
+  </div>
 </div></section>`;
 
   var how = `
-<!-- ================= HOW ================= -->
-<section class="sec" id="rg-how"><div class="w">
-  <div class="head rv"><span class="kick">How it works</span><h2 class="h2">Your Free Audit <span class="o">in 3 Steps</span></h2><p>No logins. No pressure. No obligation.</p></div>
-  <div class="lp-three">
-    <div class="lp-card lp-step rv"><span class="n">1</span><div class="lp-ico">${img('receipt', '', '')}</div><h3>Share one payout</h3><p>A screenshot of a recent Zomato or Swiggy payout is enough. You don't need to share any logins.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.08s"><span class="n">2</span><div class="lp-ico">${img('bell', '', '')}</div><h3>We find the leaks</h3><p>On a 30 minute call we break down commission, tax, ads and discounts and show what you actually keep per order.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.16s"><span class="n">3</span><div class="lp-ico">${img('star', '', '')}</div><h3>You get a clear plan</h3><p>We show how much a direct ordering system can win back for you, with the 3X in 90 days guarantee behind it.</p></div>
+<section class="x-sec x-cream" id="rg-how"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">How it works</span><h2 class="x-h2">Your Free Audit <span class="o">in 3 Steps</span></h2><p class="x-lead">No logins. No pressure. No obligation.</p></div>
+  <div class="x-three">
+    <div class="x-card x-step rv"><span class="n">1</span><div class="x-ico">${I('upload')}</div><h3>Share one payout</h3><p class="m">A screenshot of a recent Zomato or Swiggy payout is enough. You don't need to share any logins.</p></div>
+    <div class="x-card x-step rv" style="--dl:.08s"><span class="n">2</span><div class="x-ico">${I('search')}</div><h3>We find the leaks</h3><p class="m">On a 30 minute call we break down commission, tax, ads and discounts and show what you actually keep per order.</p></div>
+    <div class="x-card x-step rv" style="--dl:.16s"><span class="n">3</span><div class="x-ico">${I('award')}</div><h3>You get a clear plan</h3><p class="m">We show how much a direct ordering system can win back for you, with the 3X in 90 days guarantee behind it.</p></div>
   </div>
-  <p class="stay rv" style="margin-top:34px;text-align:center;font:600 1.1rem var(--fh)">No pressure, no obligation. <span class="o">You leave knowing your real numbers.</span></p>
 </div></section>`;
 
+  var body = [
+    S.topbar({ cta: 'Get My Free Profit Audit', links: [['Real payouts', '#rg-cmp'], ['Calculators', '#rg-calc'], ['What you get', '#rg-get'], ['FAQ', '#rg-faq']] }),
+    hero, stats, S.logos('Trusted by 140+ restaurants, cafes and cloud kitchens'), compare, calc, leaks, score, get,
+    S.clients({ kick: 'After the audit', h2: 'What Restaurants Do With <span class="o">the Money They Win Back</span>', lead: 'Real dashboards from restaurants that now take direct orders on their own RestroGrow system. Tap a client to see its sales, orders and what the apps would have charged.', focus: 'sales' }),
+    how, S.guarantee('Get My Free Profit Audit'),
+    S.faq([
+      ['Is the audit really free?', 'Yes. The audit call is free and there is no obligation to buy anything.'],
+      ['What do I need to share?', 'One recent Zomato or Swiggy payout statement or screenshot. You don\'t have to share any logins.'],
+      ['How long does it take?', 'About 30 minutes on a call with our team.'],
+      ['What happens after the audit?', 'If a direct ordering system makes sense for you, we show how it would work and what you could save. If it doesn\'t, you still keep the findings.'],
+      ['Are the payouts on this page real?', 'Yes. They are real payout statements from delivery apps, with restaurant details removed. The calculators use illustrative assumptions that you can change.'],
+      ['How does the 3X guarantee work?', 'Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.']
+    ]),
+    S.finalCta({ h2: 'Find Out Where Your Profit Is Going.', p: 'Share one payout and get every rupee explained in a free 30 minute call.', checks: ['Free, no obligation', 'No logins needed', '3X in 90 days or 100% back'], cta: 'Get My Free Profit Audit' })
+  ];
+
   var css = `
-.rg .pa-card{position:relative;z-index:1;width:min(100%,430px);margin:0 auto;background:#fff;color:var(--tx);border-radius:26px;padding:22px;box-shadow:0 44px 90px -34px rgba(0,0,0,.8)}
-.rg .pa-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
-.rg .pa-h small{display:block;font-size:.74rem;color:var(--mu)}
-.rg .pa-h b{font:800 1.2rem var(--fh)}
-.rg .pa-seg{display:flex;width:100%;margin-bottom:16px}
-.rg .pa-seg button{flex:1;padding:9px 6px;font-size:.78rem}
-.rg .pa-sl{margin-bottom:14px}
-.rg .pa-sl output{color:var(--o)}
-.rg .pa-rows li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0}
-.rg .pa-rows li span{font-size:.84rem;font-weight:500}
-.rg .pa-rows li b{font:700 .9rem var(--fh);color:#C2410C;font-variant-numeric:tabular-nums}
-.rg .pa-rows li em{grid-column:1/-1;height:7px;border-radius:7px;background:#F3EDE7;overflow:hidden;font-style:normal}
-.rg .pa-rows li em i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,#FC5301,#FF8A3D);transition:width .6s var(--ease)}
-.rg .pa-keep{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:14px 16px;border-radius:16px;background:#E6F6EC}
-.rg .pa-keep small{display:block;font-size:.74rem;color:#166534}
-.rg .pa-keep b{font:800 1.7rem var(--fh);color:#15803D;font-variant-numeric:tabular-nums}
-.rg .pa-pct{font:800 1.3rem var(--fh);color:#15803D;padding:8px 12px;border-radius:12px;background:#fff}
-.rg .pa-fn{margin-top:10px;font-size:.72rem;color:var(--mu);text-align:center}
+.rg .pa-hv{min-height:0}
+.rg .pa-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;position:relative;z-index:2}
+.rg .pa-top .seg{background:rgba(255,255,255,.08)}
+.rg .pa-top .seg button{color:var(--dmu)}.rg .pa-top .seg button.on{background:var(--o);color:#fff;box-shadow:none}
+.rg .pa-full{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;padding:8px 14px;border-radius:99px;font:600 .78rem var(--fh);cursor:pointer}
+.rg .pa-full:hover{border-color:#fff}
+.rg .pa-full .ic{width:14px;height:14px}
+.rg .pa-row{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:16px;align-items:start;position:relative;z-index:2}
+.rg .pa-shot .shot-f{position:relative}
+.rg .pa-tip{padding:18px;border-radius:20px;background:#fff;color:var(--tx);box-shadow:0 30px 60px -30px rgba(0,0,0,.7);position:sticky;top:90px}
+.rg .pa-tip .t{display:flex;align-items:center;gap:10px}
+.rg .pa-tip .t i{width:26px;height:26px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 .76rem var(--fh);font-style:normal;flex:none}
+.rg .pa-tip h4{font:700 1rem/1.25 var(--fh)}
+.rg .pa-tip .v{display:block;font:800 1.9rem/1.1 var(--fh);color:#C2410C;margin:12px 0 2px;font-variant-numeric:tabular-nums}
+.rg .pa-tip .v.g{color:#15803D}
+.rg .pa-tip small{color:var(--mu);font-size:.78rem}
+.rg .pa-tip p{margin-top:10px;font-size:.88rem;color:var(--mu)}
+.rg .pa-fn{margin-top:14px;font-size:.78rem;color:var(--dmu);position:relative;z-index:2}
+.rg .pa-stats{background:#fff;border-bottom:1px solid var(--ln);padding:34px 0}
+.rg .pa-stat b{display:block;font:800 clamp(1.7rem,3vw,2.3rem)/1.1 var(--fh);letter-spacing:-.02em;color:var(--o);font-variant-numeric:tabular-nums}
+.rg .pa-stat span{display:block;font-size:.88rem;color:var(--mu);margin-top:4px}
+.rg .pa-cmp{max-width:980px;margin:0 auto}
+.rg .pa-cmp-l{display:flex;gap:22px;margin-bottom:22px;font-size:.88rem;font-weight:600}
+.rg .pa-cmp-l i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:8px}
+.rg .pa-cmp-g{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(8px,2vw,22px);align-items:end;height:260px;border-bottom:1px solid var(--ln)}
+.rg .pa-g{display:flex;flex-direction:column;justify-content:flex-end;height:100%;align-items:center}
+.rg .pa-g .bs{display:flex;gap:6px;align-items:flex-end;width:100%;flex:1;justify-content:center}
+.rg .pa-g .bs i{display:block;width:34%;max-width:46px;border-radius:7px 7px 0 0;position:relative;transition:height .8s var(--ease);cursor:pointer}
+.rg .pa-g .bs i.a{background:#FC5301}.rg .pa-g .bs i.b{background:#1F2937}
+.rg .pa-g .bs i em{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:700 .72rem var(--fh);font-style:normal;white-space:nowrap;color:var(--tx)}
+.rg .pa-g .bs i.keep{background:#16A34A}
+.rg .pa-g .bs i.keep.b{background:#0F5132}
+.rg .pa-cmp-k{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(8px,2vw,22px);margin-top:10px;font-size:.76rem;color:var(--mu);text-align:center}
+.rg .pa-cmp-k span{line-height:1.3}
 .rg .pa-acc{max-width:860px;margin:0 auto;display:grid;gap:12px}
 .rg .pa-acc details{border:1px solid var(--ln);border-radius:18px;background:#fff;overflow:hidden;transition:border-color .3s,box-shadow .3s}
 .rg .pa-acc details[open]{border-color:#F6C7AE;box-shadow:0 18px 36px -26px rgba(252,83,1,.5)}
 .rg .pa-acc summary{display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;align-items:center;padding:18px 22px;cursor:pointer;list-style:none}
 .rg .pa-acc summary::-webkit-details-marker{display:none}
-.rg .pa-acc summary .ic{width:44px;height:44px;border-radius:12px;background:var(--ot);display:grid;place-items:center;font:800 1.05rem var(--fh);color:var(--o)}
+.rg .pa-acc summary .ico{width:44px;height:44px;border-radius:12px;background:var(--ot);display:grid;place-items:center;color:var(--o)}
 .rg .pa-acc summary h3{font:700 1.05rem/1.3 var(--fh)}
 .rg .pa-acc summary .tag{font:700 .78rem var(--fh);color:#C2410C;background:#FDE8E1;padding:5px 11px;border-radius:99px;white-space:nowrap}
-.rg .pa-acc summary i{font-style:normal;font-size:1.3rem;color:var(--mu);transition:transform .3s}
-.rg .pa-acc details[open] summary i{transform:rotate(45deg)}
+.rg .pa-acc summary .pl{transition:transform .3s;color:var(--mu)}
+.rg .pa-acc details[open] summary .pl{transform:rotate(45deg)}
 .rg .pa-acc details p{padding:0 22px 20px 80px;color:var(--mu);font-size:.96rem}
 .rg .pa-checks{display:grid;gap:10px}
 .rg .pa-checks button{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.14);background:transparent;color:#E8E8F0;font:500 .95rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s}
-.rg .pa-checks button i{width:22px;height:22px;border-radius:7px;border:2px solid rgba(255,255,255,.3);flex:none;display:grid;place-items:center;font-style:normal;font-size:.75rem;color:transparent;transition:background .2s,border-color .2s,color .2s}
+.rg .pa-checks button i{width:22px;height:22px;border-radius:7px;border:2px solid rgba(255,255,255,.3);flex:none;display:grid;place-items:center;color:transparent;transition:background .2s,border-color .2s,color .2s}
+.rg .pa-checks button i .ic{width:13px;height:13px}
 .rg .pa-checks button.on{border-color:var(--o);background:rgba(252,83,1,.1)}
 .rg .pa-checks button.on i{background:var(--o);border-color:var(--o);color:#fff}
 .rg .pa-gauge{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -117,49 +187,73 @@ module.exports = function (c) {
 .rg .pa-num small{color:var(--mu);font-size:.78rem}
 .rg .pa-gauge h3{font:800 1.4rem var(--fh);transition:color .4s}
 .rg .pa-gauge p{color:var(--mu);font-size:.95rem;max-width:34ch;margin-bottom:10px;min-height:3.4em}
-.rg .pa-st-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#F8F6F3;border-bottom:1px solid var(--ln);font-size:.85rem}
-.rg .pa-st-h b{font:700 .95rem var(--fh)}
-.rg .pa-st li{display:flex;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--ln);font-size:.94rem;cursor:pointer;transition:background .2s}
-.rg .pa-st li:hover{background:#FFF8F3}
-.rg .pa-st li.on{background:var(--ot);box-shadow:inset 3px 0 0 var(--o)}
-.rg .pa-st li b{font:700 .94rem var(--fh);font-variant-numeric:tabular-nums}
-.rg .pa-st li.cut b{color:#C2410C}
-.rg .pa-st-f{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#E6F6EC;font-weight:600}
-.rg .pa-st-f b{font:800 1.4rem var(--fh);color:#15803D}
-.rg .pa-find{display:flex;flex-direction:column;gap:10px;justify-content:center;align-items:flex-start}
-.rg .pa-find h3{font:800 1.35rem var(--fh)}
-.rg .pa-find p{color:var(--mu)}
-.rg .pa-find .big2{font:800 2.2rem var(--fh);color:#C2410C}
-.rg .pa-find .tip{padding:12px 14px;border-radius:14px;background:#E6F6EC;color:#166534;font-size:.9rem;font-weight:500}
-@media (max-width:760px){.rg .pa-acc summary{grid-template-columns:40px 1fr auto;padding:16px}.rg .pa-acc summary .tag{display:none}.rg .pa-acc details p{padding:0 16px 18px 16px}}`;
+@media (max-width:980px){.rg .pa-row{grid-template-columns:minmax(0,230px) 1fr}}
+@media (max-width:640px){.rg .pa-row{grid-template-columns:1fr}.rg .pa-shot{max-width:280px;margin:0 auto}.rg .pa-tip{position:static}
+ .rg .pa-acc summary{grid-template-columns:40px 1fr auto;padding:16px}.rg .pa-acc summary .tag{display:none}.rg .pa-acc details p{padding:0 16px 18px 16px}
+ .rg .pa-cmp-g{height:200px}.rg .pa-g .bs i em{display:none}}`;
 
   var js = `
-  /* ---- hero leak report ---- */
-  var L=[['Commission',[25,28]],['GST on commission',[4.5,5]],['Ads and visibility',[4,8]],['Discounts you fund',[5,12]],['Packaging and other fees',[1.5,2]]],mode=0,paS=$('paS');
-  var rowsEl=$('paRows');
-  rowsEl.innerHTML=L.map(function(l,i){return '<li><span>'+l[0]+'</span><b id="paB'+i+'">₹0</b><em><i id="paI'+i+'" style="width:0"></i></em></li>'}).join('');
-  function rep(){
-    fill(paS);var s=+paS.value,tot=0;
-    $('paSv').textContent=inr(s).replace(/(\\d)(?=(\\d\\d)+\\d$)/g,'$1,');
-    L.forEach(function(l,i){var p=l[1][mode];tot+=p;num($('paB'+i),s*p/100,function(v){return '−'+inr(v)},500);$('paI'+i).style.width=p*2+'%'});
-    num($('paKeep'),s*(100-tot)/100,inr,500);$('paPct').textContent=Math.round(100-tot)+'%';
+  var P=LP.D.payouts,PB=LP.D.base,cur=0;
+  var pc=function(v,a){return (v/a*100).toFixed(1)+'%'},fm=function(n){return '₹'+n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})};
+  /* ---- hero: tap the numbered dots ---- */
+  var PINS=[
+    {k:'A',y:[4.6,4.2],t:'Net order value',v:function(p){return p.A},tx:function(p){return 'What customers paid for your food. This is the number most owners look at, and it hides everything below.'}},
+    {k:'base',y:[29.5,28.7],t:'Base service fee',v:function(p){return -p.base},tx:function(p){return "The platform's commission, "+pc(p.base,p.A)+" of your sales. It is the biggest single cut on every order."}},
+    {k:'pay',y:[44.6,44.5],t:'Payment mechanism fee',v:function(p){return -p.pay},tx:function(p){return 'A fee for processing online payments, charged on top of the commission.'}},
+    {k:'tax',y:[62.2,62.2],t:'Tax deductions',v:function(p){return -p.tax},tx:function(p){return 'Tax collected on your behalf, including GST on the platform\\'s own fees. It is '+pc(p.tax,p.A)+' of sales.'}},
+    {k:'growth',y:[71.3,71.8],t:'Investments in growth',v:function(p){return -p.growth},tx:function(p){return 'Ads and visibility charges taken from the same payout, '+pc(p.growth,p.A)+' of sales. Worth checking whether they paid for themselves.'}},
+    {k:'payout',y:[93.3,94],t:'Est. payout',v:function(p){return p.payout},tx:function(p){return 'What actually reaches your bank account: '+pc(p.payout,p.A)+' of your sales. The rest never reached you.'},g:1}
+  ];
+  var pins=$('paPins'),tip=$('paTip'),sel=0;
+  function drawPins(){
+    pins.innerHTML=PINS.map(function(p,i){return '<span class="x-pin'+(i===sel?' on':'')+'" data-i="'+i+'" style="left:72%;top:'+p.y[cur]+'%">'+(i+1)+'</span>'}).join('');
+    showTip();
   }
-  paS.addEventListener('input',rep);pick($('paMode'),function(v){mode=+v;rep()});rep();
+  function showTip(){
+    var p=PINS[sel],d=P[cur],v=p.v(d);
+    tip.innerHTML='<div class="t"><i>'+(sel+1)+'</i><h4>'+p.t+'</h4></div><span class="v'+(p.g?' g':'')+'">'+(v<0?'−':'')+fm(Math.abs(v))+'</span><small>'+(p.k==='A'?'of your sales':pc(Math.abs(v),d.A)+' of sales')+'</small><p>'+p.tx(d)+'</p>';
+    Array.prototype.forEach.call(pins.children,function(el,i){el.classList.toggle('on',i===sel)});
+  }
+  pins.addEventListener('click',function(e){var b=e.target.closest('.x-pin');if(b){sel=+b.getAttribute('data-i');showTip()}});
+  pick($('paPick'),function(v){cur=+v;$('paImg').src=PB+P[cur].file;drawPins()});
+  $('paFull').addEventListener('click',function(){LP.zoom(PB+P[cur].file)});
+  drawPins();
+
+  /* ---- side by side comparison ---- */
+  var CAT=[['Base fee','base'],['Long distance','ld'],['Payment fee','pay'],['Tax','tax'],['Growth','growth'],['You kept','payout']],g=$('paCmpG');
+  var mxv=Math.max.apply(null,CAT.map(function(c){return Math.max(P[0][c[1]]/P[0].A,P[1][c[1]]/P[1].A)}))*100;
+  g.innerHTML=CAT.map(function(c){var a=P[0][c[1]]/P[0].A*100,b=P[1][c[1]]/P[1].A*100,k=c[1]==='payout',sc=k?100:mxv;
+    return '<div class="pa-g"><div class="bs"><i class="a'+(k?' keep':'')+'" style="height:'+a/sc*100+'%" title="'+fm(P[0][c[1]])+'"><em>'+a.toFixed(1)+'%</em></i><i class="b'+(k?' keep':'')+'" style="height:'+b/sc*100+'%" title="'+fm(P[1][c[1]])+'"><em>'+b.toFixed(1)+'%</em></i></div></div>'}).join('');
+  $('paCmpK').innerHTML=CAT.map(function(c){return '<span>'+c[0]+'</span>'}).join('');
+
+  /* ---- calculator 1 ---- */
+  var pcs=['pcA','pcK','pcM'];
+  function pcalc(){
+    pcs.forEach(function(i){fill($(i))});
+    var A=+$('pcA').value,K=+$('pcK').value/100,M=+$('pcM').value/100;
+    $('pcAv').textContent=inr(A).replace(/(\\d)(?=(\\d\\d)+\\d$)/g,'$1,');$('pcKv').textContent=Math.round(K*100)+'%';$('pcMv').textContent=Math.round(M*100)+'%';
+    var got=A*K,leak=A-got,win=Math.max(0,(0.98-K)*A*M*12);
+    num($('pcLeak'),leak,inr);num($('pcGot'),got,inr);num($('pcYear'),leak*12,sh);num($('pcWin'),win,sh);
+  }
+  pcs.forEach(function(i){$(i).addEventListener('input',pcalc)});pcalc();
 
   /* ---- accordion ---- */
-  var AC=[['%','Commission','25 to 30%','The headline rate is the biggest single cut on every order. It is charged on the full order value, on every order, even from your 20th-time regular.'],
-          ['₹','GST on the commission','About 4.5%','18% GST is charged on the commission itself, so the real cost of the platform is higher than the number in your contract.'],
-          ['★','Ads and visibility','3 to 10%','Promoted listings and "growth" charges are deducted from the same payout. Many owners never check whether those ads paid for themselves.'],
-          ['−','Discounts you fund','5 to 12%','Offers that bring volume can cost more than they earn once everything else is deducted. The app shows the sale, you carry the cost.'],
-          ['?','Refunds, cancellations and packaging','1 to 3%','Order issues, cancellations charged to you and packaging costs add up quietly and rarely show as one clear line.']];
+  var LI={pct:'<path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/>',rup:'<path d="M6 4h12M6 9h12M6 4c5 0 8 2 8 5s-3 5-8 5l8 7"/>',zap:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',tag:'<path d="M3 12l9-9h8v8l-9 9z"/><circle cx="16" cy="8" r="1.4"/>',rcpt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'};
+  var AC=[['pct','Commission','25 to 30%','The headline rate is the biggest single cut on every order. It is charged on the full order value, on every order, even from your 20th-time regular.'],
+          ['rup','GST on the commission','About 4.5%','18% GST is charged on the commission itself, so the real cost of the platform is higher than the number in your contract.'],
+          ['zap','Ads and visibility','3 to 10%','Promoted listings and "growth" charges are deducted from the same payout. Many owners never check whether those ads paid for themselves.'],
+          ['tag','Discounts you fund','5 to 12%','Offers that bring volume can cost more than they earn once everything else is deducted. The app shows the sale, you carry the cost.'],
+          ['rcpt','Refunds, cancellations and packaging','1 to 3%','Order issues, cancellations charged to you and packaging costs add up quietly and rarely show as one clear line.']];
+  var PL='<svg class="ic pl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
   var acc=$('paAcc');
-  acc.innerHTML=AC.map(function(a,i){return '<details'+(i?'':' open')+'><summary><span class="ic">'+a[0]+'</span><h3>'+a[1]+'</h3><span class="tag">'+a[2]+'</span><i>+</i></summary><p>'+a[3]+'</p></details>'}).join('');
+  acc.innerHTML=AC.map(function(a,i){return '<details'+(i?'':' open')+'><summary><span class="ico"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+LI[a[0]]+'</svg></span><h3>'+a[1]+'</h3><span class="tag">'+a[2]+'</span>'+PL+'</summary><p>'+a[3]+'</p></details>'}).join('');
   acc.addEventListener('toggle',function(e){if(e.target.open)Array.prototype.forEach.call(acc.children,function(d){if(d!==e.target)d.open=false})},true);
 
   /* ---- leak score ---- */
-  var CK=[['I run ads or promoted listings on the apps',15],['I fund discounts and offers on the apps',15],['The apps charge me 25% or more in total',15],['I don\\'t have my customers\\' phone numbers',15],['Cancellations and refunds get deducted from my payout',10],['I never check my payout line by line',10]],on=[];
+  var CK=[['I run ads or promoted listings on the apps',15],['I fund discounts and offers on the apps',15],['The apps charge me 25% or more in total',15],["I don't have my customers' phone numbers",15],['Cancellations and refunds get deducted from my payout',10],['I never check my payout line by line',10]];
+  var CKI='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
   var chk=$('paChecks');
-  chk.innerHTML=CK.map(function(k){return '<button type="button"><i>✓</i>'+k[0]+'</button>'}).join('');
+  chk.innerHTML=CK.map(function(k){return '<button type="button"><i>'+CKI+'</i>'+k[0]+'</button>'}).join('');
   var sh_=$('paShare');
   function score(){
     fill(sh_);$('paShv').textContent=sh_.value+'%';
@@ -172,33 +266,13 @@ module.exports = function (c) {
   }
   chk.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;b.classList.toggle('on');score()});
   sh_.addEventListener('input',score);score();
-
-  /* ---- sample audit ---- */
-  var ST=[['Total sales','₹98,640',0,'Your sales for the month','This is what customers paid on the apps. It is the number most owners look at, and the one that hides everything below.',''],
-          ['Commission','−₹24,660',1,'25% commission','The biggest leak. On this month it cost ₹24,660.','Moving regulars to direct orders removes it on every order they place with you.'],
-          ['GST on commission','−₹4,439',1,'18% tax on the commission','Charged on top of the commission, so the platform costs more than the contract rate suggests.','This also disappears on direct orders.'],
-          ['Ads and visibility','−₹3,946',1,'Promoted listings','Money spent to appear higher on the app. Worth keeping only if each rupee brings back more than a rupee.','We show which ads paid off and which did not.'],
-          ['Discounts you fund','−₹4,932',1,'Offers you paid for','Discounts run on the app come out of your pocket, not theirs.','A loyalty reward on your own site can win the same customers at a lower cost.'],
-          ['Packaging and other fees','−₹1,487',1,'Small charges that add up','Refunds, cancellations and packaging charges spread across many lines.','We flag the lines that repeat.']],stEl=$('paSt'),fd=$('paFind');
-  stEl.innerHTML=ST.map(function(s,i){return '<li class="'+(s[2]?'cut':'')+(i===1?' on':'')+'" data-i="'+i+'"><span>'+s[0]+'</span><b>'+s[1]+'</b></li>'}).join('');
-  function showF(i){var s=ST[i];fd.innerHTML='<span class="lp-badge">'+s[0]+'</span><div class="big2">'+s[1]+'</div><h3>'+s[3]+'</h3><p>'+s[4]+'</p>'+(s[5]?'<div class="tip">'+s[5]+'</div>':'')}
-  stEl.addEventListener('click',function(e){var li=e.target.closest('li');if(!li)return;Array.prototype.forEach.call(stEl.children,function(x){x.classList.toggle('on',x===li)});showF(+li.getAttribute('data-i'))});
-  showF(1);
   `;
 
   return {
     slug: 'profit-audit', name: 'Free profit audit',
-    title: 'Free Profit Leak Audit for Zomato & Swiggy Restaurants | RestroGrow',
+    title: 'Free Profit Leak Audit for Zomato and Swiggy Restaurants | RestroGrow',
     desc: 'Share one app payout and see exactly where your money goes. A free 30 minute audit for restaurants on Zomato and Swiggy. 3X in 90 days or 100% back.',
-    cta: 'Get My Free Profit Audit', stickyTail: 'going to app commission',
-    hero: hero, before: [problem, score, sample, how], after: [], css: css, js: js,
-    faq: [
-      ['Is the audit really free?', 'Yes. The audit call is free and there is no obligation to buy anything.'],
-      ['What do I need to share?', 'One recent Zomato or Swiggy payout statement or screenshot. You don\'t have to share any logins.'],
-      ['How long does it take?', 'About 30 minutes on a call with our team.'],
-      ['What happens after the audit?', 'If a direct ordering system makes sense for you, we show how it would work and what you could save. If it doesn\'t, you still keep the findings.'],
-      ['Are the numbers on this page real?', 'The sample figures are illustrative so you can see how an audit looks. Your audit uses your own payout.'],
-      ['How does the 3X guarantee work?', 'Over 90 days we add up the commission you saved and your direct order revenue. If it is less than 3X our service fee, we refund 100% of what you paid.']
-    ]
+    cta: 'Get My Free Profit Audit', sticky: ['Free audit', ' See where your profit goes'],
+    body: body, css: css, js: js
   };
 };

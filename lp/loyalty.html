@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turn Zomato & Swiggy Customers Into Your Own Loyal Regulars | RestroGrow</title>
-<meta name="description" content="RestroGrow turns your app customers into your own loyal regulars with points, rewards and WhatsApp. Zero commission on repeat orders. 3X in 90 days or 100% back.">
+<title>Turn Zomato and Swiggy Customers Into Your Own Loyal Regulars | RestroGrow</title>
+<meta name="description" content="RestroGrow turns your app customers into your own loyal members with points, rewards and WhatsApp. Zero commission on repeat orders. 3X in 90 days or 100% back.">
 <meta name="robots" content="noindex, follow">
 <style>html,body{margin:0;padding:0}</style>
 </head>
@@ -421,358 +421,532 @@
 }
 </style>
 <style>
-/* ===== shared widgets for the ad landing pages (all scoped under .rg) ===== */
-.rg .lp-phone{position:relative;width:min(100%,320px);margin:0 auto;border-radius:44px;background:#0B0B1A;padding:11px;box-shadow:0 44px 90px -34px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.14) inset}
-.rg .lp-phone::before{content:"";position:absolute;top:19px;left:50%;transform:translateX(-50%);width:86px;height:22px;border-radius:14px;background:#000;z-index:4}
-.rg .lp-screen{position:relative;background:#fff;color:var(--tx);border-radius:34px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
-.rg .lp-sb{height:44px;flex:none}
-.rg .lp-cap{margin-top:18px;text-align:center;font-size:.82rem;color:var(--dmu)}
-.rg .lp-cap b{color:#fff;font-weight:600}
-.rg .lp-float{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px;font-size:.8rem;line-height:1.3;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);animation:lpBob 5s ease-in-out infinite;z-index:5}
-.rg .lp-float b{display:block;font:700 .95rem var(--fh);color:var(--tx)}
-.rg .lp-float small{display:block;color:var(--mu);font-size:.72rem}
-.rg .lp-float img{width:34px;height:34px;flex:none}
-.rg .lp-float.tr{top:-6px;right:-150px}
-.rg .lp-float.bl{bottom:70px;left:-150px}
-@keyframes lpBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.rg .lp-hero-v{position:relative;padding:20px 0}
-.rg .lp-hero-v::before{content:"";position:absolute;inset:6% -4% 6% -4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.28),transparent);filter:blur(14px);z-index:0}
-.rg .lp-hero-v>.lp-phone,.rg .lp-hero-v>.lp-main{position:relative;z-index:1}
+/* ===== ad landing pages: layout, components, app screens (all scoped under .rg) ===== */
+.rg .ic{width:1.2em;height:1.2em;flex:none;display:inline-block;vertical-align:-.2em}
+.rg .x-w{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.rg .x-sec{padding:clamp(64px,8vw,104px) 0;position:relative}
+.rg .x-dark{background:var(--ink);color:#fff}
+.rg .x-cream{background:var(--cream)}
+.rg .x-dots{background-image:radial-gradient(rgba(0,0,12,.07) 1px,transparent 1px);background-size:22px 22px}
+.rg .x-dark.x-dots{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px)}
+.rg .x-head{max-width:740px;margin:0 0 clamp(30px,4vw,50px)}
+.rg .x-head.c{margin-left:auto;margin-right:auto;text-align:center}
+.rg .x-kick{display:inline-flex;align-items:center;gap:10px;font:600 .78rem var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--o);margin-bottom:14px}
+.rg .x-kick::before{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-head.c .x-kick::after{content:"";width:22px;height:2px;background:var(--o)}
+.rg .x-h2{font:700 clamp(1.8rem,3.4vw,2.7rem)/1.15 var(--fh);letter-spacing:-.02em}
+.rg .x-lead{margin-top:14px;color:var(--mu);font-size:1.05rem}
+.rg .x-dark .x-lead{color:var(--dmu)}
+.rg .o{color:var(--o)}
 
-/* cards, chips, toggles */
-.rg .lp-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
-.rg .lp-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+/* top bar */
+.rg .x-top{position:sticky;top:0;z-index:40;background:rgba(0,0,12,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.rg .x-top .x-w{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.rg .x-logo{font:800 1.2rem var(--fh);color:#fff;letter-spacing:-.01em}
+.rg .x-logo b{color:var(--o)}
+.rg .x-top .btn{height:42px;padding:0 18px;font-size:.86rem}
+.rg .x-top nav{display:flex;gap:22px;font-size:.88rem;color:#C9C9D6}
+.rg .x-top nav a:hover{color:#fff}
+@media (max-width:820px){.rg .x-top nav{display:none}}
+
+/* hero */
+.rg .x-hero{background:radial-gradient(900px 520px at 82% -8%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;padding:clamp(40px,5.5vw,80px) 0 clamp(52px,7vw,92px);overflow:hidden}
+.rg .x-hero .x-w{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(32px,5vw,72px);align-items:center}
+.rg .x-eyb{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:14px;line-height:1.4;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:.84rem;color:#D4D4E0}
+.rg .x-eyb .ic{color:var(--o)}
+.rg .x-hero h1{font:800 clamp(2.1rem,4.3vw,3.45rem)/1.1 var(--fh);letter-spacing:-.025em;margin:20px 0 0;color:#fff}
+.rg .x-sub{margin-top:20px;font-size:1.08rem;color:#CFCFDB;max-width:54ch}
+.rg .x-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.rg .x-btn2{display:inline-flex;align-items:center;gap:9px;height:56px;padding:0 24px;border-radius:12px;border:1.5px solid rgba(255,255,255,.25);color:#fff;font:600 1rem var(--fh);transition:border-color .25s,background .25s}
+.rg .x-btn2:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.rg .x-checks{margin-top:26px;display:grid;gap:10px}
+.rg .x-checks li{display:flex;gap:11px;align-items:flex-start;font-size:.96rem;color:#E4E4EE}
+.rg .x-checks .ic{color:var(--o);margin-top:2px;width:1.25em;height:1.25em}
+.rg .x-trust{display:flex;align-items:center;gap:14px;margin-top:28px}
+.rg .x-trust .avs{display:flex;padding-left:10px}
+.rg .x-trust .avs img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);margin-left:-10px}
+.rg .x-trust p{font-size:.88rem;color:var(--dmu);line-height:1.4}
+.rg .x-trust b{color:#fff;font-weight:600}
+.rg .x-hv{position:relative;min-height:420px}
+.rg .x-hv::before{content:"";position:absolute;inset:8% 4%;border-radius:50%;background:radial-gradient(closest-side,rgba(252,83,1,.32),transparent);filter:blur(18px)}
+
+/* app screens (look like the real RestroGrow Partner app) */
+.rg .app{position:relative;width:min(100%,290px);border-radius:40px;background:#0B0B1A;padding:9px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12) inset}
+.rg .app::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#000;z-index:4}
+.rg .app-s{position:relative;background:#FBF6F1;color:var(--tx);border-radius:32px;overflow:hidden;min-height:540px;display:flex;flex-direction:column}
+.rg .app-hd{background:linear-gradient(165deg,#FF7A3D,#FC5301 55%,#E54A00);color:#fff;padding:42px 16px 38px;border-radius:0 0 28px 28px}
+.rg .app-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.rg .app-id{display:flex;align-items:center;gap:8px;font:600 .74rem var(--fh)}
+.rg .app-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.4);flex:none}
+.rg .app-ic{display:flex;gap:12px;opacity:.95}
+.rg .app-ic .ic{width:18px;height:18px}
+.rg .blr{filter:blur(4.5px);user-select:none;-webkit-user-select:none}
+.rg .app-tt small{display:block;font:600 .58rem var(--fh);letter-spacing:.14em;opacity:.85}
+.rg .app-tt b{display:block;font:800 1.65rem/1.1 var(--fh)}
+.rg .app-bd{padding:0 12px;margin-top:-20px;flex:1;display:flex;flex-direction:column;gap:10px}
+.rg .app-card{background:#fff;border-radius:16px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3);padding:12px 14px}
+.rg .app-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rg .app-tile{background:#fff;border-radius:16px;padding:11px;box-shadow:0 8px 20px -12px rgba(0,0,0,.3)}
+.rg .app-tile .i{width:28px;height:28px;border-radius:9px;display:grid;place-items:center}
+.rg .app-tile .i .ic{width:16px;height:16px}
+.rg .app-tile b{display:block;font:800 1.2rem/1.1 var(--fh);margin-top:8px;font-variant-numeric:tabular-nums}
+.rg .app-tile small{display:block;font:600 .56rem var(--fh);letter-spacing:.08em;color:var(--mu);text-transform:uppercase;margin-top:2px}
+.rg .t-g{background:#DCFCE7;color:#15803D}.rg .t-b{background:#DBEAFE;color:#1D4ED8}.rg .t-y{background:#FEF3C7;color:#B45309}
+.rg .t-p{background:#EDE9FE;color:#6D28D9}.rg .t-r{background:#FEE2E2;color:#B91C1C}.rg .t-o{background:#FFEDD5;color:#C2410C}
+.rg .app-nav{display:flex;justify-content:space-around;padding:9px 4px 12px;background:#fff;border-top:1px solid #F1ECE6;margin-top:auto}
+.rg .app-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.56rem;color:#8A8A98;min-width:44px}
+.rg .app-nav .ic{width:18px;height:18px}
+.rg .app-nav .on{color:var(--o);font-weight:600}
+.rg .app-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F3EEE8;font-size:.78rem}
+.rg .app-row:last-child{border-bottom:0}
+.rg .app-row .app-av{background:#E5E7EB;width:30px;height:30px}
+.rg .app-row b{display:block;font:600 .8rem var(--fh)}
+.rg .app-row small{color:var(--mu);font-size:.68rem}
+.rg .app-row em{margin-left:auto;font-style:normal;font:700 .74rem var(--fh);color:var(--o)}
+.rg .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font:700 .62rem var(--fh);letter-spacing:.03em}
+.rg .pill.s{background:#E5E7EB;color:#374151}.rg .pill.g{background:#FEF3C7;color:#92400E}.rg .pill.p{background:#EDE9FE;color:#5B21B6}.rg .pill.ok{background:#DCFCE7;color:#166534}
+.rg .app-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border:0;border-radius:13px;background:var(--o);color:#fff;font:700 .85rem var(--fh);cursor:pointer;width:100%;transition:transform .2s,background .2s}
+.rg .app-btn:hover{background:var(--o2)}.rg .app-btn:active{transform:scale(.98)}
+
+/* real screenshot frames */
+.rg .shot-f{position:relative;border-radius:30px;overflow:hidden;border:7px solid #0B0B1A;background:#0B0B1A;box-shadow:0 36px 70px -28px rgba(0,0,0,.7);cursor:zoom-in;line-height:0}
+.rg .shot-f img{display:block;width:100%;height:auto}
+.rg .shot-f.wide{border-radius:20px;border-width:5px}
+.rg .shot-zoom{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;background:rgba(0,0,12,.78);color:#fff;font:600 .72rem var(--fh);line-height:1;pointer-events:none}
+.rg .shot-zoom .ic{width:14px;height:14px}
+
+/* floating notes and annotations */
+.rg .x-note{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;color:var(--tx);border-radius:14px;padding:10px 14px 10px 10px;font-size:.78rem;line-height:1.25;box-shadow:0 22px 44px -16px rgba(0,0,0,.6);z-index:6;animation:xBob 5s ease-in-out infinite}
+.rg .x-note b{display:block;font:800 .95rem var(--fh);color:var(--tx)}
+.rg .x-note small{display:block;color:var(--mu);font-size:.7rem}
+.rg .x-note i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-style:normal}
+.rg .x-note i .ic{width:18px;height:18px}
+@keyframes xBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.rg .x-pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 .68rem var(--fh);cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 0 rgba(252,83,1,.6);animation:xPulse 2s infinite;z-index:3;transform:translate(-50%,-50%)}
+.rg .x-pin.on{background:var(--ink);animation:none}
+@keyframes xPulse{0%{box-shadow:0 0 0 0 rgba(252,83,1,.55)}70%{box-shadow:0 0 0 12px rgba(252,83,1,0)}100%{box-shadow:0 0 0 0 rgba(252,83,1,0)}}
+
+/* logos strip */
+.rg .x-logos{padding:34px 0 38px;background:#fff;border-bottom:1px solid var(--ln)}
+.rg .x-logos p{text-align:center;font-size:.9rem;color:var(--mu);margin-bottom:20px}
+.rg .x-logos .mq img{height:clamp(54px,6vw,70px)}
+
+/* cards, chips, toggles, inputs */
+.rg .x-card{background:#fff;color:var(--tx);border:1px solid var(--ln);border-radius:22px;padding:clamp(20px,3vw,30px)}
+.rg .x-dcard{background:var(--ink2);border:1px solid var(--dln);border-radius:22px;padding:clamp(20px,3vw,30px);color:#fff}
+.rg .x-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.rg .x-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rg .x-four{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rg .x-ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:14px;background:var(--ot);color:var(--o)}
+.rg .x-ico .ic{width:24px;height:24px}
+.rg .x-card h3,.rg .x-dcard h3{font:700 1.1rem/1.35 var(--fh)}
+.rg .x-card p.m,.rg .x-dcard p.m{margin-top:8px;font-size:.94rem;color:var(--mu)}
+.rg .x-dcard p.m{color:var(--dmu)}
 .rg .seg{display:inline-flex;gap:4px;padding:5px;border-radius:14px;background:#EFE8E0;flex-wrap:wrap}
-.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
+.rg .seg button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font:600 .88rem var(--fh);color:var(--mu);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s;display:inline-flex;align-items:center;gap:7px}
 .rg .seg button.on{background:#fff;color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.rg .dark .seg{background:rgba(255,255,255,.08)}
-.rg .dark .seg button{color:var(--dmu)}
-.rg .dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
+.rg .x-dark .seg{background:rgba(255,255,255,.08)}
+.rg .x-dark .seg button{color:var(--dmu)}
+.rg .x-dark .seg button.on{background:var(--o);color:#fff;box-shadow:none}
 .rg .chips{display:flex;flex-wrap:wrap;gap:8px}
-.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s}
+.rg .chips button{border:1.5px solid var(--ln);background:#fff;color:var(--tx);padding:9px 14px;border-radius:99px;font:500 .88rem var(--fb);cursor:pointer;transition:border-color .2s,background .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
 .rg .chips button:hover{border-color:#F6C7AE}
 .rg .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
-.rg .dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
-.rg .dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
+.rg .x-dark .chips button{background:transparent;border-color:rgba(255,255,255,.18);color:#E8E8F0}
+.rg .x-dark .chips button.on{background:var(--o);border-color:var(--o);color:#fff}
 .rg .rng.lt{background:linear-gradient(to right,var(--o) 0 var(--p,50%),#E8E1D9 var(--p,50%))}
-.rg .lp-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;font-weight:500}
-.rg .lp-lbl output,.rg .lp-lbl b{font:700 1.15rem var(--fh)}
-.rg .lp-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:var(--o);font:600 .74rem var(--fh);letter-spacing:.04em}
-.rg .lp-badge.g{background:#E6F6EC;color:#15803D}
-.rg .lp-note{font-size:.78rem;color:var(--mu);margin-top:14px}
-.rg .dark .lp-note{color:var(--dmu)}
-.rg .lp-two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
-.rg .lp-three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.rg .lp-ico{width:56px;height:56px;border-radius:16px;background:var(--ot);display:grid;place-items:center;margin-bottom:14px}
-.rg .lp-ico img{width:36px;height:36px}
-.rg .lp-step{position:relative;padding-top:6px}
-.rg .lp-step .n{position:absolute;top:14px;right:20px;font:800 3.4rem/1 var(--fh);color:rgba(252,83,1,.12)}
-.rg .lp-step h3{font:700 1.1rem/1.35 var(--fh);margin-top:6px}
-.rg .lp-step p{color:var(--mu);font-size:.95rem;margin-top:8px}
-.rg .lp-cta-row{display:flex;justify-content:center;margin-top:34px}
-.rg .lp-confetti{position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;opacity:0}
-.rg .lp-table{width:100%;border-collapse:collapse;font-size:.94rem}
-.rg .lp-table th,.rg .lp-table td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--ln)}
-.rg .lp-table th{font:600 .78rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
-@media (max-width:900px){
- .rg .lp-two,.rg .lp-three{grid-template-columns:1fr}
- .rg .lp-float{display:none}
+.rg .x-fld{margin-bottom:24px}
+.rg .x-fld:last-child{margin-bottom:0}
+.rg .x-lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;font-weight:500}
+.rg .x-lbl output,.rg .x-lbl b{font:700 1.2rem var(--fh)}
+.rg .x-fld small{display:block;color:var(--mu);font-size:.8rem;margin-top:10px}
+.rg .x-dark .x-fld small{color:var(--dmu)}
+.rg .x-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--ot);color:#C2410C;font:600 .74rem var(--fh)}
+.rg .x-tag.g{background:#DCFCE7;color:#15803D}
+.rg .x-note2{font-size:.78rem;color:var(--mu);margin-top:14px}
+.rg .x-dark .x-note2{color:var(--dmu)}
+.rg .x-cta-row{display:flex;justify-content:center;margin-top:34px}
+
+/* result panel used by calculators */
+.rg .x-out{padding:clamp(22px,3vw,34px);border-radius:22px;background:#fff;color:var(--tx);display:flex;flex-direction:column;gap:16px}
+.rg .x-out .l{font-size:.94rem;color:var(--mu)}
+.rg .x-out .big{font:800 clamp(2.2rem,4.4vw,3.2rem)/1.05 var(--fh);letter-spacing:-.03em;color:#C2410C;margin-top:6px;font-variant-numeric:tabular-nums}
+.rg .x-out .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:13px 0;border-top:1px solid var(--ln);color:var(--mu);font-size:.92rem}
+.rg .x-out .row b{font:700 1.3rem var(--fh);color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rg .x-out .win{background:var(--ot);border:1.5px solid #FBD2BC;border-radius:16px;padding:16px 18px}
+.rg .x-out .win p{font-size:.94rem;color:var(--tx)}
+.rg .x-out .win strong{display:block;font:800 clamp(1.7rem,3.2vw,2.3rem)/1.1 var(--fh);color:#16A34A;margin:6px 0 2px;letter-spacing:-.02em}
+.rg .x-out .win small{font-size:.78rem;color:var(--mu)}
+
+/* real client explorer */
+.rg .cl-wrap{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(24px,4vw,56px);align-items:center}
+.rg .cl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rg .cl-tabs button{border:1.5px solid var(--ln);background:#fff;border-radius:12px;padding:9px 14px;font:600 .82rem var(--fh);cursor:pointer;color:var(--mu);transition:all .2s}
+.rg .cl-tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rg .cl-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rg .cl-st{padding:16px;border-radius:16px;background:#fff;border:1px solid var(--ln)}
+.rg .cl-st small{display:block;font:600 .68rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .cl-st b{display:block;font:800 1.6rem/1.15 var(--fh);margin-top:4px;font-variant-numeric:tabular-nums}
+.rg .cl-st.hl{background:var(--ot);border-color:#FBD2BC}.rg .cl-st.hl b{color:var(--o)}
+.rg .cl-say{margin-top:14px;padding:16px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.94rem;line-height:1.55}
+.rg .cl-say b{color:var(--o);font:800 1.15rem var(--fh)}
+.rg .cl-bars{margin-top:18px;display:grid;gap:8px}
+.rg .cl-bar{display:grid;grid-template-columns:62px 1fr 56px;gap:10px;align-items:center;font-size:.8rem;color:var(--mu)}
+.rg .cl-bar i{display:block;height:9px;border-radius:9px;background:#EFE8E0;overflow:hidden;position:relative}
+.rg .cl-bar i::after{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,#FC5301,#FF8A3D);border-radius:9px;transition:width .8s var(--ease)}
+.rg .cl-bar.on b{color:var(--o)}
+.rg .cl-bar b{text-align:right;font:700 .8rem var(--fh);color:var(--tx)}
+
+/* real payout decoder */
+.rg .po-wrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.rg .po-img{position:relative}
+.rg .po-img .shot-f{border-radius:22px;border-width:5px}
+.rg .po-tabs{margin-bottom:18px}
+.rg .po-bar{display:flex;height:46px;border-radius:12px;overflow:hidden;background:#EFE8E0;margin:14px 0 8px}
+.rg .po-bar i{display:block;height:100%;transition:width .7s var(--ease);min-width:0}
+.rg .po-leg{display:grid;gap:2px}
+.rg .po-leg li{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln);font-size:.9rem}
+.rg .po-leg li:last-child{border-bottom:0}
+.rg .po-leg li i{width:12px;height:12px;border-radius:4px}
+.rg .po-leg li em{font-style:normal;color:var(--mu);font-size:.8rem;min-width:48px;text-align:right}
+.rg .po-leg li b{font:700 .92rem var(--fh);font-variant-numeric:tabular-nums}
+.rg .po-keep{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px 18px;border-radius:16px;background:#E6F6EC;color:#166534}
+.rg .po-keep b{font:800 1.7rem var(--fh);color:#15803D;font-variant-numeric:tabular-nums}
+.rg .po-keep small{display:block;font-size:.76rem}
+.rg .po-more{margin-top:12px;padding:14px 18px;border-radius:16px;background:var(--ink);color:#fff;font-size:.92rem}
+.rg .po-more b{color:#4ADE80;font:800 1.15rem var(--fh)}
+
+/* guarantee, faq, final cta */
+.rg .gx{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(26px,4vw,48px);border-radius:28px;background:#fff;border:1px solid var(--ln);box-shadow:0 40px 80px -50px rgba(0,0,0,.35)}
+.rg .gx-seal{position:relative;width:clamp(150px,18vw,200px);aspect-ratio:1}
+.rg .gx-seal svg{width:100%;height:100%}
+.rg .gx-seal b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:800 clamp(2.4rem,4.4vw,3.4rem)/1 var(--fh);color:var(--o)}
+.rg .gx-seal small{display:block;font:600 .66rem var(--fh);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);margin-top:6px}
+.rg .gx h2{font:700 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--fh);letter-spacing:-.02em;margin:10px 0 12px}
+.rg .gx p{color:var(--mu)}
+.rg .gx-pts{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 22px}
+.rg .gx-pts li{display:flex;gap:8px;align-items:center;font-size:.9rem;font-weight:500}
+.rg .gx-pts .ic{color:var(--o)}
+.rg .x-faq{max-width:860px;margin:0 auto;display:grid;gap:12px}
+.rg .x-faq details{border:1px solid var(--ln);border-radius:16px;background:#fff;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.rg .x-faq details[open]{border-color:#F6C7AE;box-shadow:0 18px 36px -26px rgba(252,83,1,.5)}
+.rg .x-faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;cursor:pointer;list-style:none;font:600 1rem/1.4 var(--fh)}
+.rg .x-faq summary::-webkit-details-marker{display:none}
+.rg .x-faq summary .ic{color:var(--o);transition:transform .3s}
+.rg .x-faq details[open] summary .ic{transform:rotate(45deg)}
+.rg .x-faq details p{padding:0 22px 20px;color:var(--mu);font-size:.96rem}
+.rg .fin{background:radial-gradient(800px 420px at 12% 110%,rgba(252,83,1,.22),transparent 60%),var(--ink);color:#fff;text-align:center;padding:clamp(64px,8vw,104px) 0}
+.rg .fin h2{font:800 clamp(1.9rem,3.8vw,3rem)/1.12 var(--fh);letter-spacing:-.025em;max-width:820px;margin:0 auto}
+.rg .fin p{color:#CFCFDB;margin:16px auto 0;max-width:56ch;font-size:1.05rem}
+.rg .fin .x-checks{justify-content:center;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px}
+.rg .fin .btn{margin-top:30px;height:60px;padding:0 34px;font-size:1.05rem}
+.rg .fin small{display:block;margin-top:14px;color:var(--dmu);font-size:.84rem}
+
+/* steps / timeline */
+.rg .x-step{position:relative}
+.rg .x-step .n{position:absolute;top:16px;right:20px;font:800 3.2rem/1 var(--fh);color:rgba(252,83,1,.12)}
+.rg .x-tl{position:relative;display:grid;gap:18px}
+.rg .x-tl li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:16px;border-radius:16px;border:1px solid transparent;transition:background .3s,border-color .3s;cursor:pointer}
+.rg .x-tl li .ic-b{width:44px;height:44px;border-radius:13px;background:#EFE8E0;color:var(--mu);display:grid;place-items:center;transition:background .3s,color .3s}
+.rg .x-tl li.on{background:#fff;border-color:var(--ln);box-shadow:0 20px 40px -30px rgba(0,0,0,.4)}
+.rg .x-tl li.on .ic-b{background:var(--o);color:#fff}
+.rg .x-tl li b{display:block;font:700 1rem var(--fh)}
+.rg .x-tl li span{display:block;color:var(--mu);font-size:.9rem;margin-top:3px}
+
+/* tables */
+.rg .x-tbl{width:100%;border-collapse:collapse;font-size:.94rem}
+.rg .x-tbl th,.rg .x-tbl td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+.rg .x-tbl th{font:600 .74rem var(--fh);letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.rg .x-tbl th.hl,.rg .x-tbl td.hl{background:#FFF7F1}
+.rg .x-tbl td.no{color:#C2410C}.rg .x-tbl td.ok{color:#15803D;font-weight:600}
+.rg .x-tbl td .ic{margin-right:6px}
+.rg .x-tbl td:first-child{font-weight:600}
+.rg .x-tbl tr:last-child td{border-bottom:0}
+
+@media (max-width:980px){
+ .rg .x-hero .x-w{grid-template-columns:1fr}
+ .rg .x-hv{min-height:0;padding:10px 0}
+ .rg .x-two,.rg .x-three,.rg .x-four{grid-template-columns:1fr}
+ .rg .cl-wrap,.rg .po-wrap{grid-template-columns:1fr}
+ .rg .cl-wrap .shot-f,.rg .po-img{max-width:320px;margin:0 auto}
+ .rg .gx{grid-template-columns:1fr;text-align:center}
+ .rg .gx-seal{margin:0 auto}.rg .gx-pts{justify-content:center}
+ .rg .x-note{display:none}
 }
-@media (prefers-reduced-motion:reduce){.rg .lp-float{animation:none}}
+@media (max-width:520px){
+ .rg .btn{white-space:normal;height:auto;min-height:52px;padding:12px 20px;text-align:center;line-height:1.3}
+ .rg .x-top .btn{white-space:nowrap;min-height:40px;height:40px;padding:0 12px;font-size:.78rem}
+ .rg .x-logo{font-size:1.05rem}
+ .rg .x-four{grid-template-columns:1fr 1fr}
+ .rg .cl-stats{grid-template-columns:1fr 1fr}
+ .rg .x-tbl{font-size:.82rem}.rg .x-tbl th,.rg .x-tbl td{padding:11px 8px}
+ .rg .po-leg li{grid-template-columns:12px 1fr auto}.rg .po-leg li em{display:none}
+}
+@media (prefers-reduced-motion:reduce){.rg .x-note,.rg .x-pin{animation:none}}
 
 
-.rg .ly-screen{background:linear-gradient(180deg,#FFF1E8 0,#fff 38%)}
-.rg .ly-top{display:flex;justify-content:space-between;align-items:center;padding:6px 20px 0}
-.rg .ly-top small{display:block;color:var(--mu);font-size:.74rem}
-.rg .ly-top b{font:800 1.25rem var(--fh)}
-.rg .ly-tier{font:700 .72rem var(--fh);padding:6px 11px;border-radius:99px;background:#E5E7EB;color:#374151;transition:background .4s,color .4s}
-.rg .ly-tier.gold{background:#FEF3C7;color:#92400E}
-.rg .ly-tier.plat{background:#EDE9FE;color:#5B21B6}
-.rg .ly-pts{margin:14px 20px 0;padding:16px;border-radius:18px;background:var(--ink);color:#fff}
-.rg .ly-pts small{display:block;color:var(--dmu);font-size:.74rem}
-.rg .ly-pts b{display:block;font:800 2.3rem/1.1 var(--fh);color:#fff}
-.rg .ly-bar{height:7px;border-radius:7px;background:rgba(255,255,255,.14);margin:10px 0 8px;overflow:hidden}
-.rg .ly-bar i{display:block;height:100%;width:40%;border-radius:7px;background:var(--o);transition:width .6s var(--ease)}
-.rg .ly-card{margin:14px 20px 0;padding:14px;border-radius:18px;border:1px solid var(--ln);background:#fff}
-.rg .ly-card-h{display:flex;justify-content:space-between;align-items:baseline;font-size:.82rem}
-.rg .ly-card-h b{font:700 .95rem var(--fh)}.rg .ly-card-h span{color:var(--mu)}
-.rg .ly-stamps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
-.rg .ly-stamps i{aspect-ratio:1;border-radius:50%;border:2px dashed #E3D9CF;display:grid;place-items:center;transition:transform .3s var(--ease),background .3s,border-color .3s}
-.rg .ly-stamps i.on{border:2px solid #FACC15;background:#FFFBEB}
-.rg .ly-stamps i.on img{width:62%;height:62%;animation:lyPop .45s var(--ease)}
-.rg .ly-stamps i img{width:0;height:0}
-.rg .ly-stamps i.last{border-color:var(--o);background:var(--ot)}
-@keyframes lyPop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
-.rg .ly-rew{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:12px;background:var(--ot);font-size:.8rem;font-weight:600;color:#9A3412}
-.rg .ly-rew img{width:26px;height:26px}
+.rg .ly-hv{min-height:640px}
+.rg .ly-real{position:absolute;left:-2%;top:46px;width:50%;transform:rotate(-5deg);z-index:1}
+.rg .ly-real .shot-f{border-width:6px;border-radius:26px}
+.rg .ly-front{position:absolute;right:-2%;top:0;width:58%;z-index:2}
+.rg .ly-front .app{width:100%}
+.rg .ly-n1{left:-4%;bottom:70px;animation-delay:-1s}
+.rg .ly-n2{right:4%;bottom:-30px}
+.rg .ly-s{background:#fff}
+.rg .ly-hd{display:flex;justify-content:space-between;align-items:center;padding:40px 16px 8px}
+.rg .ly-brand{display:flex;align-items:center;gap:9px}
+.rg .ly-brand small{display:block;color:var(--mu);font-size:.64rem}
+.rg .ly-brand b{font:800 1.05rem var(--fh)}
+.rg .ly-logo{width:34px;height:34px;border-radius:11px;background:var(--o);color:#fff;display:grid;place-items:center;flex:none}
+.rg .ly-logo .ic{width:18px;height:18px}
+.rg .ly-pts{margin:6px 14px 0;padding:12px;border-radius:20px;background:var(--ink);color:#fff;text-align:center}
+.rg .ly-pts p{font-size:.7rem;color:var(--dmu);margin-top:4px}
+.rg .ly-ringw{position:relative;width:110px;height:110px;margin:0 auto}
+.rg .ly-ringw svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rg .ly-ringw circle{fill:none;stroke-width:9}
+.rg .ly-ringw .bg{stroke:rgba(255,255,255,.12)}
+.rg .ly-ringw .fg{stroke:var(--o);stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:65;transition:stroke-dashoffset .7s var(--ease)}
+.rg .ly-n{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.rg .ly-n b{font:800 1.9rem/1 var(--fh);font-variant-numeric:tabular-nums}
+.rg .ly-n small{font-size:.62rem;color:var(--dmu)}
+.rg .ly-card{margin:12px 14px 0;box-shadow:none;border:1px solid var(--ln)}
+.rg .ly-ch{display:flex;justify-content:space-between;align-items:baseline;font-size:.72rem;color:var(--mu)}
+.rg .ly-ch b{font:700 .85rem var(--fh);color:var(--tx)}
+.rg .ly-st{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.rg .ly-st i{aspect-ratio:1;border-radius:50%;border:2px dashed #E3D9CF;display:grid;place-items:center;color:transparent;transition:background .3s,border-color .3s,color .3s,transform .3s}
+.rg .ly-st i .ic{width:46%;height:46%}
+.rg .ly-st i.on{border:2px solid var(--o);background:var(--ot);color:var(--o)}
+.rg .ly-st i.pop{animation:lyPop .45s var(--ease)}
+.rg .ly-st i.last{border-color:#F6C7AE}
+@keyframes lyPop{0%{transform:scale(.4)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.rg .ly-rew{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:11px;background:var(--ot);font-size:.7rem;font-weight:600;color:#9A3412}
+.rg .ly-rew .ic{width:18px;height:18px}
 .rg .ly-rew.got{background:#DCFCE7;color:#166534}
-.rg .ly-btn{margin:14px 20px 0;width:calc(100% - 40px);height:50px}
-.rg .ly-foot{padding:10px 20px 18px;text-align:center;font-size:.76rem;color:var(--mu)}
-.rg .ly-prof{max-width:900px;margin:0 auto;padding:0;overflow:hidden}
-.rg .ly-prof-t{padding:18px 20px;border-bottom:1px solid var(--ln);display:flex;justify-content:center;background:#FBF6F1}
-.rg .ly-prof-b{display:grid;grid-template-columns:260px 1fr}
-.rg .ly-who{padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border-right:1px solid var(--ln)}
-.rg .ly-av{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font:800 2rem var(--fh);background:#E5E7EB;color:#9CA3AF;transition:background .4s,color .4s}
+.rg .ly-s .app-btn{margin:12px 14px 0;width:calc(100% - 28px)}
+.rg .ly-foot{padding:8px 14px 14px;text-align:center;font-size:.66rem;color:var(--mu)}
+.rg .ly-stats{background:#fff;border-bottom:1px solid var(--ln);padding:34px 0}
+.rg .ly-stat b{display:block;font:800 clamp(1.7rem,3vw,2.3rem)/1.1 var(--fh);letter-spacing:-.02em;color:var(--o);font-variant-numeric:tabular-nums}
+.rg .ly-stat span{display:block;font-size:.88rem;color:var(--mu);margin-top:4px}
+.rg .ly-prof{max-width:940px;margin:0 auto;padding:0;overflow:hidden}
+.rg .ly-prof-t{padding:18px 20px;border-bottom:1px solid var(--ln);display:flex;justify-content:center;background:var(--cream)}
+.rg .ly-prof-b{display:grid;grid-template-columns:270px 1fr}
+.rg .ly-who{padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border-right:1px solid var(--ln)}
+.rg .ly-av{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:#E5E7EB;color:#9CA3AF;transition:background .4s,color .4s}
+.rg .ly-av .ic{width:38px;height:38px}
 .rg [data-m=own] .ly-av{background:var(--o);color:#fff}
 .rg .ly-who b{font:700 1.1rem var(--fh)}
 .rg .ly-who span{font-size:.82rem;color:var(--mu)}
-.rg .ly-rows li{display:flex;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--ln);font-size:.94rem}
-.rg .ly-rows li:last-child{border-bottom:0}
-.rg .ly-rows li span{color:var(--mu)}
-.rg .ly-rows li b{font-weight:600;text-align:right}
-.rg .ly-rows li.bad b{color:#C2410C}
-.rg .ly-rows li.good b{color:#15803D}
 .rg .ly-rows{transition:opacity .25s}
 .rg .ly-rows.sw{opacity:0}
-.rg .ly-tiers{align-items:center}
-.rg .ly-tier-h{display:flex;align-items:center;gap:14px;margin:22px 0 14px}
-.rg .ly-tier-i{width:54px;height:54px;border-radius:16px;display:grid;place-items:center}
-.rg .ly-tier-i img{width:34px;height:34px}
-.rg .ly-tier-h b{display:block;font:800 1.4rem var(--fh)}
-.rg .ly-tier-h small{color:var(--dmu)}
-.rg .ly-perks li{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--dln);font-size:.97rem}
-.rg .ly-perks li:last-child{border-bottom:0}
-.rg .ly-perks i{width:22px;height:22px;flex:none;border-radius:50%;background:var(--o);display:grid;place-items:center;font-style:normal;font-size:.7rem;font-weight:700;margin-top:2px}
-.rg .ly-chatbox{padding:22px 18px;border-radius:22px;background:#0B141A;border:1px solid var(--dln)}
-.rg .ly-chat{display:flex;flex-direction:column;gap:10px;min-height:230px;justify-content:flex-end}
-.rg .ly-b{max-width:88%;padding:10px 13px;border-radius:12px;font-size:.9rem;line-height:1.5;animation:lyIn .5s var(--ease) both}
-.rg .ly-b small{display:block;margin-top:4px;font-size:.68rem;opacity:.7;text-align:right}
-.rg .ly-b.biz{background:#202C33;color:#E9EDEF;border-top-left-radius:2px}
-.rg .ly-b.me{background:#005C4B;color:#E9EDEF;align-self:flex-end;border-top-right-radius:2px}
-@keyframes lyIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
-.rg .dots-d{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px}
-.rg .ly-vs th.hl,.rg .ly-vs td.ok{background:#FFF7F1}
-.rg .ly-vs td.ok{color:#15803D;font-weight:600}
-.rg .ly-vs td.no{color:#C2410C}
-.rg .ly-vs td:first-child{font-weight:600}
-@media (max-width:760px){
- .rg .ly-prof-b{grid-template-columns:1fr}
- .rg .ly-who{border-right:0;border-bottom:1px solid var(--ln)}
- .rg .lp-table{font-size:.84rem}.rg .lp-table th,.rg .lp-table td{padding:11px 9px}
+.rg .ly-rows li{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--ln);font-size:.94rem}
+.rg .ly-rows li:last-child{border-bottom:0}
+.rg .ly-rows li .ic{color:var(--mu)}
+.rg .ly-rows li span{flex:1;color:var(--mu)}
+.rg .ly-rows li b{font-weight:600;text-align:right}
+.rg .ly-rows li.bad b,.rg .ly-rows li.bad .ic{color:#C2410C}
+.rg .ly-rows li.good b,.rg .ly-rows li.good .ic{color:#15803D}
+.rg .rb-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rg .rb-cmp div{padding:16px;border-radius:16px;background:#F8F6F3}
+.rg .rb-cmp small{display:block;font-size:.76rem;color:var(--mu)}
+.rg .rb-cmp b{display:block;font:800 1.5rem var(--fh);margin:4px 0 10px;font-variant-numeric:tabular-nums}
+.rg .rb-cmp i{display:block;height:9px;border-radius:9px;background:#E8E1D9;position:relative;overflow:hidden}
+.rg .rb-cmp i::after{content:"";position:absolute;inset:0;width:var(--w);background:#C2410C;border-radius:9px;transition:width .6s var(--ease)}
+.rg .rb-cmp div:last-child i::after{background:#16A34A}
+.rg .ly-sty{align-items:center}
+.rg .ly-sty-h{font:800 1.6rem var(--fh);margin-top:24px}
+.rg .ly-sty-l{margin-top:18px}
+.rg .ly-sty-l li{color:var(--tx)}
+.rg .ly-prev{padding:24px;border-radius:26px;background:linear-gradient(160deg,#FFF1E8,#fff);border:1px solid var(--ln);min-height:330px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.rg .pv-h{display:flex;justify-content:space-between;align-items:center}
+.rg .pv-h b{font:800 1.1rem var(--fh)}
+.rg .pv-big{font:800 2.8rem/1 var(--fh);color:var(--o);font-variant-numeric:tabular-nums}
+.rg .pv-row{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:14px;background:#fff;border:1px solid var(--ln);font-size:.88rem}
+.rg .pv-row .i{width:36px;height:36px;border-radius:11px;display:grid;place-items:center}
+.rg .pv-row b{display:block;font:700 .9rem var(--fh)}
+.rg .pv-row small{color:var(--mu);font-size:.74rem}
+.rg .pv-pg{height:7px;border-radius:7px;background:#EFE8E0;overflow:hidden;margin-top:6px}
+.rg .pv-pg i{display:block;height:100%;background:var(--o);border-radius:7px}
+.rg .pv-stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.rg .pv-stamps i{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:2px dashed #E3D9CF;color:#fff}
+.rg .pv-stamps i.on{background:var(--o);border:2px solid var(--o)}
+.rg .pv-stamps i.free{background:#16A34A;border-color:#16A34A}
+.rg .pv-stamps .ic{width:50%;height:50%}
+.rg .pv-ticket{padding:18px;border-radius:18px;border:2px dashed var(--o);background:#fff;text-align:center}
+.rg .pv-ticket b{display:block;font:800 1.5rem var(--fh);color:var(--o)}
+.rg .pv-code{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:8px 14px;border-radius:10px;background:var(--cream);font:700 .86rem var(--fh);letter-spacing:.06em}
+.rg .ly-jr{align-items:center}
+.rg .x-dark .x-tl li{color:#fff}
+.rg .x-dark .x-tl li span{color:var(--dmu)}
+.rg .x-dark .x-tl li .ic-b{background:rgba(255,255,255,.08);color:var(--dmu)}
+.rg .x-dark .x-tl li.on{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);box-shadow:none}
+.rg .x-dark .x-tl li.on .ic-b{background:var(--o);color:#fff}
+.rg .ly-wa{border-radius:24px;overflow:hidden;background:#0B141A;border:1px solid var(--dln)}
+.rg .ly-wa-h{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#075E54;color:#fff}
+.rg .ly-wa-h b{display:block;font:700 .92rem var(--fh)}
+.rg .ly-wa-h small{font-size:.7rem;opacity:.8}
+.rg .ly-wa-c{padding:18px 14px;min-height:300px;display:flex;flex-direction:column;gap:9px;justify-content:flex-end;background:#0B141A radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/18px 18px}
+.rg .wb{max-width:86%;padding:9px 12px;border-radius:10px;font-size:.88rem;line-height:1.5;color:#E9EDEF;animation:wbIn .45s var(--ease) both}
+.rg .wb small{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:3px;font-size:.64rem;opacity:.7}
+.rg .wb small .ic{width:13px;height:13px;color:#53BDEB}
+.rg .wb.biz{background:#202C33;border-top-left-radius:2px}
+.rg .wb.me{background:#005C4B;align-self:flex-end;border-top-right-radius:2px}
+@keyframes wbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media (max-width:980px){
+ .rg .ly-hv{min-height:0}.rg .ly-real,.rg .ly-n1,.rg .ly-n2{display:none}
+ .rg .ly-front{position:static;width:min(100%,290px);margin:0 auto}
+ .rg .ly-prof-b{grid-template-columns:1fr}.rg .ly-who{border-right:0;border-bottom:1px solid var(--ln)}
 }
+@media (max-width:520px){.rg .rb-cmp{grid-template-columns:1fr}}
 </style>
 
 <div class="rg" id="rg-top">
 
-<!-- ================= HERO ================= -->
-<section class="hero" id="rg-hero"><div class="w">
-  <div class="copy">
-    <p class="eyb rv">For <b>restaurants &amp; cafes</b> whose best customers order through Zomato and Swiggy</p>
-    <h1 class="rv" style="--dl:.06s">Your Regulars Order Again and Again. <span class="o">You Don't Even Know Their Names.</span></h1>
-    <p class="sub rv" style="--dl:.12s">RestroGrow turns your app customers into your own loyal regulars, with points, rewards and WhatsApp. Every repeat order comes straight to you, with zero commission.</p>
-    <div class="cta rv" style="--dl:.18s">
-      <a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a class="btn btn-g" href="#rg-sim">See What My Regulars Cost Me</a>
-    </div>
-    <p class="wait rv" style="--dl:.22s">Every regular who orders through an app is a regular you pay to keep. <b>Make them yours.</b></p>
-    <div class="proof rv" style="--dl:.26s"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div>
-  </div>
-  <div class="lp-hero-v rv" style="--dl:.15s">
+<header class="x-top"><div class="x-w"><a class="x-logo" href="#rg-hero">Restro<b>Grow</b></a><nav><a href="#clx">Real results</a><a href="#rg-sim">Calculators</a><a href="#rg-style">How it looks</a><a href="#rg-faq">FAQ</a></nav><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program</a></div></header>
 
-    <div class="lp-phone"><div class="lp-screen ly-screen">
-      <div class="lp-sb"></div>
-      <div class="ly-top"><div><small>Welcome back</small><b>Rohan</b></div><span class="ly-tier" id="lyTier">Silver member</span></div>
-      <div class="ly-pts"><small>Your points</small><b id="lyPts">240</b>
-        <div class="ly-bar"><i id="lyBar"></i></div><small id="lyNext">60 points to Gold</small></div>
-      <div class="ly-card">
-        <div class="ly-card-h"><b>Dessert Club</b><span id="lyCount">5 of 8 stamps</span></div>
-        <div class="ly-stamps" id="lyStamps"></div>
-        <p class="ly-rew" id="lyRew"><img class="" src="img/gift.svg" alt="" loading="lazy" decoding="async"><span>Free dessert on your 8th order</span></p>
-      </div>
-      <button class="btn btn-p btn-full ly-btn" id="lyOrder" type="button">Place an order · ₹450</button>
-      <p class="ly-foot" id="lyFoot">Tap the button. This is how your customers earn.</p>
-    </div>
-    <div class="lp-float tr" id="lyFloat1"><img class="" src="img/star.svg" alt="" loading="lazy" decoding="async"><span><b id="lyF1b">+45 points</b><small>On every direct order</small></span></div>
-    <div class="lp-float bl" style="animation-delay:-2s"><img class="" src="img/heart.svg" alt="" loading="lazy" decoding="async"><span><b>0% commission</b><small>On this order</small></span></div></div>
+
+<section class="x-hero" id="rg-hero"><div class="x-w">
+  <div>
+    <span class="x-eyb rv"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>For restaurants and cafes whose best customers order through Zomato and Swiggy</span>
+    <h1 class="rv" style="--dl:.06s">Your Regulars Order Again and Again. <span class="o">You Don't Even Know Their Names.</span></h1>
+    <p class="x-sub rv" style="--dl:.12s">RestroGrow turns your app customers into your own loyal members, with points, rewards and WhatsApp. Every repeat order comes straight to you, with zero commission.</p>
+    <div class="x-cta rv" style="--dl:.18s"><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="x-btn2" href="#rg-sim"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="8" rx="6" ry="3"/><path d="M3 8v4c0 1.7 2.7 3 6 3s6-1.3 6-3V8"/><path d="M15 11.5c3.3 0 6 1.3 6 3v3c0 1.7-2.7 3-6 3-2.2 0-4-.6-5.1-1.4"/></svg>What do my regulars cost me?</a></div>
+    <ul class="x-checks rv" style="--dl:.22s"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Points, stamp cards, tiers and referrals on your own ordering website</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>WhatsApp reminders that bring regulars back, with no ad spend</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days, or 100% of your fee back</li></ul>
+    <div class="x-trust"><div class="avs" id="rgAvs"></div><p><b>140+ restaurants</b><br>already taking direct orders with us</p></div>
   </div>
-</div>
-<div class="w wimp">
-  <div class="impact rv">
-    <div class="imp"><b><span class="cu" data-to="140">0</span>+</b><p>restaurants, cafes and cloud kitchens on RestroGrow</p></div>
-    <div class="imp"><b>₹<span class="cu" data-to="90">0</span> L+</b><p>commission saved for our clients, and counting</p></div>
-    <div class="imp"><b><span class="cu" data-from="30" data-to="0">30</span>%</b><p>commission on every direct order</p></div>
-    <div class="imp"><b><span class="cu" data-to="3">0</span>X</b><p>returns in 90 days, or 100% of your money back</p></div>
+  <div class="x-hv ly-hv rv" style="--dl:.12s">
+    <div class="ly-real"><div class="shot-f" data-zoom="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-2.png"><img src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-2.png" alt="Real RestroGrow client dashboard showing a 39.89% repeat ratio"></div></div>
+    <div class="ly-front">
+      <div class="app"><div class="app-s ly-s">
+        <div class="ly-hd"><div class="ly-brand"><span class="ly-logo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg></span><div><small>Welcome back</small><b>Rohan</b></div></div><span class="pill s" id="lyTier">SILVER</span></div>
+        <div class="ly-pts">
+          <div class="ly-ringw"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="bg"/><circle id="lyArc" cx="60" cy="60" r="52" class="fg"/></svg><div class="ly-n"><b id="lyPts">240</b><small>points</small></div></div>
+          <p id="lyNext">60 points to Gold</p>
+        </div>
+        <div class="app-card ly-card"><div class="ly-ch"><b>Dessert Club</b><span id="lyCount">5 of 8 orders</span></div><div class="ly-st" id="lyStamps"></div><p class="ly-rew" id="lyRew"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8c-1.5-3.5-5-4-5-1.5S10 8 12 8zM12 8c1.5-3.5 5-4 5-1.5S14 8 12 8z"/></svg><span>Free dessert on your 8th order</span></p></div>
+        <button class="app-btn" id="lyOrder" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Place an order, ₹450</span></button>
+        <p class="ly-foot" id="lyFoot">Tap the button. This is how your customers earn.</p>
+      </div></div>
+    </div>
+    <div class="x-note ly-n1"><i class="t-g"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></i><span><b>39.89% repeat ratio</b><small>Real client dashboard</small></span></div>
+    <div class="x-note ly-n2" style="animation-delay:-2s"><i class="t-o"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/></svg></i><span><b>0% commission</b><small>On every direct order</small></span></div>
   </div>
 </div></section>
 
-<section class="logos cream" aria-label="Brands using RestroGrow">
-  <p>Trusted by 140+ restaurants, cafes and cloud kitchens</p>
-  <div class="mq"><div class="mq-t" id="rgMq"></div></div>
-</section>
+
+<section class="ly-stats"><div class="x-w"><div class="x-four">
+  <div class="ly-stat rv"><b data-count="140" data-suffix="+">0</b><span>restaurants on RestroGrow</span></div>
+  <div class="ly-stat rv" style="--dl:.06s"><b>37% to 44%</b><span>of orders from returning customers at 5 real clients</span></div>
+  <div class="ly-stat rv" style="--dl:.12s"><b data-count="90" data-prefix="₹" data-suffix=" L+">0</b><span>commission saved for clients</span></div>
+  <div class="ly-stat rv" style="--dl:.18s"><b>0%</b><span>commission on every direct order</span></div>
+</div></div></section>
+
+<section class="x-logos"><p>Trusted by 140+ restaurants, cafes and cloud kitchens</p><div class="mq"><div class="mq-t" id="rgMq"></div></div></section>
 
 
-<!-- ================= PROBLEM ================= -->
-<section class="sec" id="rg-problem"><div class="w">
-  <div class="head rv"><span class="kick">The loyalty gap</span><h2 class="h2">Same Customer. <span class="o">Two Very Different Relationships.</span></h2><p>Tap to see what you know about your best regular, depending on where they order.</p></div>
-  <div class="lp-card ly-prof rv" id="lyProf" data-m="app">
-    <div class="ly-prof-t"><div class="seg" id="lyProfSeg"><button class="on" data-v="app" type="button">On a delivery app</button><button data-v="own" type="button">In your own program</button></div></div>
+<section class="x-sec" id="rg-gap"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">The loyalty gap</span><h2 class="x-h2">Same Customer. <span class="o">Two Very Different Relationships.</span></h2><p class="x-lead">Switch between the two to see what you actually know about your best regular, depending on where they order.</p></div>
+  <div class="x-card ly-prof rv" id="lyProf" data-m="app">
+    <div class="ly-prof-t"><div class="seg" id="lyProfSeg"><button class="on" data-v="app" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>On a delivery app</button><button data-v="own" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/></svg>In your own program</button></div></div>
     <div class="ly-prof-b">
-      <div class="ly-who"><div class="ly-av" id="lyAv">?</div><b id="lyWho">Customer #48213</b><span id="lyWhoS">Name hidden by the app</span></div>
+      <div class="ly-who"><div class="ly-av" id="lyAv"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.5 9.5 0 0 1 12 6c5 0 8.5 4 9.5 6a12 12 0 0 1-2.6 3.3M6.6 7.6A12 12 0 0 0 2.5 12c1 2 4.5 6 9.5 6a9 9 0 0 0 3.2-.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></div><b id="lyWho">Customer #48213</b><span id="lyWhoS">Name hidden by the app</span></div>
       <ul class="ly-rows" id="lyRows"></ul>
     </div>
   </div>
-  <div class="pains" style="margin-top:clamp(40px,5vw,60px)">
-    <div class="pain rv"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span><div><h3>You pay full commission on every repeat.</h3><p>The 20th order from your best regular costs exactly what the 1st one did.</p></div></div>
-    <div class="pain rv" style="--dl:.06s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M4 4l16 16"/></svg></span><div><h3>No number, no thank you, no offer.</h3><p>The app keeps their details. You can't message the people who love your food.</p></div></div>
-    <div class="pain rv"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span><div><h3>Your rival is one tap away.</h3><p>With nothing that ties them to you, a regular can switch restaurants in seconds.</p></div></div>
-    <div class="pain rv" style="--dl:.06s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7l6 6 4-4 8 8M21 11v6h-6"/></svg></span><div><h3>Nothing rewards your best customers.</h3><p>No points, no tiers, no gifts that carry your brand. Just another order number.</p></div></div>
-  </div>
-  <p class="verdict rv">Loyalty is the cheapest growth there is. <span class="o">You just need a channel you own.</span></p>
 </div></section>
 
-<!-- ================= SIMULATOR ================= -->
-<section class="sec dark" id="rg-sim"><div class="w">
-  <div class="head rv"><span class="kick">Regular customer calculator</span><h2 class="h2">What Are Your Regulars <span class="o">Really Costing You?</span></h2><p>Move the sliders to your numbers. See the commission you pay on repeat orders and what a loyalty program can win back.</p></div>
-  <div class="calc">
-    <div class="cin rv">
-      <div class="fld"><div class="t"><label for="lyR">Regulars who order every month</label><output id="lyRv">300</output></div><input class="rng" type="range" id="lyR" min="20" max="3000" step="10" value="300"></div>
-      <div class="fld"><div class="t"><label for="lyO">Orders per regular, per month</label><output id="lyOv">3</output></div><input class="rng" type="range" id="lyO" min="1" max="10" step="1" value="3"></div>
-      <div class="fld"><div class="t"><label for="lyA">Average order value</label><output id="lyAv2">₹400</output></div><input class="rng" type="range" id="lyA" min="100" max="1500" step="10" value="400"></div>
-      <div class="fld"><div class="t"><label for="lyC">Commission the app takes</label><output id="lyCv">25%</output></div><input class="rng" type="range" id="lyC" min="10" max="40" step="1" value="25"></div>
-      <div class="fld"><div class="t"><label for="lyS">Regulars you move to your program</label><output id="lySv">50%</output></div><input class="rng" type="range" id="lyS" min="10" max="100" step="5" value="50"><small>Share of these regulars who join your own ordering and rewards.</small></div>
+<section class="x-sec x-cream x-dots" id="clx" data-focus="repeat"><div class="x-w"><div class="x-head rv"><span class="x-kick">Real numbers</span><h2 class="x-h2">37% to 44% of Orders Come From <span class="o">Returning Customers</span></h2><p class="x-lead">These are real dashboards from restaurants on RestroGrow. Tap a client to see how many orders came from people who had ordered before.</p></div><div class="cl-wrap"><div class="rv"><div class="shot-f" data-zoom=""><img id="clxImg" alt="Real RestroGrow client dashboard, names blurred" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/restaurent-proof-2.png"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>View full size</span></div></div><div class="rv" style="--dl:.08s"><div class="cl-tabs" id="clxTabs"></div><div class="cl-stats"><div class="cl-st"><small>Total sales</small><b id="clS">0</b></div><div class="cl-st"><small>Orders</small><b id="clO">0</b></div><div class="cl-st"><small>Customers saved</small><b id="clC">0</b></div><div class="cl-st"><small>Repeat orders</small><b id="clR">0</b></div><div class="cl-st hl" style="grid-column:1/-1"><small>Repeat ratio</small><b id="clP">0</b></div></div><div class="cl-say" id="clxSay"></div><div class="cl-bars" id="clxBars"></div></div></div><p class="x-note2" style="text-align:center;margin-top:28px">Real dashboards from restaurants running on RestroGrow, last three months, names blurred. The 25% app commission is a typical rate used for comparison.</p></div></section>
+
+
+<section class="x-sec x-dark x-dots" id="rg-sim"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Calculator 1</span><h2 class="x-h2">What Are Your Regulars <span class="o">Really Costing You?</span></h2><p class="x-lead">Move the sliders to your numbers. See the commission you pay on repeat orders and what a loyalty program can win back.</p></div>
+  <div class="x-two">
+    <div class="x-dcard rv">
+      <div class="x-fld"><div class="x-lbl"><label for="lyR">Regulars who order every month</label><output id="lyRv">300</output></div><input class="rng" type="range" id="lyR" min="20" max="3000" step="10" value="300"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="lyO">Orders per regular, per month</label><output id="lyOv">3</output></div><input class="rng" type="range" id="lyO" min="1" max="10" step="1" value="3"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="lyA">Average order value</label><output id="lyAv2">₹400</output></div><input class="rng" type="range" id="lyA" min="100" max="1500" step="10" value="400"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="lyC">Commission the app takes</label><output id="lyCv">25%</output></div><input class="rng" type="range" id="lyC" min="10" max="40" step="1" value="25"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="lyS">Regulars you move to your program</label><output id="lySv">50%</output></div><input class="rng" type="range" id="lyS" min="10" max="100" step="5" value="50"><small>Share of these regulars who join your own ordering and rewards.</small></div>
     </div>
-    <div class="cout rv" style="--dl:.08s" aria-live="polite">
+    <div class="x-out rv" style="--dl:.08s" aria-live="polite">
       <div><p class="l">Commission you pay on your regulars every month</p><p class="big" id="lyNow">₹0</p></div>
-      <div class="yr"><span>Saved by moving them to your program</span><b id="lySave">₹0</b></div>
-      <div class="yr"><span>Extra orders from rewards (illustrative +10%)</span><b id="lyExtra">₹0</b></div>
-      <div class="save"><p>Together, that could be worth</p><strong><span id="lyYear">₹0</span> / year</strong><small>An estimate from your numbers, not a promise. Your results depend on your restaurant.</small></div>
-      <a class="btn btn-p btn-full" href="#rg-demo">Build My Loyalty Program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="row"><span>Saved by moving them to your program</span><b id="lySave">₹0</b></div>
+      <div class="row"><span>Extra orders from rewards (illustrative +10%)</span><b id="lyExtra">₹0</b></div>
+      <div class="win"><p>Together, that could be worth</p><strong><span id="lyYear">₹0</span> / year</strong><small>An estimate from your numbers, not a promise. Your results depend on your restaurant.</small></div>
+      <a class="btn btn-p btn-full" href="#rg-demo">Build My Loyalty Program <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </div></section>
 
-<!-- ================= HOW ================= -->
-<section class="sec cream" id="rg-how"><div class="w">
-  <div class="head rv"><span class="kick">How it works</span><h2 class="h2">Your Own Loyalty Program <span class="o">in 3 Steps</span></h2><p>We build and run it. You keep serving great food.</p></div>
-  <div class="lp-three">
-    <div class="lp-card lp-step rv"><span class="n">1</span><div class="lp-ico"><img class="" src="img/gift.svg" alt="" loading="lazy" decoding="async"></div><h3>We build your rewards program</h3><p>Your brand, your points, your tiers and your rewards, live on your own ordering website. We handle every bit of the setup.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.08s"><span class="n">2</span><div class="lp-ico"><img class="" src="img/qr.svg" alt="" loading="lazy" decoding="async"></div><h3>We move your regulars into it</h3><p>Parcel inserts, table QR codes and a first order reward bring your app customers onto the program you own.</p></div>
-    <div class="lp-card lp-step rv" style="--dl:.16s"><span class="n">3</span><div class="lp-ico"><img class="" src="img/bell.svg" alt="" loading="lazy" decoding="async"></div><h3>They earn, return and you keep it all</h3><p>Points and WhatsApp reminders pull them back, and every repeat order pays you in full.</p></div>
-  </div>
-  <p class="stay rv" style="margin-top:34px;text-align:center;font:600 1.1rem var(--fh)">You don't leave Zomato or Swiggy. <span class="o">You make your best customers yours.</span></p>
-</div></section>
-<!-- ================= 4. BEFORE / AFTER ================= -->
-<section class="sec cream dots" id="rg-proof"><div class="w">
-  <div class="head rv"><span class="kick">Before vs. after RestroGrow</span><h2 class="h2">Same Sales. <span class="o">₹37,491 More in Your Pocket.</span></h2><p>A real Zomato payout, next to the same ₹98,640 in sales through RestroGrow.</p></div>
-  <div class="ba" id="rgBA">
-    <div class="bac bef rv">
-      <div class="bac-h"><span>Before</span><h3>Only on delivery apps</h3></div>
-      <ul class="bl"><li><i>✕</i>25 to 30% commission plus GST on every order</li><li><i>✕</i>Zero customer numbers or data</li><li><i>✕</i>Repeat orders cost commission again</li><li><i>✕</i>Discounts and visibility on the app's terms</li></ul>
-      <div class="shots" id="rgShots">
-        <span class="mark">Actual delivery app payout</span>
-        <div class="shots-t" id="rgShT">
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png" alt="Zomato payout: ₹98,640 sales, ₹59,175.70 payout"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary.png" alt="Delivery app payout summary"></figure>
-          <figure class="shot"><img loading="lazy" decoding="async" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Dark-Earnings-Breakdown-UI.png" alt="Delivery app earnings breakdown"></figure>
-        </div>
-      </div>
-      <div class="sdots" id="rgSd"><button class="on" aria-label="Payout 1"></button><button aria-label="Payout 2"></button><button aria-label="Payout 3"></button></div>
-    </div>
-    <div class="bac aft rv" style="--dl:.08s">
-      <div class="bac-h"><span>After</span><h3>With RestroGrow</h3></div>
-      <ul class="bl"><li><i>✓</i>0% commission on every direct order</li><li><i>✓</i>Every customer's number in your own CRM</li><li><i>✓</i>Repeat orders through WhatsApp and loyalty</li><li><i>✓</i>Your prices, your offers, your brand</li></ul>
-      <div class="pay">
-        <h4>Payout breakdown</h4><p class="s">Same sales, as direct orders via RestroGrow</p>
-        <div class="pr"><span>Total sales</span><b>₹98,640.00</b></div>
-        <div class="pr z"><span>Platform commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Tax on commission</span><b>₹0</b></div>
-        <div class="pr z"><span>Investments in growth</span><b>₹0</b></div>
-        <div class="pr"><span>Payment gateway, approx. 2%</span><b style="color:#C2410C">₹1,972.80</b></div>
-        <div class="net"><span>You receive</span><b>₹96,667</b></div>
-        <p class="s" style="margin:10px 0 0;text-align:center;font-weight:600;color:#0E8A45">₹37,491 more than the app payout of ₹59,175</p>
-      </div>
-    </div>
-  </div>
-  <p class="bacap">Comparison based on the first payout. Swipe to see more real app payouts.</p>
-</div></section>
 
-<!-- ================= 5. RESULTS ================= -->
-<section class="sec" id="rg-results"><div class="w">
-  <div class="head rv"><span class="kick">Real client results</span><h2 class="h2">₹90 Lakh+ Saved for 140+ Restaurants. <span class="o">And Counting.</span></h2><p>Real dashboards from restaurants running on RestroGrow. Tap any to see it full size.</p></div>
-  <div class="gal rv" id="rgGal"></div>
-</div></section>
-
-
-<!-- ================= TIERS ================= -->
-<section class="sec dark dots-d" id="rg-tiers"><div class="w">
-  <div class="head rv"><span class="kick">Rewards that feel good</span><h2 class="h2">Give Every Regular <span class="o">a Reason to Come Back</span></h2><p>Pick a tier to see what your customers get and the WhatsApp message that goes with it.</p></div>
-  <div class="lp-two ly-tiers rv">
-    <div class="lp-dcard">
-      <div class="seg" id="lyTierSeg"><button class="on" data-v="0" type="button">Silver</button><button data-v="1" type="button">Gold</button><button data-v="2" type="button">Platinum</button></div>
-      <div class="ly-tier-h"><div class="ly-tier-i" id="lyTi"></div><div><b id="lyTn">Silver</b><small id="lyTr">Starts from the first order</small></div></div>
-      <ul class="ly-perks" id="lyPerks"></ul>
+<section class="x-sec x-cream x-dots" id="rg-budget"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Calculator 2</span><h2 class="x-h2">Do Rewards Pay for <span class="o">Themselves?</span></h2><p class="x-lead">Set how generous your rewards are. We compare the reward cost with the commission you stop paying.</p></div>
+  <div class="x-two">
+    <div class="x-card rv">
+      <div class="x-fld"><div class="x-lbl"><label for="rbO">Orders from loyalty members each month</label><output id="rbOv">600</output></div><input class="rng lt" type="range" id="rbO" min="50" max="4000" step="50" value="600"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="rbA">Average order value</label><output id="rbAv">₹400</output></div><input class="rng lt" type="range" id="rbA" min="100" max="1500" step="10" value="400"></div>
+      <div class="x-fld"><div class="x-lbl"><label for="rbP">Reward you give back (% of bill)</label><output id="rbPv">5%</output></div><input class="rng lt" type="range" id="rbP" min="1" max="15" step="1" value="5"><small>For example 1 point per ₹10 spent, worth about 5% of the bill.</small></div>
+      <div class="x-fld"><div class="x-lbl"><label for="rbC">Commission these orders would pay on an app</label><output id="rbCv">25%</output></div><input class="rng lt" type="range" id="rbC" min="10" max="40" step="1" value="25"></div>
     </div>
-    <div class="ly-chatbox">
-      <div class="ly-chat" id="lyChat"></div>
-      <p class="lp-cap">Sent automatically on <b>WhatsApp</b>. No ad spend, no commission.</p>
+    <div class="x-out rv" style="--dl:.08s" aria-live="polite">
+      <div class="rb-cmp"><div><small>Commission on an app</small><b id="rbApp">₹0</b><i style="--w:100%"></i></div><div><small>Reward cost with loyalty</small><b id="rbRew">₹0</b><i id="rbBar" style="--w:20%"></i></div></div>
+      <div class="win"><p>You keep an extra</p><strong><span id="rbNet">₹0</span> / month</strong><small id="rbMsg"></small></div>
+      <a class="btn btn-p btn-full" href="#rg-demo">Set Up My Rewards <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </div></section>
 
-<!-- ================= VS ================= -->
-<section class="sec cream" id="rg-vs"><div class="w">
-  <div class="head rv"><span class="kick">Discounts vs loyalty</span><h2 class="h2">Stop Buying Customers. <span class="o">Start Keeping Them.</span></h2></div>
-  <div class="lp-card rv" style="padding:0;overflow:hidden;max-width:900px;margin:0 auto">
-    <table class="lp-table ly-vs">
-      <thead><tr><th></th><th>Discounts on the app</th><th class="hl">Your loyalty program</th></tr></thead>
-      <tbody>
-        <tr><td>Who owns the customer</td><td class="no">✕ The app</td><td class="ok">✓ You</td></tr>
-        <tr><td>Cost of a repeat order</td><td class="no">✕ 25 to 30% commission</td><td class="ok">✓ 0% commission</td></tr>
-        <tr><td>Can you message them?</td><td class="no">✕ No</td><td class="ok">✓ Anytime, on WhatsApp</td></tr>
-        <tr><td>Builds a habit</td><td class="no">✕ Buys one order</td><td class="ok">✓ Points bring them back</td></tr>
-        <tr><td>Your brand</td><td class="no">✕ Lost in the app</td><td class="ok">✓ Front and center</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="lp-cta-row rv"><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-</div></section>
-<!-- ================= 8. GUARANTEE ================= -->
-<section class="sec cream dots" id="rg-guarantee"><div class="w">
-  <div class="gbox rv">
-    <div class="seal"><b>3X</b><small>in 90 days<br>or 100% back</small></div>
-    <div>
-      <span class="kick">Our guarantee</span>
-      <h2 class="h2">Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2>
-      <p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it doesn't, we refund 100% of what you paid. You either grow your profit, or you lose nothing.</p>
-      <a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+
+<section class="x-sec" id="rg-style"><div class="x-w">
+  <div class="x-head rv"><span class="x-kick">Your program, your rules</span><h2 class="x-h2">Pick a Reward Style. <span class="o">See How It Looks.</span></h2><p class="x-lead">Every restaurant is different. We set up the style that fits your margins and your customers.</p></div>
+  <div class="x-two ly-sty">
+    <div class="rv">
+      <div class="chips" id="lySty"><button class="on" data-v="0" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="8" rx="6" ry="3"/><path d="M3 8v4c0 1.7 2.7 3 6 3s6-1.3 6-3V8"/><path d="M15 11.5c3.3 0 6 1.3 6 3v3c0 1.7-2.7 3-6 3-2.2 0-4-.6-5.1-1.4"/></svg>Points</button><button data-v="1" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5L7 21l5-2.5 5 2.5-1.5-7.5"/></svg>Stamp card</button><button data-v="2" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l4.5 4 4.5-6 4.5 6L21 8l-2 11H5z"/></svg>Tiers</button><button data-v="3" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14.5c2.6 0 4.5 1.8 4.5 4.5"/></svg>Referral</button></div>
+      <h3 class="ly-sty-h" id="lyStyH"></h3>
+      <p class="x-lead" id="lyStyP" style="margin-top:8px"></p>
+      <ul class="x-checks ly-sty-l" id="lyStyL"></ul>
     </div>
+    <div class="rv" style="--dl:.08s"><div class="ly-prev" id="lyPrev"></div></div>
   </div>
 </div></section>
 
-<!-- ================= 9. WHO IT'S FOR ================= -->
-<section class="sec" style="padding-bottom:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">Is this for you?</span><h2 class="h2">Built for Restaurants That Are Already Selling</h2></div>
-  <div class="fit">
-    <div class="fitc yes rv"><h3>RestroGrow is for you if</h3><ul>
-      <li><i>✓</i>You get steady orders on Zomato or Swiggy every day</li>
-      <li><i>✓</i>You have regulars who keep ordering your food</li>
-      <li><i>✓</i>You want more profit from orders you already get</li>
-      <li><i>✓</i>You run a restaurant, cafe, cloud kitchen or multi outlet brand</li></ul></div>
-    <div class="fitc no rv" style="--dl:.08s"><h3>It's not for you if</h3><ul>
-      <li><i>✕</i>You're just starting out and have no regular orders yet</li>
-      <li><i>✕</i>You want a quick discount trick, not a channel you own</li></ul></div>
+
+<section class="x-sec x-dark x-dots" id="rg-journey"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">The member journey</span><h2 class="x-h2">From First Order to <span class="o">Regular Who Refers</span></h2><p class="x-lead">Tap a step to see what your customer gets on WhatsApp at that moment.</p></div>
+  <div class="x-two ly-jr">
+    <ul class="x-tl rv" id="lyTl"></ul>
+    <div class="rv" style="--dl:.08s"><div class="ly-wa"><div class="ly-wa-h"><span class="ly-logo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v6M9 3v6"/><path d="M17 3c-2 2-3 4.5-3 7 0 1.5 1 3 3 3v8"/></svg></span><div><b>Spice Route</b><small>Business account</small></div></div><div class="ly-wa-c" id="lyWa"></div></div></div>
   </div>
 </div></section>
 
-<!-- ================= FAQ ================= -->
-<section class="sec" id="rg-faq" style="padding-top:clamp(40px,5vw,60px)"><div class="w">
-  <div class="head rv"><span class="kick">FAQs</span><h2 class="h2">Questions Owners Ask Us First</h2></div>
-  <div class="faq rv">
-    <details><summary>How does the loyalty program work?<i>+</i></summary><p>Customers earn points on every direct order and redeem them for rewards you choose, like a free dessert. It runs on your own ordering website and WhatsApp.</p></details>
-    <details><summary>Do I have to stop selling on Zomato and Swiggy?<i>+</i></summary><p>No. Keep them for new customers. We move your regulars to your own program so their next orders come without commission.</p></details>
-    <details><summary>How do app customers find out about it?<i>+</i></summary><p>Inserts in every app parcel, QR codes on tables and bills, and WhatsApp messages to the customers who join.</p></details>
-    <details><summary>Can I choose the rewards?<i>+</i></summary><p>Yes. You decide the points, tiers and rewards, and we set them up so they fit your margins.</p></details>
-    <details><summary>How does the 3X guarantee work?<i>+</i></summary><p>Over 90 days we add up the commission you saved and the revenue from your direct orders. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details>
-    <details><summary>Do I need any technical knowledge?<i>+</i></summary><p>None. We set up the program, the rewards and the campaigns. You focus on your kitchen.</p></details>
+<section class="x-sec" id="pod"><div class="x-w"><div class="x-head rv"><span class="x-kick">What a regular really pays you</span><h2 class="x-h2">On an App, Every Repeat Order <span class="o">Pays the Platform Again</span></h2><p class="x-lead">Two real delivery app payouts. See where each rupee of a regular's order goes, then switch to the same sales through your own ordering system.</p></div><div class="po-wrap"><div class="po-img rv"><div class="shot-f" data-zoom=""><img id="podImg" alt="Real delivery app payout statement" src="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/Minimalist-Payout-Breakdown-Summary1.png"><span class="shot-zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>View full size</span></div></div><div class="rv" style="--dl:.08s"><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="seg po-tabs" id="podTabs"><button class="on" data-v="0" type="button">Payout 1</button><button data-v="1" type="button">Payout 2</button></div><div class="seg po-tabs" id="podMode"><button class="on" data-v="app" type="button">Delivery app</button><button data-v="direct" type="button">Same sales, direct</button></div></div><div class="po-bar" id="podBar"></div><ul class="po-leg" id="podLeg"></ul><div class="po-keep"><div><small>What you keep</small><b id="podKeep">0</b></div><span id="podKeepP"></span></div><p class="po-more" id="podMore"></p></div></div><p class="x-note2" style="text-align:center;margin-top:26px">Real payout statements from delivery apps. "Direct" assumes about 2% payment gateway fee and no commission.</p></div></section>
+
+
+<section class="x-sec x-cream" id="rg-vs"><div class="x-w">
+  <div class="x-head c rv"><span class="x-kick">Discounts vs loyalty</span><h2 class="x-h2">Stop Buying Customers. <span class="o">Start Keeping Them.</span></h2></div>
+  <div class="x-card rv" style="padding:0;overflow:hidden;max-width:920px;margin:0 auto">
+    <table class="x-tbl"><thead><tr><th></th><th>Discounts on the app</th><th class="hl">Your loyalty program</th></tr></thead><tbody>
+      <tr><td>Who owns the customer</td><td class="no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>The app</td><td class="ok hl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>You</td></tr>
+      <tr><td>Cost of a repeat order</td><td class="no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>25 to 30% commission</td><td class="ok hl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>0% commission</td></tr>
+      <tr><td>Can you message them?</td><td class="no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>No</td><td class="ok hl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Anytime, on WhatsApp</td></tr>
+      <tr><td>Builds a habit</td><td class="no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Buys one order</td><td class="ok hl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Points bring them back</td></tr>
+      <tr><td>Your brand</td><td class="no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Lost inside the app</td><td class="ok hl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Front and center</td></tr>
+    </tbody></table>
   </div>
+  <div class="x-cta-row rv"><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
 </div></section>
+
+<section class="x-sec x-cream"><div class="x-w"><div class="gx rv"><div class="gx-seal"><svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="92" stroke="#FC5301" stroke-width="3" stroke-dasharray="3 7"/><circle cx="100" cy="100" r="78" fill="#FFF1E8" stroke="#FC5301" stroke-width="2"/></svg><b><span>3X<small>in 90 days</small></span></b></div><div><span class="x-kick">Our guarantee</span><h2>Recover 3X What You Pay Us in 90 Days. Or Get Every Rupee Back.</h2><p>Within 90 days, the commission you save plus your direct order revenue will add up to at least 3X our service fee. If it does not, we refund 100% of what you paid.</p><ul class="gx-pts"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Written into your agreement</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12v4"/><path d="M4 7v10a2 2 0 0 0 2 2h14v-4"/><path d="M21 9h-5a2 2 0 0 0 0 4h5z"/></svg>100% of your fee back</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Measured over 90 days</li></ul><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></div></section>
+
+<section class="x-sec" id="rg-faq"><div class="x-w"><div class="x-head c rv"><span class="x-kick">FAQs</span><h2 class="x-h2">Questions Owners Ask Us First</h2></div><div class="x-faq rv"><details><summary>How does the loyalty program work?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Customers earn points or stamps on every direct order and redeem them for rewards you choose, like a free dessert. It runs on your own ordering website and WhatsApp.</p></details><details><summary>Do I have to stop selling on Zomato and Swiggy?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>No. Keep them for new customers. We move your regulars to your own program so their next orders come without commission.</p></details><details><summary>How do app customers find out about it?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Inserts in every app parcel, QR codes on tables and bills, and WhatsApp messages to the customers who join.</p></details><details><summary>Can I choose the rewards?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Yes. You decide the points, tiers and rewards, and we set them up so they fit your margins.</p></details><details><summary>How does the 3X guarantee work?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Over 90 days we add up the commission you saved and the revenue from your direct orders. If it is less than 3X our service fee, we refund 100% of what you paid.</p></details><details><summary>Do I need any technical knowledge?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>None. We set up the program, the rewards and the campaigns. You focus on your kitchen.</p></details></div></div></section>
+
+<section class="fin"><div class="x-w"><h2>Your Best Customers Should Belong to You.</h2><p>See your loyalty program working on your own menu in a 30 minute demo.</p><ul class="x-checks"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Points, stamps, tiers or referrals</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>WhatsApp reminders included</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>3X in 90 days or 100% back</li></ul><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><small>Our team will call you to fix a time that suits you.</small></div></section>
 
 <footer class="lf"><div class="w">
   <span>&copy; <b id="rgYr">2026</b> Restro Grow. All rights reserved.</span>
   <nav aria-label="Legal"><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-services">Terms &amp; Services</a><a href="/refund-policy">Refund &amp; Cancellation</a></nav>
 </div></footer>
 
-<div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>paid on your repeat orders</p><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program</a></div>
+<div class="sticky" id="rgSt"><p><b>Free demo</b> Build your loyalty program</p><a class="btn btn-p" href="#rg-demo">Start My Loyalty Program</a></div>
 <div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
 <div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
 <form class="form rv" id="rgF" novalidate>
@@ -797,7 +971,6 @@
     <div class="done"><b>Thank you for filling the form.</b><p>Our team will get in touch with you shortly.</p></div>
   </form>
 </div></div>
-<div hidden aria-hidden="true"><div id="rgPs"><div id="rgPt"></div></div><div id="rgPd"></div><div id="rgPh"></div><input class="rng" type="range" id="rgO" min="20" max="2000" step="10" value="300"><input class="rng" type="range" id="rgA" min="100" max="1500" step="10" value="400"><input class="rng" type="range" id="rgC" min="10" max="50" step="1" value="25"><output id="rgOv"></output><output id="rgAv"></output><output id="rgCv"></output><span id="rgM"></span><span id="rgY"></span><span id="rgS"></span><span id="rgCart"></span><button id="rgUp" type="button"></button><span id="rgUt"></span><svg id="rgQr"></svg></div>
 </div>
 
 <script>
@@ -814,83 +987,6 @@
   var once=function(el,fn,th){if(!IO||RM){fn();return}var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){fn();o.disconnect()}},{threshold:th||.3});o.observe(el)};
   var tw={},tk=0;
   function tween(el,to,fmt,dur){var fr=+el.getAttribute("data-v")||0;el.setAttribute("data-v",to);if(RM){el.textContent=fmt(to);return}var s=null,k=el.id||("t"+(tk++));if(!el.id)el.id=k;cancelAnimationFrame(tw[k]);(function st(t){if(!s)s=t;var p=Math.min((t-s)/(dur||500),1);el.textContent=fmt(fr+(to-fr)*(1-Math.pow(1-p,3)));if(p<1)tw[k]=requestAnimationFrame(st)})(performance.now())}
-
-  var U="https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
-  /* lightbox */
-  var lb=$("rgLb"),lbi=lb.querySelector("img");
-  function openLb(src){lbi.src=src;lb.classList.add("on");document.addEventListener("keydown",esc)}
-  function closeLb(){lb.classList.remove("on");document.removeEventListener("keydown",esc)}
-  function esc(e){if(e.key==="Escape")closeLb()}
-  lb.addEventListener("click",closeLb);
-
-  /* client proof dashboards */
-  var PR=[1,2,3,4,5].map(function(i){return U+"restaurent-proof-"+i+".png"});
-  var ps=$("rgPs"),pd=$("rgPd"),pi=0,pt=null;
-  $("rgPt").innerHTML=PR.map(function(s,i){return '<img src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"'+(i?' loading="lazy"':'')+' decoding="async">'}).join("");
-  pd.innerHTML=PR.map(function(s,i){return '<button'+(i?'':' class="on"')+' aria-label="Dashboard '+(i+1)+'"></button>'}).join("");
-  var pbtn=pd.querySelectorAll("button"),ptk=$("rgPt"),px=null,moved=false;
-  function pgo(i){pi=(i+PR.length)%PR.length;ptk.style.transform="translateX("+(-pi*100)+"%)";pbtn.forEach(function(b,k){b.classList.toggle("on",k===pi)})}
-  ps.addEventListener("pointerdown",function(e){px=e.clientX;moved=false});
-  ps.addEventListener("pointerup",function(e){if(px===null)return;var dx=e.clientX-px;if(Math.abs(dx)>40){moved=true;pgo(pi+(dx<0?1:-1));clearInterval(pt)}px=null});
-  pbtn.forEach(function(b,i){b.addEventListener("click",function(){pgo(i);clearInterval(pt)})});
-  ps.addEventListener("click",function(){if(!moved)openLb(PR[pi])});
-  ps.addEventListener("keydown",function(e){if(e.key==="Enter")openLb(PR[pi])});
-  if(!RM)pt=setInterval(function(){if(!document.hidden&&!lb.classList.contains("on"))pgo(pi+1)},3500);
-  /* results gallery */
-  var gal=$("rgGal");
-  gal.innerHTML=PR.map(function(s,i){return '<button type="button" aria-label="View client dashboard '+(i+1)+'"><img loading="lazy" decoding="async" src="'+s+'" alt="RestroGrow client dashboard '+(i+1)+'"></button>'}).join("");
-  gal.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){openLb(PR[i])})});
-
-  /* logos */
-  var L=["01-Kohuke","02-Food-Station","03-Tastea-Food-and-Beverages","04-Naso-Restaurants-and-Bar","05-Ganesh-Restaurant","06-Delhi-Darbar-Restaurant-Copy","07-Atea-Spot","08-Desert-Delight-Copy-1","09-Pin-Point-Family-Restaurant","10-Chaska-Cafe","11-Chinees-Corner","12-House-of-Dossapamm","13-RJ-Food-Cafe","14-Arya-Cafe","15-Sadhiska-Bakery-and-Cafe"];
-  var nm=function(f){return f.replace(/^\d+-/,"").replace(/-Copy(-\d)?$/,"").replace(/-/g," ")};
-  var h=L.map(function(f){return '<img loading="lazy" decoding="async" src="'+U+f+'.png" alt="'+nm(f)+'">'}).join("");
-  $("rgMq").innerHTML=h+h.replace(/alt="[^"]*"/g,'alt=""');
-  $("rgAvs").innerHTML=[6,4,9,0,13].map(function(i){return '<img src="'+U+L[i]+'.png" alt="" width="40" height="40">'}).join("");
-
-  /* reveal */
-  var rv=R.querySelectorAll(".rv");
-  if(IO&&!RM){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("show");io.unobserve(e.target)}})},{threshold:.12,rootMargin:"0px 0px -30px 0px"});rv.forEach(function(el){io.observe(el)})}
-  else rv.forEach(function(el){el.classList.add("show")});
-
-  /* impact count up */
-  R.querySelectorAll(".impact .cu").forEach(function(el){var fr=+(el.getAttribute("data-from")||0);el.setAttribute("data-v",fr);el.textContent=fr});
-  once(R.querySelector(".impact"),function(){R.querySelectorAll(".impact .cu").forEach(function(el){tween(el,+el.getAttribute("data-to"),function(v){return Math.round(v)},2000)})},.5);
-
-  /* plate phases */
-  once($("rgPh"),function(){R.querySelectorAll(".ph").forEach(function(p,i){setTimeout(function(){p.querySelector(".plate i").style.setProperty("--k",p.getAttribute("data-k"))},RM?0:250+i*320)})});
-
-  /* calculator */
-  var f=[$("rgO"),$("rgA"),$("rgC")];
-  function calc(){
-    f.forEach(function(r){r.style.setProperty("--p",(r.value-r.min)/(r.max-r.min)*100+"%")});
-    var o=+f[0].value,a=+f[1].value,c=+f[2].value/100,m=o*a*30*c;
-    $("rgOv").textContent=o.toLocaleString("en-IN");$("rgAv").textContent=inr(a);$("rgCv").textContent=Math.round(c*100)+"%";
-    tween($("rgM"),m,inr);tween($("rgY"),m*12,sh);tween($("rgS"),m*12*.3,sh);
-    $("rgStL").textContent=sh(m)+" / month";
-  }
-  f.forEach(function(r){r.addEventListener("input",calc)});calc();
-
-  /* before/after tabs (mobile) */
-
-
-  /* payout screenshots: dots + swipe */
-  var t=$("rgShT"),ds=$("rgSd").children,n=ds.length,cur=0,sx=null,box=$("rgShots"),auto=null;
-  function go(i){cur=(i+n)%n;t.style.transform="translateX("+(-cur*100)+"%)";for(var k=0;k<n;k++)ds[k].classList.toggle("on",k===cur)}
-  var stop=function(){clearInterval(auto)};
-  Array.prototype.forEach.call(ds,function(d,i){d.addEventListener("click",function(){go(i);stop()})});
-  box.addEventListener("pointerdown",function(e){sx=e.clientX});
-  box.addEventListener("pointerup",function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>40){go(cur+(dx<0?1:-1));stop()}sx=null});
-  box.addEventListener("pointercancel",function(){sx=null});
-  once(box,function(){if(!RM)auto=setInterval(function(){if(!document.hidden)go(cur+1)},5000)});
-
-  /* feature demos */
-  var cn=0,ct=0;
-  R.querySelectorAll(".sf .it button").forEach(function(b){b.addEventListener("click",function(){var p=+b.previousElementSibling.querySelector("small").textContent.replace(/\D/g,""),on=b.classList.toggle("on");b.textContent=on?"Added":"Add";cn+=on?1:-1;ct+=on?p:-p;$("rgCart").textContent=cn?cn+(cn>1?" items, ":" item, ")+inr(ct):"Tap Add to try"})});
-  var up=$("rgUp"),uo=false;up.addEventListener("click",function(){uo=!uo;up.textContent=uo?"Added":"Add ₹99";$("rgUt").textContent=uo?"₹739":"₹640"});
-  var q=$("rgQr"),sd=7,rn=function(){sd=(sd*9301+49297)%233280;return sd/233280},fi=function(x,y){return'<rect x="'+x+'" y="'+y+'" width="7" height="7"/><rect x="'+(x+1)+'" y="'+(y+1)+'" width="5" height="5" fill="#fff"/><rect x="'+(x+2)+'" y="'+(y+2)+'" width="3" height="3"/>'},s="";
-  for(var y=0;y<21;y++)for(var x=0;x<21;x++)if(!((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12))&&rn()>.52)s+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
-  q.innerHTML='<g fill="#00000C">'+s+fi(0,0)+fi(14,0)+fi(0,14)+'</g><rect x="9" y="9" width="3" height="3" fill="#FC5301"/>';
 
   /* ad tracking: IDs come from api/public_config.php, so a tag stays off while its ID is empty.
      No Lead / conversion here: that fires once, on the thank-you page. */
@@ -923,7 +1019,7 @@
   R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(){ev("DemoOpen","demo_open")})});
   /* FormStart: first real typing/choice (not the popup auto-focusing the first field) */
   ["input","change"].forEach(function(t){$("rgF").addEventListener(t,function(){ev("FormStart","form_start")})});
-  ["rgO","rgA","rgC"].forEach(function(id){$(id).addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
+  R.querySelectorAll('input[type="range"]').forEach(function(r){r.addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
 
   /* form */
   var F=$("rgF"),M=$("rgMsg");
@@ -947,7 +1043,7 @@
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
   F.addEventListener("change",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
 
-  /* demo form popup: Start My Loyalty Program buttons move the bottom form into a popup, closing puts it back */
+  /* demo form popup: Book My Demo buttons move the bottom form into a popup, closing puts it back */
   var md=$("rgMd"),mdb=$("rgMdB"),mph=document.createElement("div"),mlast=null;
   function mdEsc(e){if(e.key==="Escape")closeMd()}
   function openMd(tr){
@@ -976,15 +1072,19 @@
     u()}
 })();
 </script>
+<script>window.LPD={"base":"https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/","proofs":[{"file":"restaurent-proof-1.png","sales":151238,"orders":398,"items":935,"customers":252,"repeat":146,"ratio":36.68},{"file":"restaurent-proof-2.png","sales":203475,"orders":529,"items":1271,"customers":318,"repeat":211,"ratio":39.89},{"file":"restaurent-proof-3.png","sales":224836,"orders":592,"items":1449,"customers":342,"repeat":250,"ratio":42.23},{"file":"restaurent-proof-4.png","sales":302280,"orders":782,"items":1922,"customers":488,"repeat":294,"ratio":37.6},{"file":"restaurent-proof-5.png","sales":348960,"orders":914,"items":2255,"customers":515,"repeat":399,"ratio":43.65}],"payouts":[{"file":"Minimalist-Payout-Breakdown-Summary1.png","A":98640,"B":120,"base":21950,"ld":1850,"pay":1980,"disc":361.2,"tax":5921.4,"growth":8244.1,"payout":59175.7},{"file":"Dark-Earnings-Breakdown-UI.png","A":124980.5,"B":84.3,"base":27544.47,"ld":2800,"pay":2415.28,"disc":724.63,"tax":11248.25,"growth":18497.4,"payout":63284.03}]};</script>
 <script>
 /* ===== shared helpers for the ad landing pages (runs after the main page script) ===== */
 (function () {
   var R = document.querySelector(".rg"); if (!R) return;
   var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var IO = "IntersectionObserver" in window;
   var $ = function (i) { return R.querySelector("#" + i); };
   var inr = function (n) { return "₹" + Math.round(n).toLocaleString("en-IN"); };
   var sh = function (n) { return n >= 1e7 ? "₹" + (n / 1e7).toFixed(2) + " Cr" : n >= 1e5 ? "₹" + (n / 1e5).toFixed(1) + " L" : inr(n); };
+  var D = window.LPD || { proofs: [], payouts: [], base: "" };
   var tw = {};
+
   /* animate a number inside an element */
   function num(el, to, fmt, dur) {
     if (!el) return;
@@ -999,29 +1099,24 @@
       if (p < 1) tw[id] = requestAnimationFrame(step);
     })();
   }
-  /* paint the filled part of a range slider */
   function fill(r) { r.style.setProperty("--p", (r.value - r.min) / (r.max - r.min) * 100 + "%"); }
-  /* run fn when el scrolls into view (or at once if motion is reduced) */
   function seen(el, fn, th) {
     if (!el) return;
-    if (RM || !("IntersectionObserver" in window)) { fn(); return; }
+    if (RM || !IO) { fn(); return; }
     var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { fn(); o.disconnect(); } }, { threshold: th || .35 });
     o.observe(el);
   }
-  /* little confetti burst from an element */
   function confetti(from) {
     if (RM) return;
     var b = from.getBoundingClientRect(), cols = ["#FC5301", "#FACC15", "#22C55E", "#3B82F6", "#EC4899"], i;
     for (i = 0; i < 26; i++) {
-      var d = document.createElement("i"); d.className = "lp-confetti"; d.style.background = cols[i % cols.length];
-      d.style.left = (b.left + b.width / 2) + "px"; d.style.top = (b.top + b.height / 2) + "px";
-      R.appendChild(d);
+      var d = document.createElement("i"); d.style.cssText = "position:fixed;pointer-events:none;z-index:10050;width:9px;height:14px;border-radius:2px;background:" + cols[i % cols.length] + ";left:" + (b.left + b.width / 2) + "px;top:" + (b.top + b.height / 2) + "px";
+      document.body.appendChild(d);
       var ang = Math.random() * Math.PI * 2, v = 90 + Math.random() * 150;
       var a = d.animate([{ opacity: 1, transform: "translate(0,0) rotate(0)" }, { opacity: 0, transform: "translate(" + Math.cos(ang) * v + "px," + (Math.sin(ang) * v + 120) + "px) rotate(" + (Math.random() * 540) + "deg)" }], { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.3,1)" });
       a.onfinish = (function (n) { return function () { n.remove(); }; })(d);
     }
   }
-  /* segmented / chip groups: one active button, callback with its data-v */
   function pick(box, cb) {
     if (!box) return;
     box.addEventListener("click", function (e) {
@@ -1030,12 +1125,102 @@
       cb(b.getAttribute("data-v"), b);
     });
   }
-  /* tag the scripted "?shot" mode used for screenshots: show every reveal block at once */
+
+  /* full-size view of a real screenshot (uses the page's existing lightbox) */
+  var lb = $("rgLb");
+  function zoom(src) {
+    if (!lb) return;
+    lb.querySelector("img").src = src; lb.classList.add("on");
+    var esc = function (e) { if (e.key === "Escape") { lb.classList.remove("on"); document.removeEventListener("keydown", esc); } };
+    document.addEventListener("keydown", esc);
+  }
+  if (lb) lb.addEventListener("click", function () { lb.classList.remove("on"); });
+  R.addEventListener("click", function (e) { var z = e.target.closest("[data-zoom]"); if (z) zoom(z.getAttribute("data-zoom")); });
+
+  /* scroll reveal (.rv) */
+  var rv = R.querySelectorAll(".rv");
+  if (IO && !RM) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("show"); io.unobserve(e.target); } }); }, { threshold: .1, rootMargin: "0px 0px -30px 0px" });
+    rv.forEach(function (el) { io.observe(el); });
+  } else rv.forEach(function (el) { el.classList.add("show"); });
+
+  /* real client logos: strip + avatars */
+  var U = "https://chocolate-porcupine-790252.hostingersite.com/wp-content/uploads/2026/10/";
+  var L = ["01-Kohuke", "02-Food-Station", "03-Tastea-Food-and-Beverages", "04-Naso-Restaurants-and-Bar", "05-Ganesh-Restaurant", "06-Delhi-Darbar-Restaurant-Copy", "07-Atea-Spot", "08-Desert-Delight-Copy-1", "09-Pin-Point-Family-Restaurant", "10-Chaska-Cafe", "11-Chinees-Corner", "12-House-of-Dossapamm", "13-RJ-Food-Cafe", "14-Arya-Cafe", "15-Sadhiska-Bakery-and-Cafe"];
+  var nm = function (f) { return f.replace(/^\d+-/, "").replace(/-Copy(-\d)?$/, "").replace(/-/g, " "); };
+  var mq = $("rgMq");
+  if (mq) { var h = L.map(function (f) { return '<img loading="lazy" decoding="async" src="' + U + f + '.png" alt="' + nm(f) + '">'; }).join(""); mq.innerHTML = h + h.replace(/alt="[^"]*"/g, 'alt=""'); }
+  var av = $("rgAvs"); if (av) av.innerHTML = [6, 4, 9, 0, 13].map(function (i) { return '<img src="' + U + L[i] + '.png" alt="" width="38" height="38">'; }).join("");
+
+  /* count-up numbers: <b data-count="140" data-suffix="+"> */
+  R.querySelectorAll("[data-count]").forEach(function (el) {
+    var to = +el.getAttribute("data-count"), suf = el.getAttribute("data-suffix") || "", pre = el.getAttribute("data-prefix") || "", dec = +(el.getAttribute("data-dec") || 0);
+    seen(el, function () { num(el, to, function (v) { return pre + (dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-IN")) + suf; }, 1600); }, .5);
+  });
+
+  /* ===== real client explorer (#clx) ===== */
+  var clx = $("clx");
+  if (clx && D.proofs.length) {
+    var focus = clx.getAttribute("data-focus") || "repeat", cur = 0;
+    var tabs = $("clxTabs"), img = $("clxImg"), say = $("clxSay"), bars = $("clxBars");
+    tabs.innerHTML = D.proofs.map(function (p, i) { return '<button type="button" data-i="' + i + '"' + (i ? "" : ' class="on"') + '>Client ' + (i + 1) + "</button>"; }).join("");
+    var M = { repeat: ["Repeat ratio", function (p) { return p.ratio; }, function (v) { return v.toFixed(2) + "%"; }, 100],
+              customers: ["Customers saved", function (p) { return p.customers; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              orders: ["Orders", function (p) { return p.orders; }, function (v) { return Math.round(v).toLocaleString("en-IN"); }, 0],
+              sales: ["Total sales", function (p) { return p.sales; }, function (v) { return sh(v); }, 0] };
+    var mm = M[focus], mx = Math.max.apply(null, D.proofs.map(mm[1])) * 1.08;
+    bars.innerHTML = D.proofs.map(function (p, i) { return '<div class="cl-bar" data-i="' + i + '"><span>Client ' + (i + 1) + '</span><i style="--w:' + (mm[1](p) / mx * 100) + '%"></i><b>' + mm[2](mm[1](p)) + "</b></div>"; }).join("");
+    function show(i) {
+      cur = i; var p = D.proofs[i];
+      Array.prototype.forEach.call(tabs.children, function (b, k) { b.classList.toggle("on", k === i); });
+      Array.prototype.forEach.call(bars.children, function (b, k) { b.classList.toggle("on", k === i); });
+      img.src = D.base + p.file; img.parentNode.setAttribute("data-zoom", D.base + p.file);
+      var s = { sales: [$("clS"), p.sales, inr], orders: [$("clO"), p.orders, function (v) { return Math.round(v).toLocaleString("en-IN"); }], customers: [$("clC"), p.customers, function (v) { return Math.round(v).toLocaleString("en-IN"); }], repeat: [$("clR"), p.repeat, function (v) { return Math.round(v).toLocaleString("en-IN"); }], ratio: [$("clP"), p.ratio, function (v) { return v.toFixed(2) + "%"; }] };
+      Object.keys(s).forEach(function (k) { num(s[k][0], s[k][1], s[k][2], 500); });
+      var aov = p.sales / p.orders, rc = p.repeat * aov * 0.25, ac = p.sales * 0.25;
+      say.innerHTML = focus === "repeat" ? "<b>" + p.repeat + " of " + p.orders + " orders</b> came from returning customers. At a typical 25% app commission, those repeat orders alone would have cost about <b>" + inr(rc) + "</b>."
+        : focus === "customers" ? "<b>" + p.customers + " customers</b> saved to this restaurant's own list in 3 months. Every one is a number the owner can message, with no app in between."
+        : "<b>" + p.orders + " direct orders</b> in 3 months, about " + (p.orders / 90).toFixed(1) + " a day. At a typical 25% app commission, <b>" + inr(ac) + "</b> of this would have gone to the apps.";
+    }
+    tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) show(+b.getAttribute("data-i")); });
+    bars.addEventListener("click", function (e) { var b = e.target.closest(".cl-bar"); if (b) show(+b.getAttribute("data-i")); });
+    seen(clx, function () { show(0); }, .15);
+    show(0);
+  }
+
+  /* ===== real payout decoder (#pod) ===== */
+  var pod = $("pod");
+  if (pod && D.payouts.length) {
+    var pi = 0, mode = "app";
+    var SEG = [["base", "Base service fee", "#FC5301"], ["ld", "Long distance fee", "#FF8A3D"], ["pay", "Payment mechanism fee", "#F5B66B"], ["tax", "Tax deductions", "#9A3412"], ["growth", "Investments in growth", "#B45309"]];
+    function pdraw() {
+      var p = D.payouts[pi], A = p.A;
+      $("podImg").src = D.base + p.file; $("podImg").parentNode.setAttribute("data-zoom", D.base + p.file);
+      var items, keep;
+      if (mode === "app") {
+        items = SEG.map(function (s) { return [s[1], p[s[0]], s[2]]; }); keep = p.payout;
+        var credits = p.B + p.disc; items.push(["Credits and additions", -credits, "#94A3B8"]);
+      } else {
+        items = [["Payment gateway, about 2%", A * 0.02, "#FC5301"]]; keep = A * 0.98;
+      }
+      var tot = items.reduce(function (a, it) { return a + Math.max(0, it[1]); }, 0) + keep;
+      $("podBar").innerHTML = items.filter(function (it) { return it[1] > 0; }).map(function (it) { return '<i style="width:' + it[1] / tot * 100 + '%;background:' + it[2] + '" title="' + it[0] + '"></i>'; }).join("") + '<i style="width:' + keep / tot * 100 + '%;background:#16A34A" title="You keep"></i>';
+      $("podLeg").innerHTML = items.map(function (it) { return '<li><i style="background:' + it[2] + '"></i><span>' + it[0] + "</span><em>" + (it[1] / A * 100).toFixed(1) + "%</em><b>" + (it[1] < 0 ? "+" : "−") + inr(Math.abs(it[1])) + "</b></li>"; }).join("");
+      num($("podKeep"), keep, inr, 600); $("podKeepP").textContent = (keep / A * 100).toFixed(1) + "% of " + inr(A) + " in sales";
+      $("podMore").innerHTML = mode === "app" ? "Of every ₹100 customers paid, this restaurant kept <b>₹" + (keep / A * 100).toFixed(0) + "</b>. The rest went to fees, tax and growth charges."
+        : "Same sales through your own ordering system: you keep <b>" + inr(A * 0.98 - p.payout) + " more</b> in this month alone.";
+    }
+    pick($("podTabs"), function (v) { pi = +v; pdraw(); });
+    pick($("podMode"), function (v) { mode = v; pdraw(); });
+    pdraw();
+  }
+
+  /* "?shot" mode used for screenshots: show every reveal block and load every image at once */
   if (/[?&]shot\b/.test(location.search)) {
     R.querySelectorAll(".rv").forEach(function (e) { e.classList.add("show"); });
     Array.prototype.forEach.call(document.images, function (i) { i.loading = "eager"; });
   }
-  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM };
+  window.LP = { R: R, $: $, inr: inr, sh: sh, num: num, fill: fill, seen: seen, confetti: confetti, pick: pick, RM: RM, zoom: zoom, D: D };
 })();
 
 </script>
@@ -1044,72 +1229,122 @@
   var LP=window.LP; if(!LP) return;
   var R=LP.R,$=LP.$,inr=LP.inr,sh=LP.sh,num=LP.num,fill=LP.fill,seen=LP.seen,confetti=LP.confetti,pick=LP.pick,RM=LP.RM;
 
-  /* ---- hero: loyalty card you can play with ---- */
-  var stamps=5,pts=240,st=$('lyStamps');
-  function tierOf(p){return p>=600?['Platinum member','plat',null]:p>=300?['Gold member','gold',600]:['Silver member','',300]}
-  function drawStamps(){
-    var h='',i;for(i=0;i<8;i++)h+='<i class="'+(i<stamps?'on':'')+(i===7?' last':'')+'">'+(i<stamps?'<img src="img/star.svg" alt="">':'')+'</i>';
-    st.innerHTML=h;
-    $('lyCount').textContent=stamps+' of 8 stamps';
-    var t=tierOf(pts),el=$('lyTier');el.textContent=t[0];el.className='ly-tier '+t[1];
-    var to=t[2];$('lyBar').style.width=(to?Math.min(100,(pts-(to===300?0:300))/(to===300?300:300)*100):100)+'%';
-    $('lyNext').textContent=to?(to-pts)+' points to '+(to===300?'Gold':'Platinum'):'You reached the top tier';
+  /* ---- hero: tap to earn ---- */
+  var stamps=5,pts=240,st=$('lyStamps'),ICN='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+  function tierOf(p){return p>=600?['PLATINUM','p',null]:p>=300?['GOLD','g',600]:['SILVER','s',300]}
+  function draw(pop){
+    var h='',i;for(i=0;i<8;i++)h+='<i class="'+(i<stamps?'on':'')+(i===7?' last':'')+(pop&&i===stamps-1?' pop':'')+'">'+ICN+'</i>';
+    st.innerHTML=h;$('lyCount').textContent=stamps+' of 8 orders';
+    var t=tierOf(pts),el=$('lyTier');el.textContent=t[0];el.className='pill '+t[1];
+    var lo=t[2]===300?0:300,hi=t[2]||600,frac=t[2]?(pts-lo)/(hi-lo):1;
+    $('lyArc').style.strokeDashoffset=327*(1-frac);
+    $('lyNext').textContent=t[2]?(hi-pts)+' points to '+(t[2]===300?'Gold':'Platinum'):'Top tier reached';
     num($('lyPts'),pts,function(v){return Math.round(v)},500);
   }
-  drawStamps();
-  var rew=$('lyRew'),btn=$('lyOrder'),foot=$('lyFoot'),f1=$('lyF1b');
+  draw(false);
+  var rew=$('lyRew'),btn=$('lyOrder'),foot=$('lyFoot'),bl=btn.querySelector('span');
   btn.addEventListener('click',function(){
-    if(stamps>=8){stamps=0;rew.className='ly-rew';rew.lastChild.textContent='Free dessert on your 8th order';btn.textContent='Place an order · ₹450';foot.textContent='Reward redeemed. A new card starts now.';drawStamps();return}
-    stamps++;pts+=45;drawStamps();f1.textContent='+45 points';
-    if(stamps>=8){rew.className='ly-rew got';rew.lastChild.textContent='Reward unlocked! Free dessert is yours';btn.textContent='Redeem my free dessert';foot.textContent='That is how regulars are made.';confetti(btn)}
+    if(stamps>=8){stamps=0;rew.className='ly-rew';rew.lastChild.textContent='Free dessert on your 8th order';bl.textContent='Place an order, ₹450';foot.textContent='Reward redeemed. A new card starts now.';draw(false);return}
+    stamps++;pts+=45;draw(true);
+    if(stamps>=8){rew.className='ly-rew got';rew.lastChild.textContent='Reward unlocked: free dessert';bl.textContent='Redeem my free dessert';foot.textContent='That is how regulars are made.';confetti(btn)}
     else foot.textContent=(8-stamps)+' more order'+(8-stamps>1?'s':'')+' to a free dessert. No commission paid.';
   });
 
-  /* ---- problem: app customer vs your customer ---- */
-  var PA=[['Name','Hidden','bad'],['Phone number','Hidden','bad'],['Orders from you','You can\'t see','bad'],['Lifetime spend','Unknown','bad'],['Can you send an offer?','No','bad'],['Commission on their next order','25 to 30%','bad']];
-  var PO=[['Name','Rohan Sharma','good'],['Phone number','+91 98••• ••521','good'],['Orders from you','14 orders','good'],['Lifetime spend','₹8,420','good'],['Can you send an offer?','Yes, on WhatsApp','good'],['Commission on their next order','₹0','good']];
+  /* ---- the loyalty gap ---- */
+  var IC={eyeoff:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.5 9.5 0 0 1 12 6c5 0 8.5 4 9.5 6a12 12 0 0 1-2.6 3.3M6.6 7.6A12 12 0 0 0 2.5 12c1 2 4.5 6 9.5 6a9 9 0 0 0 3.2-.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+    user:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>'};
+  var RI={u:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>',
+    p:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>',
+    r:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>',
+    w:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12v4"/><path d="M4 7v10a2 2 0 0 0 2 2h14v-4"/><path d="M21 9h-5a2 2 0 0 0 0 4h5z"/></svg>',
+    m:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></svg>',
+    c:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/></svg>'};
+  var PA=[['u','Name','Hidden','bad'],['p','Phone number','Hidden','bad'],['r','Orders from you',"You can't see",'bad'],['w','Lifetime spend','Unknown','bad'],['m','Can you send an offer?','No','bad'],['c','Commission on their next order','25 to 30%','bad']];
+  var PO=[['u','Name','Rohan Sharma','good'],['p','Phone number','+91 98••• ••521','good'],['r','Orders from you','14 orders','good'],['w','Lifetime spend','₹8,420','good'],['m','Can you send an offer?','Yes, on WhatsApp','good'],['c','Commission on their next order','₹0','good']];
   var rows=$('lyRows'),prof=$('lyProf');
   function drawRows(m){
-    var d=m==='own'?PO:PA;
-    rows.className='ly-rows sw';
+    var d=m==='own'?PO:PA;rows.className='ly-rows sw';
     setTimeout(function(){
-      rows.innerHTML=d.map(function(r){return '<li class="'+r[2]+'"><span>'+r[0]+'</span><b>'+r[1]+'</b></li>'}).join('');
+      rows.innerHTML=d.map(function(r){return '<li class="'+r[3]+'">'+RI[r[0]]+'<span>'+r[1]+'</span><b>'+r[2]+'</b></li>'}).join('');
       prof.setAttribute('data-m',m);
-      $('lyAv').textContent=m==='own'?'R':'?';
+      $('lyAv').innerHTML=m==='own'?IC.user:IC.eyeoff;
       $('lyWho').textContent=m==='own'?'Rohan Sharma':'Customer #48213';
-      $('lyWhoS').textContent=m==='own'?'Gold member, since Jan':'Name hidden by the app';
+      $('lyWhoS').textContent=m==='own'?'Gold member since January':'Name hidden by the app';
       rows.className='ly-rows';
     },RM?0:200);
   }
-  drawRows('app');
-  pick($('lyProfSeg'),drawRows);
+  drawRows('app');pick($('lyProfSeg'),drawRows);
 
-  /* ---- simulator ---- */
+  /* ---- calculator 1 ---- */
   var ids=['lyR','lyO','lyA','lyC','lyS'];
   function sim(){
     ids.forEach(function(i){fill($(i))});
-    var R_=+$('lyR').value,O=+$('lyO').value,A=+$('lyA').value,C=+$('lyC').value/100,S=+$('lyS').value/100;
-    $('lyRv').textContent=R_.toLocaleString('en-IN');$('lyOv').textContent=O;$('lyAv2').textContent=inr(A);$('lyCv').textContent=Math.round(C*100)+'%';$('lySv').textContent=Math.round(S*100)+'%';
-    var rev=R_*O*A,now=rev*C,saved=rev*S*C,extra=rev*S*0.10;
+    var R_=+$('lyR').value,O=+$('lyO').value,A=+$('lyA').value,C=+$('lyC').value/100,S_=+$('lyS').value/100;
+    $('lyRv').textContent=R_.toLocaleString('en-IN');$('lyOv').textContent=O;$('lyAv2').textContent=inr(A);$('lyCv').textContent=Math.round(C*100)+'%';$('lySv').textContent=Math.round(S_*100)+'%';
+    var rev=R_*O*A,now=rev*C,saved=rev*S_*C,extra=rev*S_*0.10;
     num($('lyNow'),now,inr);num($('lySave'),saved,inr);num($('lyExtra'),extra,inr);num($('lyYear'),(saved+extra)*12,sh);
-    var stl=$('rgStL');if(stl)stl.textContent=sh(now)+' / month';
   }
   ids.forEach(function(i){$(i).addEventListener('input',sim)});sim();
 
-  /* ---- tiers ---- */
-  var TI=[
-    {n:'Silver',r:'Starts from the first order',img:'star',bg:'#E5E7EB',perks:['1 point for every ₹10 spent','Free dessert after 8 orders','Birthday wish on WhatsApp'],chat:[['biz','Hi Rohan! You earned 45 points on your order. 60 more and you are Gold. 🌟','7:42 pm'],['me','Ordering again this weekend!','7:44 pm']]},
-    {n:'Gold',r:'After 300 points',img:'star',bg:'#FEF3C7',perks:['1.5x points on every order','Free starter every 5th order','Early access to new dishes','Birthday gift on your table'],chat:[['biz','Welcome to Gold, Rohan! 🎉 Enjoy 1.5x points and a free starter on your next order.','6:15 pm'],['me','Nice! Booking a table for Saturday','6:17 pm']]},
-    {n:'Platinum',r:'After 600 points',img:'gift',bg:'#EDE9FE',perks:['2x points on every order','Free main course every month','Priority table and delivery','Invites to chef tasting nights'],chat:[['biz','Rohan, you are Platinum! 💎 Your free main course this month is waiting. Reply YES to claim.','1:05 pm'],['me','YES! 😍','1:06 pm']]}
-  ];
-  function drawTier(k){
-    var t=TI[+k];
-    $('lyTn').textContent=t.n;$('lyTr').textContent=t.r;
-    $('lyTi').style.background=t.bg;$('lyTi').innerHTML='<img src="img/'+t.img+'.svg" alt="">';
-    $('lyPerks').innerHTML=t.perks.map(function(p){return '<li><i>✓</i>'+p+'</li>'}).join('');
-    $('lyChat').innerHTML=t.chat.map(function(m,i){return '<div class="ly-b '+m[0]+'" style="animation-delay:'+(RM?0:i*.45)+'s">'+m[1]+'<small>'+m[2]+'</small></div>'}).join('');
+  /* ---- calculator 2 ---- */
+  var rb=['rbO','rbA','rbP','rbC'];
+  function budget(){
+    rb.forEach(function(i){fill($(i))});
+    var o=+$('rbO').value,a=+$('rbA').value,p=+$('rbP').value/100,c=+$('rbC').value/100;
+    $('rbOv').textContent=o.toLocaleString('en-IN');$('rbAv').textContent=inr(a);$('rbPv').textContent=Math.round(p*100)+'%';$('rbCv').textContent=Math.round(c*100)+'%';
+    var app=o*a*c,rew=o*a*p,net=app-rew;
+    num($('rbApp'),app,inr);num($('rbRew'),rew,inr);num($('rbNet'),Math.max(0,net),inr);
+    $('rbBar').style.setProperty('--w',Math.min(100,rew/app*100)+'%');
+    $('rbMsg').textContent=net>0?'Even after paying out '+Math.round(p*100)+'% in rewards, you keep '+Math.round(net/app*100)+'% of the commission you would have paid.':'At this reward level the rewards cost more than the commission. Try a lower reward.';
   }
-  drawTier(0);pick($('lyTierSeg'),drawTier);
+  rb.forEach(function(i){$(i).addEventListener('input',budget)});budget();
+
+  /* ---- reward styles ---- */
+  var STY=[
+    {h:'Points on every order',p:'Customers earn points on every direct order and spend them on rewards you pick.',l:['1 point for every ₹10 spent','Rewards from a free drink to a free meal','Points show up in the customer\'s account and on WhatsApp'],
+     v:function(){return '<div class="pv-h"><b>Spice Route Rewards</b><span class="pill s">SILVER</span></div><div class="pv-big">240 pts</div>'+[['cake','Free dessert',200,100],['coffee','Free coffee',300,80],['bowl','Free starter',500,48]].map(function(r){return '<div class="pv-row"><span class="i t-o">'+IK[r[0]]+'</span><div><b>'+r[1]+'</b><small>'+r[2]+' points</small><div class="pv-pg"><i style="width:'+r[3]+'%"></i></div></div></div>'}).join('')}},
+    {h:'A stamp card that fills up',p:'Simple and familiar. Every order adds a stamp and the last one is free.',l:['Every 8th order free, or any rule you like','No app download for customers','Stamps added automatically on every direct order'],
+     v:function(){var s='';for(var i=0;i<10;i++)s+='<i class="'+(i<6?'on':i===9?'free':'')+'">'+(i===9?IK.gift:i<6?IK.check:'')+'</i>';return '<div class="pv-h"><b>Dessert Club</b><span class="pill ok">6 OF 10</span></div><div class="pv-stamps">'+s+'</div><div class="pv-row"><span class="i t-g">'+IK.gift+'</span><div><b>Your 10th order is free</b><small>4 more orders to go</small></div></div>'}},
+    {h:'Tiers that make people climb',p:'Silver, Gold and Platinum give your best customers something to aim for.',l:['Better rewards at every level','Birthday gifts and early access to new dishes','Customers see exactly how close the next tier is'],
+     v:function(){return '<div class="pv-h"><b>Your member tiers</b></div>'+[['Silver','From the first order','s','1x points'],['Gold','After 300 points','g','1.5x points and a free starter'],['Platinum','After 600 points','p','2x points and a free main every month']].map(function(t){return '<div class="pv-row"><span class="i t-'+(t[2]==='s'?'o':t[2]==='g'?'y':'p')+'">'+IK.crown+'</span><div><b>'+t[0]+'</b><small>'+t[1]+'. '+t[3]+'</small></div><span class="pill '+t[2]+'">'+t[0].toUpperCase()+'</span></div>'}).join('')}},
+    {h:'Regulars who bring friends',p:'Your happiest customers become your best marketing. Reward both sides.',l:['Give a reward, get a reward','Each customer gets a personal code to share','You see every new customer who came through a referral'],
+     v:function(){return '<div class="pv-h"><b>Invite a friend</b></div><div class="pv-ticket"><b>Give ₹100. Get ₹100.</b><small>When a friend places their first order</small><br><span class="pv-code">'+IK.link+'ROHAN100</span></div><div class="pv-row"><span class="i t-g">'+IK.users+'</span><div><b>3 friends joined</b><small>You earned ₹300 in rewards</small></div></div>'}}
+  ];
+  var IK={check:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+    gift:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8c-1.5-3.5-5-4-5-1.5S10 8 12 8zM12 8c1.5-3.5 5-4 5-1.5S14 8 12 8z"/></svg>',
+    crown:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4.5 4 4.5-6 4.5 6L21 8l-2 11H5z"/></svg>',
+    users:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14.5c2.6 0 4.5 1.8 4.5 4.5"/></svg>',
+    link:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1"/><path d="M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></svg>',
+    cake:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M12 12V9M12 9c-1-1-1-2.2 0-3.2 1 1 1 2.2 0 3.2z"/><path d="M4 16c2 1.5 3.5 1.5 4 0 .5 1.5 3.5 1.5 4 0 .5 1.5 3.5 1.5 4 0 .5 1.5 2 1.5 4 0"/></svg>',
+    coffee:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v2M12 3v2"/></svg>',
+    bowl:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-9 9 9 9 0 0 1-9-9z"/><path d="M8 7c0-1.5 1.5-1.5 1.5-3M12 7c0-1.5 1.5-1.5 1.5-3"/></svg>'};
+  function drawSty(k){
+    var s=STY[+k],ck='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+    $('lyStyH').textContent=s.h;$('lyStyP').textContent=s.p;
+    $('lyStyL').innerHTML=s.l.map(function(x){return '<li>'+ck+x+'</li>'}).join('');
+    $('lyPrev').innerHTML=s.v();
+  }
+  drawSty(0);pick($('lySty'),drawSty);
+
+  /* ---- member journey ---- */
+  var JR=[
+    {i:'bag',t:'First direct order',d:'Joins in one tap at checkout. No app to download.',c:[['biz','Welcome to Spice Route Rewards, Rohan. You earned 45 points on your first order.','7:42 pm'],['me','Thanks, how do I use them?','7:44 pm'],['biz','Spend 200 points on a free dessert. You are 155 away.','7:44 pm']]},
+    {i:'coins',t:'Earns points every time',d:'Each order adds points and a stamp, automatically.',c:[['biz','Order confirmed. 45 points added. You now have 240 points.','8:10 pm'],['me','Nice, ordering again this weekend','8:12 pm']]},
+    {i:'bell',t:'Gets a gentle nudge',d:'A reminder before they drift to another restaurant.',c:[['biz','Rohan, your favourite biryani is one tap away. Free delivery today only.','1:10 pm'],['me','Ordering now','1:12 pm']]},
+    {i:'crown',t:'Moves up a tier',d:'Gold unlocks better rewards and a reason to stay.',c:[['biz','You are now a Gold member. Enjoy 1.5x points and a free starter on your next order.','6:15 pm'],['me','Great, booking a table for Saturday','6:17 pm']]},
+    {i:'users',t:'Brings a friend',d:'Referrals turn regulars into your best marketing.',c:[['biz','Your friend Priya just ordered with your code. ₹100 has been added to your wallet.','9:30 pm'],['me','Love it','9:31 pm']]}
+  ];
+  var JI={bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',coins:'<ellipse cx="9" cy="8" rx="6" ry="3"/><path d="M3 8v4c0 1.7 2.7 3 6 3s6-1.3 6-3V8"/><path d="M15 11.5c3.3 0 6 1.3 6 3v3c0 1.7-2.7 3-6 3-2.2 0-4-.6-5.1-1.4"/>',bell:'<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/>',crown:'<path d="M3 8l4.5 4 4.5-6 4.5 6L21 8l-2 11H5z"/>',users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14.5c2.6 0 4.5 1.8 4.5 4.5"/>'};
+  var TK='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13l4 4 8-9"/><path d="M10 15l1 1 9-10"/></svg>';
+  var tl=$('lyTl'),jcur=0,jt=null;
+  tl.innerHTML=JR.map(function(j,i){return '<li data-i="'+i+'"><span class="ic-b"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+JI[j.i]+'</svg></span><div><b>'+j.t+'</b><span>'+j.d+'</span></div></li>'}).join('');
+  function showJ(i){
+    jcur=i;Array.prototype.forEach.call(tl.children,function(li,k){li.classList.toggle('on',k===i)});
+    $('lyWa').innerHTML=JR[i].c.map(function(m,k){return '<div class="wb '+m[0]+'" style="animation-delay:'+(RM?0:k*.4)+'s">'+m[1]+'<small>'+m[2]+(m[0]==='me'?'':'')+' '+(m[0]==='biz'?'':TK)+'</small></div>'}).join('');
+  }
+  tl.addEventListener('click',function(e){var li=e.target.closest('li');if(li){clearInterval(jt);showJ(+li.getAttribute('data-i'))}});
+  showJ(0);
+  seen($('lyTl'),function(){if(!RM)jt=setInterval(function(){if(!document.hidden)showJ((jcur+1)%JR.length)},4500)},.4);
   
 })();
 </script>
