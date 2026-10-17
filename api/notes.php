@@ -1,13 +1,10 @@
 <?php
 require __DIR__ . '/config.php';
 
-// Shared notes board used by /text. Same admin password as the dashboard.
-// POST {password, action: list | add | delete | pin, ...}
+// Shared notes board used by /text. No password: anyone who has the /text link can read and write, so keep the link private.
+// POST {action: list | add | delete | pin, ...}
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_out(405, ['error' => 'Method not allowed']);
-$pass = env('ADMIN_PASSWORD');
-if ($pass === '') json_out(500, ['error' => 'ADMIN_PASSWORD is not set']);
 $b = body();
-if (!hash_equals($pass, (string)($b['password'] ?? ''))) json_out(401, ['error' => 'Wrong password']);
 
 $action = (string)($b['action'] ?? 'list');
 try {

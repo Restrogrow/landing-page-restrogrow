@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../admin/admin.css">
 <style>
-#app{max-width:860px}
+#app{display:block;max-width:860px}
 .pin{border-left:4px solid var(--o);margin-bottom:16px}
 .pin textarea,.compose textarea{width:100%;min-height:110px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none;line-height:1.5}
 .pin .txt{white-space:pre-wrap;overflow-wrap:anywhere}
@@ -26,21 +26,10 @@
 </style>
 </head>
 <body>
-<div id="login"><form id="lf">
-  <h1>Shared notes</h1><p>Enter the admin password to continue.</p>
-  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
-  <button class="btn" type="submit">Log in</button>
-  <div id="err" role="alert"></div>
-</form></div>
-
 <div id="app">
   <nav class="nav">
     <span class="logo">Restro<b>Grow</b></span>
-    <a class="tab" href="../admin/index.html">Dashboard</a>
-    <a class="tab" href="../admin/leads.html">Leads</a>
     <a class="tab on" href="./">Notes</a>
-    <span class="sp"></span>
-    <button class="btn ghost" id="out" type="button">Log out</button>
   </nav>
 
   <div class="top"><div><h1>Shared notes</h1><div class="sub">One place for you and every agent to leave instructions and messages. Updates every few seconds.</div></div></div>
@@ -72,13 +61,12 @@
 
 <script>
 (function(){
-  var KEY="rgAdminPw",pw="",editing=false,last="",busy=false;
+  var editing=false,last="",busy=false;
   var $=function(i){return document.getElementById(i)};
   var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
   var fmt=function(t){var d=new Date(t);return isNaN(d)?"":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})};
 
   function call(data){
-    data.password=pw;
     return fetch("../api/notes.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
       .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})});
   }
@@ -94,14 +82,7 @@
     }).join(""):'<div class="empty">No messages yet. Write the first one below.</div>';
     if(atEnd)scrollTo(0,document.body.scrollHeight);
   }
-  function show(d){$("login").style.display="none";$("app").style.display="block";render(d)}
   function poll(){if(busy||document.hidden)return;call({action:"list"}).then(render).catch(function(){})}
-
-  $("lf").addEventListener("submit",function(e){
-    e.preventDefault();$("err").textContent="";var p=$("pw").value;pw=p;
-    call({action:"list"}).then(function(d){try{sessionStorage.setItem(KEY,p)}catch(x){}show(d);setInterval(poll,8000)}).catch(function(x){$("err").textContent=x.message});
-  });
-  $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
 
   try{$("who").value=localStorage.getItem("rgNoteName")||""}catch(x){}
   $("send").addEventListener("click",function(){
@@ -126,8 +107,7 @@
       .catch(function(x){alert(x.message)}).then(function(){busy=false});
   });
 
-  var saved="";try{saved=sessionStorage.getItem(KEY)||""}catch(x){}
-  if(saved){pw=saved;call({action:"list"}).then(function(d){show(d);setInterval(poll,8000)}).catch(function(){try{sessionStorage.removeItem(KEY)}catch(x){}})}
+  call({action:"list"}).then(function(d){render(d);setInterval(poll,8000)}).catch(function(x){$("msgs").innerHTML='<div class="empty">'+esc(x.message)+"</div>"});
 })();
 </script>
 </body>
