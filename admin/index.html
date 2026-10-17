@@ -58,34 +58,40 @@ input:focus,select:focus,textarea:focus{border-color:var(--o)}
 .chip b{margin-left:5px;color:var(--mu);font-weight:600}
 .chip.on{background:var(--o);border-color:var(--o);color:#fff}.chip.on b{color:#fff}
 #q{flex:1 1 220px;max-width:340px}
-/* table */
-.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--ln);border-radius:14px}
-table{width:100%;border-collapse:collapse;font-size:.88rem}
-th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--ln);vertical-align:middle}
-th{background:var(--thead);font-weight:600;white-space:nowrap}
-tr:last-child td{border-bottom:0}
-td.nw{white-space:nowrap}
-.wa{display:inline-block;height:34px;line-height:34px;padding:0 14px;border-radius:8px;background:#25D366;color:#fff!important;font-weight:600;text-decoration:none}
-select.st{height:36px;padding:0 8px;border-radius:8px;font-weight:500;width:100%}
+/* lead cards */
+.leads{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.lead{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px;display:grid;gap:12px;align-content:start;border-top:4px solid var(--ln)}
+.lead[data-s=New]{border-top-color:var(--o)}
+.lead[data-s=Called]{border-top-color:#3B82F6}
+.lead[data-s=Converted]{border-top-color:#22C55E}
+.lead[data-s="Follow-up"]{border-top-color:#F59E0B}
+.lead[data-s="Not answered"],.lead[data-s="Not interested"]{border-top-color:#EF4444}
+.lead .hd{display:flex;gap:12px;align-items:center}
+.av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 1.1rem 'Montserrat',sans-serif}
+.lead .nm{font-weight:600;font-size:1.02rem;line-height:1.25;overflow-wrap:anywhere}
+.lead .mt{color:var(--mu);font-size:.8rem;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:var(--track);border-radius:8px;padding:3px 9px;font-size:.78rem}
+.tag em{font-style:normal;color:var(--mu);margin-right:4px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cl,.wa{display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border-radius:10px;color:#fff!important;font-weight:600;text-decoration:none;font-size:.9rem}
+.cl{background:#2563EB}
+.wa{background:#25D366}
+.cl svg,.wa svg{width:17px;height:17px;fill:currentColor}
+.ph{font-weight:500;font-size:.9rem}
+select.st{height:40px;padding:0 10px;border-radius:10px;font-weight:600;width:100%}
 select.st[data-s=Converted]{background:#DCFCE7;border-color:#86EFAC;color:#14532D}
 select.st[data-s=Called]{background:#DBEAFE;border-color:#93C5FD;color:#1E3A8A}
 select.st[data-s="Not answered"],select.st[data-s="Not interested"]{background:#FEE2E2;border-color:#FCA5A5;color:#7F1D1D}
 select.st[data-s="Follow-up"]{background:#FEF3C7;border-color:#FCD34D;color:#78350F}
-textarea.nt{width:100%;min-width:180px;height:36px;min-height:36px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
+textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
 .empty{padding:40px;text-align:center;color:var(--mu)}
 @media (max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
 @media (max-width:760px){
   #app{padding:16px 12px 40px}
   .top .r{width:100%}.top .r .btn{flex:1;padding:0 10px}
   #q{max-width:none}
-  .wrap{background:none;border:0;overflow:visible}
-  table,tbody{display:block}thead{display:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:10px}
-  td{display:block;border:0;padding:0;min-width:0}
-  td[data-l]::before{content:attr(data-l);display:block;color:var(--mu);font-size:.72rem}
-  td.full{grid-column:1/-1}
-  td.hd{grid-column:1/-1;font-weight:600;font-size:1rem}
-  .wa{display:block;text-align:center;height:42px;line-height:42px}
+  .leads{grid-template-columns:1fr}
   .br{grid-template-columns:minmax(70px,38%) 1fr 30px}
 }
 @media (max-width:420px){.kpi .v{font-size:1.5rem}.kpis{gap:8px}}
@@ -123,10 +129,7 @@ textarea.nt{width:100%;min-width:180px;height:36px;min-height:36px;padding:7px 1
     <div class="chips" id="chips"></div>
     <input id="q" type="search" placeholder="Search name, phone, brand, city, notes">
   </div>
-  <div class="wrap"><table>
-    <thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Brand</th><th>Location</th><th>Outlets</th><th>Orders/day</th><th>Turnover</th><th>Budget</th><th>Status</th><th>Notes</th><th>Chat</th></tr></thead>
-    <tbody id="tb"></tbody>
-  </table></div>
+  <div class="leads" id="tb"></div>
 </div>
 <div id="tip"></div>
 
@@ -218,8 +221,15 @@ textarea.nt{width:100%;min-width:180px;height:36px;min-height:36px;padding:7px 1
     $("tb").innerHTML=rows.length?rows.map(function(l){
       var opts=STATUSES.map(function(x){return "<option"+(x===l.status?" selected":"")+">"+esc(x)+"</option>"}).join("");
       var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
-      return '<tr data-id="'+l.id+'"><td class="nw" data-l="Date">'+esc(fmt(l.time))+'</td><td class="hd" data-l="Name">'+esc(l.name)+'</td><td class="nw" data-l="Phone">'+esc(l.phone)+'</td><td data-l="Brand">'+esc(l.brand)+'</td><td data-l="Location">'+esc(l.location)+'</td><td data-l="Outlets">'+esc(l.outlets)+'</td><td data-l="Orders/day">'+esc(l.orders)+'</td><td data-l="Turnover">'+esc(l.turnover)+'</td><td data-l="Budget">'+esc(l.budget)+'</td><td class="full" data-l="Status"><select class="st" data-s="'+esc(l.status)+'">'+opts+'</select></td><td class="full" data-l="Notes"><textarea class="nt" maxlength="2000" placeholder="Add note">'+esc(l.notes)+'</textarea></td><td class="full"><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></td></tr>';
-    }).join(""):'<tr><td colspan="12" class="empty">No submissions found.</td></tr>';
+      var ic='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
+      var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
+      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(fmt(l.time))+'</div></div></div>'
+        +'<div class="ph">'+esc(l.phone)+'</div>'
+        +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
+        +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+        +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
+        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea></article>';
+    }).join(""):'<div class="empty card" style="grid-column:1/-1">No submissions found.</div>';
   }
   function renderAll(){renderStats();renderTable()}
 
@@ -229,7 +239,7 @@ textarea.nt{width:100%;min-width:180px;height:36px;min-height:36px;padding:7px 1
     if(st===l.status&&nt===l.notes)return;
     fetch("../api/lead_update.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw,id:l.id,status:st,notes:nt})})
       .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
-      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;tr.querySelector("select").setAttribute("data-s",st);renderStats();if(ch&&filter)renderTable()})
+      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;tr.querySelector("select").setAttribute("data-s",st);tr.setAttribute("data-s",st);renderStats();if(ch&&filter)renderTable()})
       .catch(function(x){alert("Not saved: "+x.message)});
   }
 
@@ -244,8 +254,14 @@ textarea.nt{width:100%;min-width:180px;height:36px;min-height:36px;padding:7px 1
     $(id).addEventListener("mousemove",function(e){var b=e.target.closest(".br");b?showTip(e,b.getAttribute("data-t")):hideTip()});
     $(id).addEventListener("mouseleave",hideTip);
   });
-  $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest("tr"))});
-  $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest("tr"))});
+  $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest(".lead"))});
+  $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest(".lead"))});
+  // Tapping Call marks the lead as Called (unless already Converted / Not interested / Called).
+  $("tb").addEventListener("click",function(e){
+    var a=e.target.closest(".cl");if(!a)return;
+    var card=a.closest(".lead"),sel=card.querySelector("select");
+    if(["New","Not answered","Follow-up"].indexOf(sel.value)>-1){sel.value="Called";save(card)}
+  });
   $("ref").addEventListener("click",function(){load(pw).then(show).catch(function(x){alert(x.message)})});
   $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
   $("csv").addEventListener("click",function(){
