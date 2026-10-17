@@ -22,6 +22,8 @@ Repo: https://github.com/Restrogrow/landing-page-restrogrow (branch `main`, depl
 | `admin/admin.css`, `admin/common.js` | Shared admin styling, login and data loading. |
 | `legal.php`, `api/legal_lib.php`, `api/legal_defaults.php`, `api/pages_admin.php`, `admin/pages.html` | Legal pages (`/privacy-policy`, `/terms-and-services`, `/refund-policy`, rewritten to `legal.php` in `.htaccess`). Text is stored in the `pages` table and edited in Admin -> Pages; the defaults file is used until a page is saved or if the DB is down. |
 | `text/index.html`, `api/notes.php` | Shared notes board for agents (no password; keep the link private; never post secrets there). |
+| `lp/*.html`, `tools/build-lps.js`, `tools/check-lps.js` | Extra ad landing pages (loyalty, own-website, whatsapp, profit-audit) generated from `index.html` (same design/JS/proof images, different pitch). Edit the copy in `tools/build-lps.js` and run `node tools/build-lps.js` then `node tools/check-lps.js`. Pages post to `../api/submit.php`; Admin -> Leads shows the page each lead came from. `lp/index.html` lists them all. |
+| `storage/leads-fallback.jsonl` | If MySQL is down, `submit.php` keeps each lead here (one JSON line) so nothing is lost; the folder is blocked from the web. Not committed. |
 | `.env` | Secrets. **Gitignored. Never commit it or paste its values into chat/commits.** |
 | `.env.example` | List of every env var, no values. |
 | `.htaccess` | Blocks dotfiles (`.env`, `.git`), disables directory listing. |

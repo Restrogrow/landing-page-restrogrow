@@ -21,6 +21,6 @@ json_out(200, ['leads' => array_map(function ($r) {
         'outlets' => $r['outlets'], 'orders' => $r['orders_day'], 'turnover' => $r['turnover'], 'budget' => $r['budget'],
         'utm_source' => (string)$r['utm_source'], 'utm_medium' => (string)$r['utm_medium'], 'utm_campaign' => (string)$r['utm_campaign'],
         'utm_content' => (string)$r['utm_content'], 'utm_term' => (string)$r['utm_term'],
-        'gclid' => (string)$r['gclid'], 'fbclid' => (string)$r['fbclid'],
+        'gclid' => (string)$r['gclid'], 'fbclid' => (string)$r['fbclid'], 'page' => (string)$r['page'],
     ];
 }, $rows)]);

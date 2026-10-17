@@ -42,7 +42,7 @@
 <script>
 (function(){
   var $=RG.$,esc=RG.esc,leads=[],filter="";
-  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid"];
+  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page"];
   try{var p=new URLSearchParams(location.search).get("status");if(p&&RG.STATUSES.indexOf(p)>-1)filter=p}catch(x){}
 
   function chips(){
@@ -65,7 +65,8 @@
       var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
       var src=l.gclid?"Google":l.fbclid?"Meta":"";
       var srcTxt=[l.utm_source,l.utm_campaign].filter(Boolean).join(" / ");
-      var from=(src||srcTxt)?'<div class="mt">'+(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span> ':"")+esc(srcTxt)+'</div>':"";
+      var lp=(String(l.page||"").match(/\/lp\/([a-z0-9-]+)/)||[])[1]||"";   /* which landing page the lead came from */
+      var from=(src||srcTxt||lp)?'<div class="mt">'+(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span> ':"")+(lp?'<span class="tag">Page: '+esc(lp)+'</span> ':"")+esc(srcTxt)+'</div>':"";
       return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div>'+from+'</div></div>'
         +'<div class="ph">'+esc(l.phone)+'</div>'
         +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'

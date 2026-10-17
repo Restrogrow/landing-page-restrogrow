@@ -19,8 +19,10 @@ try {
     $ex->execute([$eid]);
     $row = $ex->fetch();
 } catch (Throwable $e) {
+    // Database unreachable: still show the thank-you page (the lead was kept in the file fallback), but count nothing.
     error_log('lead confirm failed: ' . $e->getMessage());
-    json_out(200, ['valid' => false, 'fire' => false]);
+    json_out(200, ['valid' => true, 'fire' => false, 'event_id' => $eid,
+        'meta_pixel_id' => tag_id('META_PIXEL_ID'), 'google_ads_id' => tag_id('GOOGLE_ADS_ID'), 'ga4_id' => tag_id('GA4_ID')]);
 }
 if (!$row) json_out(200, ['valid' => false, 'fire' => false]);
 

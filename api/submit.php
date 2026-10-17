@@ -64,11 +64,24 @@ try {
 } catch (PDOException $e) {
     // Same event_id again (double click / retry): already saved, so don't count or message twice.
     if ($e->getCode() === '23000') json_out(200, ['ok' => true, 'event_id' => $eid]);
-    error_log('lead save failed: ' . $e->getMessage());
-    json_out(500, ['error' => 'Could not save your details. Please try again.']);
+    error_log('lead save failed, using file fallback: ' . $e->getMessage());
+    save_fallback($lead, $phone, $eid, $b, $attr);
 } catch (Throwable $e) {
-    error_log('lead save failed: ' . $e->getMessage());
-    json_out(500, ['error' => 'Could not save your details. Please try again.']);
+    error_log('lead save failed, using file fallback: ' . $e->getMessage());
+    save_fallback($lead, $phone, $eid, $b, $attr);
+}
+
+// If the database is unreachable the lead is still kept (one JSON line per lead in storage/), so the form
+// keeps working and no lead is lost. Import them later; storage/ is blocked from the web by its own .htaccess.
+function save_fallback($lead, $phone, $eid, $b, $attr) {
+    $dir = __DIR__ . '/../storage';
+    if (!is_dir($dir)) @mkdir($dir, 0750, true);
+    if (!is_file($dir . '/.htaccess')) @file_put_contents($dir . '/.htaccess', "Require all denied\n");
+    $row = array_merge($lead, ['phone' => $phone, 'event_id' => $eid, 'page' => mb_substr((string)($b['page'] ?? ''), 0, 300),
+                               'created_at' => gmdate('c')], $attr);
+    if (@file_put_contents($dir . '/leads-fallback.jsonl', json_encode($row, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX) === false) {
+        json_out(500, ['error' => 'Could not save your details. Please try again.']);
+    }
 }
 
 // Sends the WACRM_TEMPLATE WhatsApp template ({{1}} = name) to the number from the form.
