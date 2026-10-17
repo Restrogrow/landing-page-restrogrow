@@ -48,5 +48,23 @@ p{margin:0 0 14px;color:var(--mu)}
     <small>Restro Grow — Helping Restaurants Grow Online.</small>
   </div>
 </main>
+<script>
+/* Count the Lead once: the server hands out the OK for each event_id only the first time,
+   so a refresh or a shared link never fires it again. The same id is sent to Meta from the server. */
+(function(){
+  var eid="";
+  try{eid=new URLSearchParams(location.search).get("eid")||""}catch(x){}
+  try{history.replaceState(null,"",location.pathname)}catch(x){}
+  if(!/^[A-Za-z0-9-]{8,64}$/.test(eid))return;
+  fetch("api/lead_confirm.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({eid:eid})})
+    .then(function(r){return r.json()})
+    .then(function(j){
+      if(!j||!j.fire||!j.pixel_id)return;
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init",j.pixel_id);
+      fbq("track","Lead",{},{eventID:j.event_id});
+    }).catch(function(){});
+})();
+</script>
 </body>
 </html>

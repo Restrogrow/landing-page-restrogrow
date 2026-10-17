@@ -59,5 +59,9 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'status'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN status VARCHAR(30) NOT NULL DEFAULT 'New', ADD COLUMN notes TEXT NULL");
     }
+    // Unique id per form submit, used to count each lead once (Pixel + Conversions API dedup).
+    if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'event_id'")->fetch()) {
+        $pdo->exec("ALTER TABLE leads ADD COLUMN event_id VARCHAR(64) NULL, ADD COLUMN pixel_fired_at DATETIME NULL, ADD UNIQUE KEY uq_event_id (event_id)");
+    }
     return $pdo;
 }
