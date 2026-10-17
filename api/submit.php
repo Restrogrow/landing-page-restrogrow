@@ -21,6 +21,16 @@ if (!preg_match('/^[6-9]\d{9}$/', $phone)) json_out(400, ['error' => 'Enter a va
 $eid = (string)($b['event_id'] ?? '');
 if (!preg_match('/^[A-Za-z0-9-]{8,64}$/', $eid)) $eid = bin2hex(random_bytes(16));
 
+// Same number submitted again within 24h (refresh, back button, second try): keep the first lead, don't save,
+// message or report a duplicate. The visitor still lands on the thank-you page.
+try {
+    $dup = db()->prepare('SELECT event_id FROM leads WHERE phone = ? AND created_at >= ? ORDER BY id LIMIT 1');
+    $dup->execute([$phone, gmdate('Y-m-d H:i:s', time() - 86400)]);
+    if ($row = $dup->fetch()) json_out(200, ['ok' => true, 'event_id' => (string)($row['event_id'] ?? $eid)]);
+} catch (Throwable $e) {
+    error_log('dup check failed: ' . $e->getMessage());
+}
+
 try {
     $st = db()->prepare('INSERT INTO leads (created_at, name, phone, brand, location, outlets, orders_day, turnover, budget, page, event_id)
                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
