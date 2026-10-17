@@ -44,7 +44,8 @@ function send_confirmation($name, $phone) {
     curl_setopt_array($ch, [
         CURLOPT_POST => true,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 10,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 15,
         CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . env('Api'), 'Content-Type: application/json'],
         CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
     ]);
@@ -53,6 +54,19 @@ function send_confirmation($name, $phone) {
     curl_close($ch);
     if ($code < 200 || $code >= 300) error_log("whatsapp send failed ($code): $res");
 }
-try { send_confirmation($lead['name'], $phone); } catch (Throwable $e) { error_log('whatsapp failed: ' . $e->getMessage()); }
+// Answer the visitor first so the form never waits on the WhatsApp API, then send in the background.
+ignore_user_abort(true);
+@set_time_limit(30);
+$out = json_encode(['ok' => true]);
+http_response_code(200);
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+header('Connection: close');
+header('Content-Length: ' . strlen($out));
+echo $out;
+while (ob_get_level() > 0) @ob_end_flush();
+flush();
+if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-json_out(200, ['ok' => true]);
+try { send_confirmation($lead['name'], $phone); } catch (Throwable $e) { error_log('whatsapp failed: ' . $e->getMessage()); }
