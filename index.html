@@ -811,7 +811,7 @@
   var F=$("rgF"),M=$("rgMsg");
   F.addEventListener("submit",function(e){
     e.preventDefault();var bad=null;
-    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}el.setAttribute("aria-invalid",!ok);if(!ok&&!bad)bad=el});
+    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}if(ok)el.removeAttribute("aria-invalid");else el.setAttribute("aria-invalid","true");if(!ok&&!bad)bad=el});
     if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":"Please fill in all fields.";bad.focus();return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
     /* one id per attempt, reused on retry, so a lead is never counted twice */
