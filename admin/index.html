@@ -6,151 +6,43 @@
 <meta name="robots" content="noindex, nofollow">
 <title>RestroGrow Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--o:#FC5301;--series:#E8541A;--bg:#FBF6F1;--card:#fff;--ln:#ECE6DF;--tx:#1A1A26;--mu:#5E5E70;--track:#F3EEE8;--field:#fff;--fln:#E4E0EA;--thead:#F8F6F3;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--series:#FF7A3D;--bg:#121214;--card:#1C1C20;--ln:#2C2C32;--tx:#ECECF1;--mu:#A4A4B4;--track:#2A2A30;--field:#1C1C20;--fln:#3A3A42;--thead:#222228;color-scheme:dark}}
-*{box-sizing:border-box}
-body{margin:0;font:400 15px/1.5 'Poppins',system-ui,sans-serif;color:var(--tx);background:var(--bg)}
-h1{font:800 1.5rem 'Montserrat',sans-serif;margin:0}
-h2{font:600 .95rem 'Poppins',sans-serif;margin:0 0 2px}
-button,input,select,textarea{font:inherit;color:inherit}
-.btn{height:44px;padding:0 18px;border:0;border-radius:10px;background:var(--o);color:#fff;font-weight:600;cursor:pointer}
-.btn.ghost{background:var(--card);color:var(--tx);border:1.5px solid var(--ln)}
-input,select{height:44px;padding:0 14px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--o)}
-/* login */
-#login{min-height:100vh;display:grid;place-items:center;padding:16px}
-#login form{width:100%;max-width:360px;background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:28px;display:grid;gap:14px}
-#login p{margin:0;color:var(--mu);font-size:.9rem}
-#err{color:#D92D20;font-size:.86rem;min-height:1.2em}
-/* app */
-#app{display:none;max-width:1280px;margin:0 auto;padding:24px 16px 48px}
-.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
-.top .r{display:flex;gap:8px;flex-wrap:wrap}
-.sub{color:var(--mu);font-size:.9rem;margin-top:2px}
-/* KPIs */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
-.kpi{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px 16px}
-.kpi .l{color:var(--mu);font-size:.8rem}
-.kpi .v{font:800 1.9rem/1.2 'Montserrat',sans-serif}
-.kpi .n{color:var(--mu);font-size:.78rem}
-/* charts */
-.charts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px;min-width:0}
-.card.wide{grid-column:1/-1}
-.card .h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
-.card .h span{color:var(--mu);font-size:.8rem}
-.rows{display:grid;gap:8px}
-.br{display:grid;grid-template-columns:minmax(80px,32%) 1fr 36px;align-items:center;gap:10px;font-size:.84rem;width:100%;border:0;background:none;padding:2px 0;text-align:left;cursor:pointer}
-.br .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.br .tr{height:12px;background:var(--track);border-radius:0 4px 4px 0}
-.br .fl{display:block;height:100%;background:var(--series);border-radius:0 4px 4px 0;min-width:2px}
-.br .ct{text-align:right;font-weight:600}
-.br.on .nm{font-weight:600;color:var(--o)}
-.nodata{color:var(--mu);font-size:.85rem;padding:20px 0;text-align:center}
-#line{position:relative;height:190px}
-#line svg{display:block;width:100%;height:100%}
-#tip{position:fixed;z-index:10;pointer-events:none;background:var(--tx);color:var(--bg);font-size:.78rem;padding:5px 9px;border-radius:7px;opacity:0;transition:opacity .08s;white-space:nowrap}
-/* toolbar */
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 100%}
-.chip{height:34px;padding:0 12px;border-radius:999px;border:1.5px solid var(--ln);background:var(--card);cursor:pointer;font-size:.82rem;font-weight:500}
-.chip b{margin-left:5px;color:var(--mu);font-weight:600}
-.chip.on{background:var(--o);border-color:var(--o);color:#fff}.chip.on b{color:#fff}
-#q{flex:1 1 220px;max-width:340px}
-/* lead cards */
-.leads{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
-.lead{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px;display:grid;gap:12px;align-content:start;border-top:4px solid var(--ln)}
-.lead[data-s=New]{border-top-color:var(--o)}
-.lead[data-s=Called]{border-top-color:#3B82F6}
-.lead[data-s=Converted]{border-top-color:#22C55E}
-.lead[data-s="Follow-up"]{border-top-color:#F59E0B}
-.lead[data-s="Not answered"],.lead[data-s="Not interested"]{border-top-color:#EF4444}
-.lead .hd{display:flex;gap:12px;align-items:center}
-.av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--o);color:#fff;display:grid;place-items:center;font:800 1.1rem 'Montserrat',sans-serif}
-.lead .nm{font-weight:600;font-size:1.02rem;line-height:1.25;overflow-wrap:anywhere}
-.lead .mt{color:var(--mu);font-size:.8rem;overflow-wrap:anywhere}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{background:var(--track);border-radius:8px;padding:3px 9px;font-size:.78rem}
-.tag em{font-style:normal;color:var(--mu);margin-right:4px}
-.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cl,.wa{display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border-radius:10px;color:#fff!important;font-weight:600;text-decoration:none;font-size:.9rem}
-.cl{background:#2563EB}
-.wa{background:#25D366}
-.cl svg,.wa svg{width:17px;height:17px;fill:currentColor}
-.ph{font-weight:500;font-size:.9rem}
-select.st{height:40px;padding:0 10px;border-radius:10px;font-weight:600;width:100%}
-select.st[data-s=Converted]{background:#DCFCE7;border-color:#86EFAC;color:#14532D}
-select.st[data-s=Called]{background:#DBEAFE;border-color:#93C5FD;color:#1E3A8A}
-select.st[data-s="Not answered"],select.st[data-s="Not interested"]{background:#FEE2E2;border-color:#FCA5A5;color:#7F1D1D}
-select.st[data-s="Follow-up"]{background:#FEF3C7;border-color:#FCD34D;color:#78350F}
-textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
-.empty{padding:40px;text-align:center;color:var(--mu)}
-@media (max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
-@media (max-width:760px){
-  #app{padding:16px 12px 40px}
-  .top .r{width:100%}.top .r .btn{flex:1;padding:0 10px}
-  #q{max-width:none}
-  .leads{grid-template-columns:1fr}
-  .br{grid-template-columns:minmax(70px,38%) 1fr 30px}
-}
-@media (max-width:420px){.kpi .v{font-size:1.5rem}.kpis{gap:8px}}
-</style>
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
 <div id="login"><form id="lf">
-  <h1>Admin login</h1><p>Enter the password to see form submissions.</p>
+  <h1>Admin login</h1><p>Enter the password to continue.</p>
   <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
   <button class="btn" type="submit">Log in</button>
   <div id="err" role="alert"></div>
 </form></div>
 
 <div id="app">
-  <div class="top">
-    <div><h1>Sales dashboard</h1><div class="sub" id="cnt"></div></div>
-    <div class="r">
-      <button class="btn ghost" id="ref" type="button">Refresh</button>
-      <button class="btn ghost" id="csv" type="button">Download CSV</button>
-      <button class="btn ghost" id="out" type="button">Log out</button>
-    </div>
-  </div>
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab on" href="index.html">Dashboard</a>
+    <a class="tab" href="leads.html">Leads</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="ref" type="button">Refresh</button>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Dashboard</h1><div class="sub" id="cnt"></div></div></div>
 
   <div class="kpis" id="kpis"></div>
 
   <div class="charts">
     <section class="card wide"><div class="h"><h2>Leads per day</h2><span>Last 30 days</span></div><div id="line"></div></section>
-    <section class="card"><div class="h"><h2>Pipeline</h2><span>Click a row to filter</span></div><div class="rows" id="cs"></div></section>
+    <section class="card"><div class="h"><h2>Pipeline</h2><span>Click a row to open those leads</span></div><div class="rows" id="cs"></div></section>
     <section class="card"><div class="h"><h2>Budget range</h2><span>Leads</span></div><div class="rows" id="cb"></div></section>
     <section class="card"><div class="h"><h2>Top cities</h2><span>Leads</span></div><div class="rows" id="cc"></div></section>
     <section class="card"><div class="h"><h2>Turnover</h2><span>Leads</span></div><div class="rows" id="ct"></div></section>
   </div>
-
-  <div class="bar">
-    <div class="chips" id="chips"></div>
-    <input id="q" type="search" placeholder="Search name, phone, brand, city, notes">
-  </div>
-  <div class="leads" id="tb"></div>
 </div>
-<div id="tip"></div>
 
+<script src="common.js"></script>
 <script>
 (function(){
-  var KEY="rgAdminPw",pw="",leads=[],filter="";
-  var STATUSES=["New","Called","Not answered","Follow-up","Converted","Not interested"];
-  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes"];
-  var $=function(i){return document.getElementById(i)};
-  var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
-  var fmt=function(t){var d=new Date(t);return isNaN(d)?"":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})};
-  var dayKey=function(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)};
-  var tip=$("tip");
-  function showTip(e,txt){tip.textContent=txt;tip.style.opacity=1;var x=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8);tip.style.left=Math.max(8,x)+"px";tip.style.top=Math.max(8,e.clientY-34)+"px"}
-  function hideTip(){tip.style.opacity=0}
-
-  function load(p){
-    return fetch("../api/leads.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})})
-      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j.leads})});
-  }
-  function show(list){leads=list;$("login").style.display="none";$("app").style.display="block";renderAll()}
+  var $=RG.$,esc=RG.esc,leads;
 
   function count(key,order){
     var m={};leads.forEach(function(l){var v=l[key]||"—";m[v]=(m[v]||0)+1});
@@ -159,46 +51,25 @@ textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radiu
     else arr.sort(function(a,b){return b[1]-a[1]});
     return arr;
   }
-  function bars(el,arr,key){
+  function bars(el,arr,go){
     var max=Math.max.apply(null,arr.map(function(a){return a[1]}).concat([1]));
     el.innerHTML=arr.length?arr.map(function(a){
-      var on=key==="status"&&filter===a[0];
-      return '<button type="button" class="br'+(on?" on":"")+'" data-k="'+esc(key)+'" data-v="'+esc(a[0])+'" data-t="'+esc(a[0]+": "+a[1]+" lead"+(a[1]===1?"":"s"))+'"><span class="nm">'+esc(a[0])+'</span><span class="tr"><span class="fl" style="width:'+(a[1]/max*100)+'%"></span></span><span class="ct">'+a[1]+'</span></button>';
+      return '<button type="button" class="br'+(go?" go":"")+'" data-v="'+esc(a[0])+'" data-t="'+esc(a[0]+": "+a[1]+" lead"+(a[1]===1?"":"s"))+'"><span class="nm">'+esc(a[0])+'</span><span class="tr"><span class="fl" style="width:'+(a[1]/max*100)+'%"></span></span><span class="ct">'+a[1]+'</span></button>';
     }).join(""):'<div class="nodata">No data yet.</div>';
-  }
-  function renderStats(){
-    var today=dayKey(new Date()),n=leads.length;
-    var td=leads.filter(function(l){return dayKey(new Date(l.time))===today}).length;
-    var conv=leads.filter(function(l){return l.status==="Converted"}).length;
-    var todo=leads.filter(function(l){return l.status==="New"||l.status==="Follow-up"}).length;
-    var rate=n?Math.round(conv/n*1000)/10:0;
-    var k=[["Total leads",n,"all time"],["New today",td,"submitted today"],["To contact",todo,"New + Follow-up"],["Converted",conv,rate+"% conversion"]];
-    $("kpis").innerHTML=k.map(function(x){return '<div class="kpi"><div class="l">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="n">'+x[2]+'</div></div>'}).join("");
-    $("cnt").textContent=n+" submission"+(n===1?"":"s");
-    bars($("cs"),count("status",STATUSES),"status");
-    bars($("cb"),count("budget"),"budget");
-    var c=count("location"),top=c.slice(0,5),rest=c.slice(5).reduce(function(s,a){return s+a[1]},0);
-    if(rest)top.push(["Other",rest]);
-    bars($("cc"),top,"location");
-    bars($("ct"),count("turnover"),"turnover");
-    $("chips").innerHTML=['<button type="button" class="chip'+(filter?"":" on")+'" data-f="">All<b>'+n+"</b></button>"].concat(STATUSES.map(function(s){
-      var m=leads.filter(function(l){return l.status===s}).length;
-      return '<button type="button" class="chip'+(filter===s?" on":"")+'" data-f="'+esc(s)+'">'+esc(s)+"<b>"+m+"</b></button>";
-    })).join("");
-    drawLine();
   }
   function drawLine(){
     var box=$("line"),W=box.clientWidth||600,H=190,pl=30,pr=8,pt=10,pb=22;
     var days=[],i,now=new Date();now.setHours(12,0,0,0);
-    for(i=29;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);days.push({k:dayKey(d),d:d,n:0})}
+    for(i=29;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);days.push({k:RG.dayKey(d),d:d,n:0})}
     var idx={};days.forEach(function(x,j){idx[x.k]=j});
-    leads.forEach(function(l){var j=idx[dayKey(new Date(l.time))];if(j!=null)days[j].n++});
+    leads.forEach(function(l){var j=idx[RG.dayKey(new Date(l.time))];if(j!=null)days[j].n++});
     var max=Math.max.apply(null,days.map(function(x){return x.n}).concat([1]));
     var step=max<=4?1:Math.ceil(max/4),top=Math.ceil(max/step)*step;
     var X=function(j){return pl+j*(W-pl-pr)/29},Y=function(v){return pt+(H-pt-pb)*(1-v/top)};
+    var lab=function(d){return d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})};
     var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Leads per day, last 30 days">';
     for(var g=0;g<=top;g+=step)s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(g)+'" y2="'+Y(g)+'" stroke="var(--ln)"/><text x="'+(pl-6)+'" y="'+(Y(g)+4)+'" text-anchor="end" font-size="10" fill="var(--mu)">'+g+'</text>';
-    [0,7,14,21,29].forEach(function(j){s+='<text x="'+X(j)+'" y="'+(H-6)+'" text-anchor="'+(j===0?"start":j===29?"end":"middle")+'" font-size="10" fill="var(--mu)">'+days[j].d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+'</text>'});
+    [0,7,14,21,29].forEach(function(j){s+='<text x="'+X(j)+'" y="'+(H-6)+'" text-anchor="'+(j===0?"start":j===29?"end":"middle")+'" font-size="10" fill="var(--mu)">'+lab(days[j].d)+'</text>'});
     var pts=days.map(function(x,j){return X(j)+","+Y(x.n)}).join(" ");
     s+='<polygon points="'+X(0)+","+Y(0)+" "+pts+" "+X(29)+","+Y(0)+'" fill="var(--series)" opacity=".12"/><polyline points="'+pts+'" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
     s+='<g id="hv" style="display:none"><line id="hl" y1="'+pt+'" y2="'+(H-pb)+'" stroke="var(--mu)" stroke-dasharray="3 3"/><circle id="hd" r="4.5" fill="var(--series)" stroke="var(--card)" stroke-width="2"/></g>';
@@ -208,71 +79,37 @@ textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radiu
     function mv(e){
       var b=r.getBoundingClientRect(),j=Math.round((e.clientX-b.left)/b.width*29);j=Math.max(0,Math.min(29,j));
       $("hv").style.display="";$("hl").setAttribute("x1",X(j));$("hl").setAttribute("x2",X(j));$("hd").setAttribute("cx",X(j));$("hd").setAttribute("cy",Y(days[j].n));
-      showTip(e,days[j].d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+": "+days[j].n+" lead"+(days[j].n===1?"":"s"));
+      RG.showTip(e,lab(days[j].d)+": "+days[j].n+" lead"+(days[j].n===1?"":"s"));
     }
     r.addEventListener("mousemove",mv);r.addEventListener("touchmove",function(e){mv(e.touches[0])},{passive:true});
-    r.addEventListener("mouseleave",function(){$("hv").style.display="none";hideTip()});
+    r.addEventListener("mouseleave",function(){$("hv").style.display="none";RG.hideTip()});
   }
-  function renderTable(){
-    var q=$("q").value.trim().toLowerCase();
-    var rows=leads.filter(function(l){
-      return (!filter||l.status===filter)&&(!q||COLS.some(function(k){return String(l[k]||"").toLowerCase().indexOf(q)>-1}));
-    });
-    $("tb").innerHTML=rows.length?rows.map(function(l){
-      var opts=STATUSES.map(function(x){return "<option"+(x===l.status?" selected":"")+">"+esc(x)+"</option>"}).join("");
-      var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
-      var ic='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
-      var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
-      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(fmt(l.time))+'</div></div></div>'
-        +'<div class="ph">'+esc(l.phone)+'</div>'
-        +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
-        +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-        +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
-        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea></article>';
-    }).join(""):'<div class="empty card" style="grid-column:1/-1">No submissions found.</div>';
-  }
-  function renderAll(){renderStats();renderTable()}
-
-  function save(tr){
-    var l=leads.filter(function(x){return String(x.id)===tr.getAttribute("data-id")})[0];if(!l)return;
-    var st=tr.querySelector("select").value,nt=tr.querySelector("textarea").value;
-    if(st===l.status&&nt===l.notes)return;
-    fetch("../api/lead_update.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw,id:l.id,status:st,notes:nt})})
-      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
-      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;tr.querySelector("select").setAttribute("data-s",st);tr.setAttribute("data-s",st);renderStats();if(ch&&filter)renderTable()})
-      .catch(function(x){alert("Not saved: "+x.message)});
+  function render(){
+    leads=RG.leads;
+    var today=RG.dayKey(new Date()),n=leads.length;
+    var td=leads.filter(function(l){return RG.dayKey(new Date(l.time))===today}).length;
+    var conv=leads.filter(function(l){return l.status==="Converted"}).length;
+    var todo=leads.filter(function(l){return l.status==="New"||l.status==="Follow-up"}).length;
+    var rate=n?Math.round(conv/n*1000)/10:0;
+    var k=[["Total leads",n,"all time"],["New today",td,"submitted today"],["To contact",todo,"New + Follow-up"],["Converted",conv,rate+"% conversion"]];
+    $("kpis").innerHTML=k.map(function(x){return '<div class="kpi"><div class="l">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="n">'+x[2]+'</div></div>'}).join("");
+    $("cnt").textContent=n+" submission"+(n===1?"":"s");
+    bars($("cs"),count("status",RG.STATUSES),true);
+    bars($("cb"),count("budget"));
+    var c=count("location"),top=c.slice(0,5),rest=c.slice(5).reduce(function(s,a){return s+a[1]},0);
+    if(rest)top.push(["Other",rest]);
+    bars($("cc"),top);
+    bars($("ct"),count("turnover"));
+    drawLine();
   }
 
-  $("lf").addEventListener("submit",function(e){
-    e.preventDefault();$("err").textContent="";var p=$("pw").value;
-    load(p).then(function(l){pw=p;try{sessionStorage.setItem(KEY,p)}catch(x){}show(l)}).catch(function(x){$("err").textContent=x.message});
-  });
-  $("q").addEventListener("input",renderTable);
-  $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=b.getAttribute("data-f");renderAll()});
-  $("cs").addEventListener("click",function(e){var b=e.target.closest(".br");if(!b)return;var v=b.getAttribute("data-v");filter=filter===v?"":v;renderAll()});
+  $("cs").addEventListener("click",function(e){var b=e.target.closest(".br");if(b)location.href="leads.html?status="+encodeURIComponent(b.getAttribute("data-v"))});
   ["cs","cb","cc","ct"].forEach(function(id){
-    $(id).addEventListener("mousemove",function(e){var b=e.target.closest(".br");b?showTip(e,b.getAttribute("data-t")):hideTip()});
-    $(id).addEventListener("mouseleave",hideTip);
-  });
-  $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest(".lead"))});
-  $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest(".lead"))});
-  // Tapping Call marks the lead as Called (unless already Converted / Not interested / Called).
-  $("tb").addEventListener("click",function(e){
-    var a=e.target.closest(".cl");if(!a)return;
-    var card=a.closest(".lead"),sel=card.querySelector("select");
-    if(["New","Not answered","Follow-up"].indexOf(sel.value)>-1){sel.value="Called";save(card)}
-  });
-  $("ref").addEventListener("click",function(){load(pw).then(show).catch(function(x){alert(x.message)})});
-  $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
-  $("csv").addEventListener("click",function(){
-    var q=function(v){return '"'+String(v==null?"":v).replace(/"/g,'""')+'"'};
-    var csv=[COLS.join(",")].concat(leads.map(function(l){return COLS.map(function(k){return q(l[k])}).join(",")})).join("\n");
-    var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="restrogrow-leads.csv";a.click();
+    $(id).addEventListener("mousemove",function(e){var b=e.target.closest(".br");b?RG.showTip(e,b.getAttribute("data-t")):RG.hideTip()});
+    $(id).addEventListener("mouseleave",RG.hideTip);
   });
   var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){if($("app").style.display==="block")drawLine()},120)});
-
-  var saved="";try{saved=sessionStorage.getItem(KEY)||""}catch(x){}
-  if(saved)load(saved).then(function(l){pw=saved;show(l)}).catch(function(){try{sessionStorage.removeItem(KEY)}catch(x){}});
+  RG.start(render);
 })();
 </script>
 </body>
