@@ -63,6 +63,7 @@ p{margin:0 0 14px;color:var(--mu)}
   function tags(c,j){
     if(c.meta_pixel_id){
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("set","autoConfig",false,c.meta_pixel_id);   /* no automatic button-click events */
       fbq("init",c.meta_pixel_id,(j&&j.ph_sha256)?{ph:j.ph_sha256}:{});   /* advanced matching, hashed phone */
       fbq("track","PageView");
       if(j)fbq("track","Lead",{},{eventID:j.event_id});

@@ -789,6 +789,7 @@
   fetch(API_BASE+"api/public_config.php").then(function(r){return r.json()}).then(function(c){
     if(c.meta_pixel_id){
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("set","autoConfig",false,c.meta_pixel_id);   /* no automatic button-click events */
       fbq("init",c.meta_pixel_id);fbq("track","PageView");
     }
     var gid=c.ga4_id||c.google_ads_id;
@@ -802,7 +803,8 @@
     tg.ready=true;tg.q.splice(0).forEach(function(a){tg.done[a[0]]=0;ev(a[0],a[1])});
   }).catch(function(){});
   R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(){ev("DemoOpen","demo_open")})});
-  $("rgF").addEventListener("focusin",function(){ev("FormStart","form_start")});
+  /* FormStart: first real typing/choice (not the popup auto-focusing the first field) */
+  ["input","change"].forEach(function(t){$("rgF").addEventListener(t,function(){ev("FormStart","form_start")})});
   ["rgO","rgA","rgC"].forEach(function(id){$(id).addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
 
   /* form */
