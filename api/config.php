@@ -84,6 +84,13 @@ function db() {
         author VARCHAR(60) NOT NULL DEFAULT '',
         body TEXT NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // Editable legal pages (privacy / terms / refund), managed from Admin -> Pages.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS pages (
+        slug VARCHAR(40) NOT NULL PRIMARY KEY,
+        title VARCHAR(160) NOT NULL,
+        body MEDIUMTEXT NOT NULL,
+        updated_at DATETIME NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'gclid'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");

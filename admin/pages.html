@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pages - RestroGrow Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<style>
+.ed{display:grid;gap:12px}
+.ed label{font-size:.82rem;color:var(--mu);font-weight:600}
+.ed input[type=text]{width:100%}
+.ed textarea{width:100%;min-height:55vh;padding:12px 14px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none;font:400 .92rem/1.6 'Poppins',system-ui,sans-serif}
+.ed textarea:focus{border-color:var(--o)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{color:var(--mu);font-size:.82rem}
+#st{font-size:.85rem;color:var(--mu)}
+</style>
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Admin login</h1><p>Enter the password to continue.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab" href="index.html">Dashboard</a>
+    <a class="tab" href="leads.html">Leads</a>
+    <a class="tab on" href="pages.html">Pages</a>
+    <a class="tab" href="../text/">Notes</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Pages</h1><div class="sub">Edit the Privacy Policy, Terms &amp; Services and Refund policy. Changes go live as soon as you save.</div></div></div>
+
+  <div class="bar"><div class="chips" id="chips"></div></div>
+
+  <section class="card ed">
+    <div><label for="title">Page title</label><input id="title" type="text" maxlength="160"></div>
+    <div><label for="body">Text</label><textarea id="body" spellcheck="true"></textarea></div>
+    <div class="hint">Formatting: start a line with <b>## </b> for a heading, <b>- </b> for a bullet point, and leave a blank line between paragraphs. This is a general template, so have a lawyer review it for your business.</div>
+    <div class="row">
+      <button class="btn" id="save" type="button">Save page</button>
+      <a class="btn ghost" id="view" href="#" target="_blank" rel="noopener">View page</a>
+      <span id="st"></span>
+    </div>
+  </section>
+</div>
+
+<script src="common.js"></script>
+<script>
+(function(){
+  var $=RG.$,esc=RG.esc,pages=[],cur="",started=false;
+
+  function call(data){
+    data.password=RG.pw;
+    return fetch("../api/pages_admin.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})});
+  }
+  function chips(){
+    $("chips").innerHTML=pages.map(function(p){return '<button type="button" class="chip'+(p.slug===cur?" on":"")+'" data-s="'+esc(p.slug)+'">'+esc(p.title)+"</button>"}).join("");
+  }
+  function open(slug){
+    var p=pages.filter(function(x){return x.slug===slug})[0];if(!p)return;
+    cur=slug;$("title").value=p.title;$("body").value=p.body;$("view").href="../"+slug;
+    $("st").textContent=p.updated?"Last saved "+RG.fmt(p.updated):"Not edited yet (showing the starting text)";
+    chips();
+  }
+  function load(){
+    return call({action:"list"}).then(function(j){pages=j.pages;open(cur||pages[0].slug)}).catch(function(x){$("st").textContent=x.message});
+  }
+  function render(){if(started)return;started=true;load()}
+
+  $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-s]");if(b)open(b.getAttribute("data-s"))});
+  $("save").addEventListener("click",function(){
+    $("save").disabled=true;$("st").textContent="Saving...";
+    call({action:"save",slug:cur,title:$("title").value,body:$("body").value})
+      .then(function(j){pages=j.pages;open(cur);$("st").textContent="Saved"})
+      .catch(function(x){$("st").textContent=x.message})
+      .then(function(){$("save").disabled=false});
+  });
+  RG.start(render);
+})();
+</script>
+</body>
+</html>

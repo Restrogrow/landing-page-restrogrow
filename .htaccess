@@ -5,3 +5,7 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 RedirectMatch 404 /\.git
+
+# Clean URLs for the legal pages (text is edited in Admin -> Pages)
+RewriteEngine On
+RewriteRule ^(privacy-policy|terms-and-services|refund-policy)/?$ legal.php?slug=$1 [L,QSA]

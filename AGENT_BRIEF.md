@@ -20,6 +20,8 @@ Repo: https://github.com/Restrogrow/landing-page-restrogrow (branch `main`, depl
 | `admin/index.html` | Admin **dashboard** (KPIs, charts). |
 | `admin/leads.html` | Admin **leads** page (cards, status chips, search, CSV, Call/WhatsApp buttons). |
 | `admin/admin.css`, `admin/common.js` | Shared admin styling, login and data loading. |
+| `legal.php`, `api/legal_lib.php`, `api/legal_defaults.php`, `api/pages_admin.php`, `admin/pages.html` | Legal pages (`/privacy-policy`, `/terms-and-services`, `/refund-policy`, rewritten to `legal.php` in `.htaccess`). Text is stored in the `pages` table and edited in Admin -> Pages; the defaults file is used until a page is saved or if the DB is down. |
+| `text/index.html`, `api/notes.php` | Shared notes board for agents (no password; keep the link private; never post secrets there). |
 | `.env` | Secrets. **Gitignored. Never commit it or paste its values into chat/commits.** |
 | `.env.example` | List of every env var, no values. |
 | `.htaccess` | Blocks dotfiles (`.env`, `.git`), disables directory listing. |

@@ -348,6 +348,12 @@
 .rg .lb.on{display:grid}
 .rg .lb img{max-width:min(960px,100%);max-height:90vh;border-radius:14px;background:#fff}
 .rg .lb button{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:1.4rem;cursor:pointer}
+/* footer */
+.rg .lf{background:var(--ink);color:var(--dmu);font-size:.88rem;padding:26px 0 90px}
+.rg .lf .w{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between;align-items:center}
+.rg .lf nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.rg .lf a{color:#CFCFDB;text-decoration:none}
+.rg .lf a:hover{color:var(--o)}
 /* demo form popup */
 .rg .md{position:fixed;inset:0;z-index:10001;display:none;overflow-y:auto;background:rgba(0,0,12,.78);padding:24px 16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .rg .md.on{display:flex}
@@ -655,6 +661,11 @@
   </div>
 </div></section>
 
+<footer class="lf"><div class="w">
+  <span>&copy; <b id="rgYr">2026</b> Restro Grow. All rights reserved.</span>
+  <nav aria-label="Legal"><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-services">Terms &amp; Services</a><a href="/refund-policy">Refund &amp; Cancellation</a></nav>
+</div></footer>
+
 <div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Book My Demo</a></div>
 <div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
 <div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
@@ -846,6 +857,8 @@
   md.addEventListener("click",function(e){if(e.target===md)closeMd()});
   md.querySelector(".md-x").addEventListener("click",closeMd);
   R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();openMd(a)})});
+
+  var yr=$("rgYr");if(yr)yr.textContent=new Date().getFullYear();
 
   /* smooth scroll */
   R.querySelectorAll('a[href^="#rg-"]:not([href="#rg-demo"])').forEach(function(a){a.addEventListener("click",function(e){var x=R.querySelector(a.getAttribute("href"));if(!x)return;e.preventDefault();scrollTo({top:x.getBoundingClientRect().top+pageYOffset-10,behavior:RM?"auto":"smooth"})})});
