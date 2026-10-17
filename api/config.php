@@ -24,7 +24,7 @@ function env($k, $default = '') {
 // META_CAPI_TOKEN and META_TEST_EVENT_CODE have no default and must come from .env.
 function tag_id($k) {
     static $defaults = [
-        'META_PIXEL_ID' => '1130992032712314',
+        'META_PIXEL_ID' => '1589496065992075',
         'GOOGLE_ADS_ID' => 'AW-18495072087',
         'GOOGLE_ADS_LEAD_LABEL' => 'qdGWCPL-7Z8dENfOkfNE',
         'GA4_ID' => 'G-H6FKYMRB8X',
