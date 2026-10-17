@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Shared notes - RestroGrow</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../admin/admin.css">
+<style>
+#app{max-width:860px}
+.pin{border-left:4px solid var(--o);margin-bottom:16px}
+.pin textarea,.compose textarea{width:100%;min-height:110px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none;line-height:1.5}
+.pin .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.pin .row,.compose .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.msgs{display:grid;gap:10px;margin-bottom:16px}
+.m{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
+.m .who{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.8rem;color:var(--mu);margin-bottom:4px}
+.m .who b{color:var(--tx);font-size:.88rem}
+.m .bd{white-space:pre-wrap;overflow-wrap:anywhere}
+.m .x{border:0;background:none;color:var(--mu);cursor:pointer;font-size:.8rem}
+.m .x:hover{color:#D92D20}
+.compose{position:sticky;bottom:0;background:var(--bg);padding:10px 0 4px}
+.compose input{flex:1 1 160px;max-width:240px}
+.hint{color:var(--mu);font-size:.8rem}
+</style>
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Shared notes</h1><p>Enter the admin password to continue.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab" href="../admin/index.html">Dashboard</a>
+    <a class="tab" href="../admin/leads.html">Leads</a>
+    <a class="tab on" href="./">Notes</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Shared notes</h1><div class="sub">One place for you and every agent to leave instructions and messages. Updates every few seconds.</div></div></div>
+
+  <section class="card pin">
+    <div class="h"><h2>Instructions (pinned)</h2><span id="pinMeta"></span></div>
+    <div class="txt" id="pinView"></div>
+    <div id="pinEdit" hidden>
+      <textarea id="pinTa" maxlength="10000" placeholder="Write the instructions every agent should follow"></textarea>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="pinBtn" type="button">Edit instructions</button>
+      <button class="btn" id="pinSave" type="button" hidden>Save instructions</button>
+      <button class="btn ghost" id="pinCancel" type="button" hidden>Cancel</button>
+    </div>
+  </section>
+
+  <div class="msgs" id="msgs"></div>
+
+  <div class="compose card">
+    <textarea id="body" maxlength="5000" placeholder="Write a message for the other agent..."></textarea>
+    <div class="row">
+      <input id="who" type="text" maxlength="60" placeholder="Your name (e.g. Agent 1)" aria-label="Your name">
+      <button class="btn" id="send" type="button">Save message</button>
+      <span class="hint" id="st"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY="rgAdminPw",pw="",editing=false,last="",busy=false;
+  var $=function(i){return document.getElementById(i)};
+  var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+  var fmt=function(t){var d=new Date(t);return isNaN(d)?"":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})};
+
+  function call(data){
+    data.password=pw;
+    return fetch("../api/notes.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})});
+  }
+  function render(d){
+    var sig=JSON.stringify(d);if(sig===last)return;last=sig;
+    var p=d.pin;
+    $("pinView").textContent=p?p.body:"No instructions yet.";
+    $("pinMeta").textContent=p?(p.author?p.author+" · ":"")+fmt(p.time):"";
+    if(!editing)$("pinTa").value=p?p.body:"";
+    var box=$("msgs"),atEnd=innerHeight+scrollY>=document.body.scrollHeight-80;
+    box.innerHTML=d.messages.length?d.messages.map(function(m){
+      return '<article class="m"><div class="who"><span><b>'+esc(m.author||"Anonymous")+'</b> · '+esc(fmt(m.time))+'</span><button class="x" type="button" data-id="'+m.id+'">Delete</button></div><div class="bd">'+esc(m.body)+'</div></article>';
+    }).join(""):'<div class="empty">No messages yet. Write the first one below.</div>';
+    if(atEnd)scrollTo(0,document.body.scrollHeight);
+  }
+  function show(d){$("login").style.display="none";$("app").style.display="block";render(d)}
+  function poll(){if(busy||document.hidden)return;call({action:"list"}).then(render).catch(function(){})}
+
+  $("lf").addEventListener("submit",function(e){
+    e.preventDefault();$("err").textContent="";var p=$("pw").value;pw=p;
+    call({action:"list"}).then(function(d){try{sessionStorage.setItem(KEY,p)}catch(x){}show(d);setInterval(poll,8000)}).catch(function(x){$("err").textContent=x.message});
+  });
+  $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
+
+  try{$("who").value=localStorage.getItem("rgNoteName")||""}catch(x){}
+  $("send").addEventListener("click",function(){
+    var body=$("body").value.trim(),who=$("who").value.trim();if(!body)return;
+    try{localStorage.setItem("rgNoteName",who)}catch(x){}
+    busy=true;$("send").disabled=true;$("st").textContent="Saving...";
+    call({action:"add",body:body,author:who}).then(function(d){$("body").value="";$("st").textContent="Saved";render(d);scrollTo(0,document.body.scrollHeight)})
+      .catch(function(x){$("st").textContent=x.message}).then(function(){busy=false;$("send").disabled=false});
+  });
+  $("body").addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter")$("send").click()});
+  $("msgs").addEventListener("click",function(e){
+    var b=e.target.closest(".x");if(!b||!confirm("Delete this message?"))return;
+    call({action:"delete",id:+b.getAttribute("data-id")}).then(render).catch(function(x){alert(x.message)});
+  });
+
+  function edit(on){editing=on;$("pinEdit").hidden=!on;$("pinView").hidden=on;$("pinBtn").hidden=on;$("pinSave").hidden=!on;$("pinCancel").hidden=!on;if(on)$("pinTa").focus()}
+  $("pinBtn").addEventListener("click",function(){edit(true)});
+  $("pinCancel").addEventListener("click",function(){last="";edit(false);poll()});
+  $("pinSave").addEventListener("click",function(){
+    busy=true;
+    call({action:"pin",body:$("pinTa").value,author:$("who").value.trim()}).then(function(d){edit(false);last="";render(d)})
+      .catch(function(x){alert(x.message)}).then(function(){busy=false});
+  });
+
+  var saved="";try{saved=sessionStorage.getItem(KEY)||""}catch(x){}
+  if(saved){pw=saved;call({action:"list"}).then(function(d){show(d);setInterval(poll,8000)}).catch(function(){try{sessionStorage.removeItem(KEY)}catch(x){}})}
+})();
+</script>
+</body>
+</html>
