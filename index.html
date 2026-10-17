@@ -655,15 +655,10 @@
   </div>
 </div></section>
 
-<!-- ================= 11. FINAL CTA ================= -->
-<section class="sec fin dark" id="rg-demo"><div class="w">
-  <div class="copy">
-    <span class="kick rv">Book your demo</span>
-    <h2 class="h2 rv">Every Month on Apps Alone Costs You Lakhs. <span class="o">Let's Fix That.</span></h2>
-    <p class="rv">In a 30 minute demo, we'll show you exactly how much you can keep and how we'll move your regulars to direct orders.</p>
-    <ul class="tk rv"><li><i>✓</i>Your real monthly cost of delivery apps</li><li><i>✓</i>Your ordering system, with your menu</li><li><i>✓</i>Your 90 day plan, backed by our 3X guarantee</li></ul>
-  </div>
-  <form class="form rv" id="rgF" novalidate>
+<div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Book My Demo</a></div>
+<div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
+<div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
+<form class="form rv" id="rgF" novalidate>
     <div class="fb">
       <h3>Book My Demo</h3><p>Our team will call you to fix a time that suits you.</p>
       <div class="fg">
@@ -683,11 +678,7 @@
     </div>
     <div class="done"><b>Thank you for filling the form.</b><p>Our team will get in touch with you shortly.</p></div>
   </form>
-</div></section>
-
-<div class="sticky" id="rgSt"><p><b id="rgStL">₹9 L / month</b>going to app commission</p><a class="btn btn-p" href="#rg-demo">Book My Demo</a></div>
-<div class="lb" id="rgLb" role="dialog" aria-modal="true" aria-label="Client dashboard"><button type="button" aria-label="Close">×</button><img alt="RestroGrow client dashboard"></div>
-<div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button></div></div>
+</div></div>
 </div>
 
 <script>
@@ -822,7 +813,7 @@
   /* mobile sticky CTA */
   if(IO){var hO=false,dI=false,st=$("rgSt"),u=function(){st.classList.toggle("on",hO&&!dI)};
     new IntersectionObserver(function(e){hO=!e[0].isIntersecting;u()}).observe($("rg-hero"));
-    new IntersectionObserver(function(e){dI=e[0].isIntersecting;u()},{threshold:.1}).observe($("rg-demo"))}
+    u()}
 })();
 </script>
 </body>
