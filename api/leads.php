@@ -15,6 +15,7 @@ try {
 
 json_out(200, ['leads' => array_map(function ($r) {
     return [
+        'id' => (int)$r['id'], 'status' => $r['status'], 'notes' => (string)$r['notes'],
         'time' => str_replace(' ', 'T', $r['created_at']) . 'Z',
         'name' => $r['name'], 'phone' => $r['phone'], 'brand' => $r['brand'], 'location' => $r['location'],
         'outlets' => $r['outlets'], 'orders' => $r['orders_day'], 'turnover' => $r['turnover'], 'budget' => $r['budget'],

@@ -55,5 +55,9 @@ function db() {
         budget VARCHAR(50) NOT NULL,
         page VARCHAR(300) NOT NULL DEFAULT ''
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // Admin follow-up columns (added after launch, so migrate older tables).
+    if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'status'")->fetch()) {
+        $pdo->exec("ALTER TABLE leads ADD COLUMN status VARCHAR(30) NOT NULL DEFAULT 'New', ADD COLUMN notes TEXT NULL");
+    }
     return $pdo;
 }
