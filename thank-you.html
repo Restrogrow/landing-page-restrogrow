@@ -30,7 +30,7 @@ p{margin:0 0 14px;color:var(--mu)}
 </style>
 </head>
 <body>
-<main class="card">
+<main class="card" id="ty" hidden>
   <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
   <h1>Thank You! 🎉</h1>
   <h2>Your Restaurant Growth Journey Starts Here!</h2>
@@ -38,7 +38,7 @@ p{margin:0 0 14px;color:var(--mu)}
 
   <p class="q">Want to connect with us right away?</p>
   <p class="num">📱 WhatsApp: <b>+91 78498 38428</b></p>
-  <a class="wa" href="https://wa.me/917849838428?text=Hi%20RestroGrow%2C%20I%20just%20booked%20a%20demo." target="_blank" rel="noopener">
+  <a class="wa" id="wa" href="https://wa.me/917849838428?text=Hi%20RestroGrow%2C%20I%20just%20booked%20a%20demo." target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.3z"/></svg>
     Chat With Us on WhatsApp
   </a>
@@ -52,18 +52,56 @@ p{margin:0 0 14px;color:var(--mu)}
 /* Count the Lead once: the server hands out the OK for each event_id only the first time,
    so a refresh or a shared link never fires it again. The same id is sent to Meta from the server. */
 (function(){
-  var eid="";
+  var eid="",KEY="rgThanks",seen=false;
   try{eid=new URLSearchParams(location.search).get("eid")||""}catch(x){}
   try{history.replaceState(null,"",location.pathname)}catch(x){}
-  if(!/^[A-Za-z0-9-]{8,64}$/.test(eid))return;
+  try{seen=sessionStorage.getItem(KEY)==="1"}catch(x){}
+  var show=function(){document.getElementById("ty").hidden=false};
+  var home=function(){location.replace("index.html")};
+  /* Only a real submit gets here: no valid id and no earlier visit in this tab means go back to the home page. */
+  /* c = public tag IDs. j = the confirm reply, passed only on the one visit that counts the lead (fire:true). */
+  function tags(c,j){
+    if(c.meta_pixel_id){
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init",c.meta_pixel_id,(j&&j.ph_sha256)?{ph:j.ph_sha256}:{});   /* advanced matching, hashed phone */
+      fbq("track","PageView");
+      if(j)fbq("track","Lead",{},{eventID:j.event_id});
+    }
+    var gid=c.ga4_id||c.google_ads_id;
+    if(gid){
+      window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};
+      var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(gid);document.head.appendChild(s);
+      gtag("js",new Date());
+      if(c.ga4_id)gtag("config",c.ga4_id);
+      if(c.google_ads_id)gtag("config",c.google_ads_id);
+      if(j){
+        if(c.google_ads_id&&j.google_ads_lead_label){
+          if(j.ph_e164_sha256)gtag("set","user_data",{sha256_phone_number:j.ph_e164_sha256});   /* enhanced conversions */
+          gtag("event","conversion",{send_to:c.google_ads_id+"/"+j.google_ads_lead_label,transaction_id:j.event_id});   /* transaction_id = Google's dedupe */
+        }
+        if(c.ga4_id)gtag("event","generate_lead",{event_id:j.event_id});
+      }
+    }
+  }
+  /* Refresh / shared link: the page still shows, tags load for PageView only, no conversions. */
+  function again(){
+    if(!seen){home();return}
+    show();
+    fetch("api/public_config.php").then(function(r){return r.json()}).then(function(c){tags(c,null)}).catch(function(){});
+  }
+  document.getElementById("wa").addEventListener("click",function(){
+    if(window.fbq)fbq("track","Contact");
+    if(window.gtag)gtag("event","whatsapp_click");
+  });
+  if(!/^[A-Za-z0-9-]{8,64}$/.test(eid)){again();return}
   fetch("api/lead_confirm.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({eid:eid})})
     .then(function(r){return r.json()})
     .then(function(j){
-      if(!j||!j.fire||!j.pixel_id)return;
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
-      fbq("init",j.pixel_id);
-      fbq("track","Lead",{},{eventID:j.event_id});
-    }).catch(function(){});
+      if(!j||!j.valid){again();return}
+      try{sessionStorage.setItem(KEY,"1")}catch(x){}
+      show();
+      tags(j,j.fire?j:null);
+    }).catch(function(){show()});
 })();
 </script>
 </body>

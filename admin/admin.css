@@ -70,6 +70,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--o)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tag{background:var(--track);border-radius:8px;padding:3px 9px;font-size:.78rem}
 .tag em{font-style:normal;color:var(--mu);margin-right:4px}
+.tag.src{font-weight:600;color:#fff;padding:1px 8px;font-size:.72rem}
+.tag.src.google{background:#4285F4}
+.tag.src.meta{background:#0866FF}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cl,.wa{display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border-radius:10px;color:#fff!important;font-weight:600;text-decoration:none;font-size:.9rem}
 .cl{background:#2563EB}

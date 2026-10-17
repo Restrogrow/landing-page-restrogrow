@@ -660,6 +660,7 @@
 <div class="md" id="rgMd" role="dialog" aria-modal="true" aria-label="Book my demo"><div class="md-b" id="rgMdB"><button type="button" class="md-x" aria-label="Close">×</button>
 <form class="form rv" id="rgF" novalidate>
     <div class="fb">
+      <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><input name="hp" type="text" tabindex="-1" autocomplete="off"></div>
       <h3>Book My Demo</h3><p>Our team will call you to fix a time that suits you.</p>
       <div class="fg">
         <div class="fi"><label for="fN">Your name</label><input id="fN" name="name" type="text" autocomplete="name" required></div>
@@ -773,16 +774,50 @@
   for(var y=0;y<21;y++)for(var x=0;x<21;x++)if(!((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12))&&rn()>.52)s+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
   q.innerHTML='<g fill="#00000C">'+s+fi(0,0)+fi(14,0)+fi(0,14)+'</g><rect x="9" y="9" width="3" height="3" fill="#FC5301"/>';
 
+  /* ad tracking: IDs come from api/public_config.php, so a tag stays off while its ID is empty.
+     No Lead / conversion here: that fires once, on the thank-you page. */
+  var AK=["gclid","fbclid","utm_source","utm_medium","utm_campaign","utm_content","utm_term"],AT={};
+  try{var sp=new URLSearchParams(location.search),old={};try{old=JSON.parse(sessionStorage.getItem("rgAttr")||"{}")}catch(x){}
+    AK.forEach(function(k){var v=sp.get(k);if(v)old[k]=v.slice(0,300)});AT=old;try{sessionStorage.setItem("rgAttr",JSON.stringify(old))}catch(x){}}catch(x){}
+  var ck=function(n){var m=document.cookie.match(new RegExp("(?:^|; )"+n+"=([^;]*)"));return m?decodeURIComponent(m[1]):""};
+  var tg={ready:false,q:[],done:{}};
+  function ev(mn,gn){ /* once per page view: Meta custom event + GA4 event */
+    if(tg.done[mn])return;tg.done[mn]=1;
+    if(!tg.ready){tg.q.push([mn,gn]);return}
+    if(window.fbq)fbq("trackCustom",mn);if(window.gtag)gtag("event",gn);
+  }
+  fetch(API_BASE+"api/public_config.php").then(function(r){return r.json()}).then(function(c){
+    if(c.meta_pixel_id){
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init",c.meta_pixel_id);fbq("track","PageView");
+    }
+    var gid=c.ga4_id||c.google_ads_id;
+    if(gid){
+      window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};
+      var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(gid);document.head.appendChild(s);
+      gtag("js",new Date());
+      if(c.ga4_id)gtag("config",c.ga4_id);          /* GA4 page_view */
+      if(c.google_ads_id)gtag("config",c.google_ads_id);
+    }
+    tg.ready=true;tg.q.splice(0).forEach(function(a){tg.done[a[0]]=0;ev(a[0],a[1])});
+  }).catch(function(){});
+  R.querySelectorAll('a[href="#rg-demo"]').forEach(function(a){a.addEventListener("click",function(){ev("DemoOpen","demo_open")})});
+  $("rgF").addEventListener("focusin",function(){ev("FormStart","form_start")});
+  ["rgO","rgA","rgC"].forEach(function(id){$(id).addEventListener("input",function(){ev("CalculatorUsed","calculator_used")})});
+
   /* form */
   var F=$("rgF"),M=$("rgMsg");
   F.addEventListener("submit",function(e){
     e.preventDefault();var bad=null;
-    F.querySelectorAll("input,select").forEach(function(el){var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}el.setAttribute("aria-invalid",!ok);if(!ok&&!bad)bad=el});
+    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}el.setAttribute("aria-invalid",!ok);if(!ok&&!bad)bad=el});
     if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":"Please fill in all fields.";bad.focus();return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
     /* one id per attempt, reused on retry, so a lead is never counted twice */
     if(!F._eid)F._eid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+"-"+Math.random().toString(16).slice(2);
     D.event_id=F._eid;
+    /* ad attribution: Meta cookies, click ids and UTMs kept from the landing URL */
+    D.fbp=ck("_fbp");D.fbc=ck("_fbc")||(AT.fbclid?"fb.1."+Date.now()+"."+AT.fbclid:"");
+    AK.forEach(function(k){if(AT[k])D[k]=AT[k]});
     var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent="Sending...";
     fetch(API_BASE+"api/submit.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
       .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");F.classList.add("ok");location.href=API_BASE+"thank-you.html?eid="+encodeURIComponent(j.event_id||F._eid)})})

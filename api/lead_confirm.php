@@ -1,18 +1,36 @@
 <?php
 require __DIR__ . '/config.php';
 
-// Called once by the thank-you page. Returns fire=true only the FIRST time a given event_id is claimed,
-// so refreshing or sharing the thank-you link never counts the lead again.
+// Called by the thank-you page.
+//  valid: this event_id belongs to a real saved lead (so the page may be shown).
+//  fire : true only the FIRST time the id is claimed (within 24h), so a refresh or a shared link never counts twice.
+// Public tag IDs are returned for any valid visit (PageView). The conversion label and the hashed phone are
+// returned only when fire is true, and the raw phone is never returned.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_out(405, ['error' => 'Method not allowed']);
 $eid = (string)(body()['eid'] ?? '');
-if (!preg_match('/^[A-Za-z0-9-]{8,64}$/', $eid)) json_out(200, ['fire' => false]);
+if (!preg_match('/^[A-Za-z0-9-]{8,64}$/', $eid)) json_out(200, ['valid' => false, 'fire' => false]);
 
 try {
-    $st = db()->prepare('UPDATE leads SET pixel_fired_at = ? WHERE event_id = ? AND pixel_fired_at IS NULL AND created_at >= ?');
+    $pdo = db();
+    $st = $pdo->prepare('UPDATE leads SET pixel_fired_at = ? WHERE event_id = ? AND pixel_fired_at IS NULL AND created_at >= ?');
     $st->execute([gmdate('Y-m-d H:i:s'), $eid, gmdate('Y-m-d H:i:s', time() - 86400)]);
     $fire = $st->rowCount() === 1;
+    $ex = $pdo->prepare('SELECT phone FROM leads WHERE event_id = ? LIMIT 1');
+    $ex->execute([$eid]);
+    $row = $ex->fetch();
 } catch (Throwable $e) {
     error_log('lead confirm failed: ' . $e->getMessage());
-    json_out(200, ['fire' => false]);
+    json_out(200, ['valid' => false, 'fire' => false]);
 }
-json_out(200, ['fire' => $fire && env('META_PIXEL_ID') !== '', 'pixel_id' => env('META_PIXEL_ID'), 'event_id' => $eid]);
+if (!$row) json_out(200, ['valid' => false, 'fire' => false]);
+
+$out = [
+    'valid' => true, 'fire' => $fire, 'event_id' => $eid,
+    'meta_pixel_id' => env('META_PIXEL_ID'), 'google_ads_id' => env('GOOGLE_ADS_ID'), 'ga4_id' => env('GA4_ID'),
+];
+if ($fire) {
+    $out['google_ads_lead_label'] = env('GOOGLE_ADS_LEAD_LABEL');
+    $out['ph_sha256'] = hash('sha256', '91' . $row['phone']);            // Meta format: 91XXXXXXXXXX
+    $out['ph_e164_sha256'] = hash('sha256', '+91' . $row['phone']);      // Google enhanced conversions format: +91XXXXXXXXXX
+}
+json_out(200, $out);

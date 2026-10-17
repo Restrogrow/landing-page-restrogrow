@@ -21,22 +21,46 @@ if (!preg_match('/^[6-9]\d{9}$/', $phone)) json_out(400, ['error' => 'Enter a va
 $eid = (string)($b['event_id'] ?? '');
 if (!preg_match('/^[A-Za-z0-9-]{8,64}$/', $eid)) $eid = bin2hex(random_bytes(16));
 
-// Same number submitted again within 24h (refresh, back button, second try): keep the first lead, don't save,
-// message or report a duplicate. The visitor still lands on the thank-you page.
+// Ad attribution sent by the page (cookies + click ids + UTMs). Trimmed and length-limited; empty becomes NULL.
+$attr = [];
+foreach (['fbp' => 200, 'fbc' => 300, 'gclid' => 300, 'fbclid' => 300, 'utm_source' => 200, 'utm_medium' => 200,
+          'utm_campaign' => 200, 'utm_content' => 200, 'utm_term' => 200] as $k => $max) {
+    $v = mb_substr(trim((string)($b[$k] ?? '')), 0, $max);
+    $attr[$k] = $v === '' ? null : $v;
+}
+if ($attr['fbp'] === null && !empty($_COOKIE['_fbp'])) $attr['fbp'] = mb_substr((string)$_COOKIE['_fbp'], 0, 200);
+if ($attr['fbc'] === null && !empty($_COOKIE['_fbc'])) $attr['fbc'] = mb_substr((string)$_COOKIE['_fbc'], 0, 300);
+
+// Bots fill the hidden "hp" field; pretend it worked but save and report nothing.
+if (trim((string)($b['hp'] ?? '')) !== '') json_out(200, ['ok' => true, 'event_id' => $eid]);
+
+// Obvious fake numbers (9999999999, 1234567890, 6789898989 ...) are not real customers.
+$seq = '01234567890123456789';
+if (count(array_unique(str_split($phone))) <= 2 || strpos($seq, $phone) !== false || strpos(strrev($seq), $phone) !== false)
+    json_out(400, ['error' => 'Enter a valid 10 digit mobile number.']);
+
+// A number is accepted once, ever. A retry of the same submit (same event_id) is fine; a different attempt is refused,
+// so no repeat lead, WhatsApp message or ad conversion is paid for.
 try {
-    $dup = db()->prepare('SELECT event_id FROM leads WHERE phone = ? AND created_at >= ? ORDER BY id LIMIT 1');
-    $dup->execute([$phone, gmdate('Y-m-d H:i:s', time() - 86400)]);
-    if ($row = $dup->fetch()) json_out(200, ['ok' => true, 'event_id' => (string)($row['event_id'] ?? $eid)]);
+    $dup = db()->prepare('SELECT event_id FROM leads WHERE phone = ? ORDER BY id LIMIT 1');
+    $dup->execute([$phone]);
+    if ($row = $dup->fetch()) {
+        if ((string)$row['event_id'] === $eid) json_out(200, ['ok' => true, 'event_id' => $eid]);
+        json_out(409, ['error' => 'This number is already registered. Our team will contact you shortly.']);
+    }
 } catch (Throwable $e) {
     error_log('dup check failed: ' . $e->getMessage());
 }
 
 try {
-    $st = db()->prepare('INSERT INTO leads (created_at, name, phone, brand, location, outlets, orders_day, turnover, budget, page, event_id)
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $st = db()->prepare('INSERT INTO leads (created_at, name, phone, brand, location, outlets, orders_day, turnover, budget, page, event_id,
+                                            fbp, fbc, gclid, fbclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $st->execute([gmdate('Y-m-d H:i:s'), $lead['name'], $phone, $lead['brand'], $lead['location'],
                   $lead['outlets'], $lead['orders'], $lead['turnover'], $lead['budget'],
-                  mb_substr((string)($b['page'] ?? ''), 0, 300), $eid]);
+                  mb_substr((string)($b['page'] ?? ''), 0, 300), $eid,
+                  $attr['fbp'], $attr['fbc'], $attr['gclid'], $attr['fbclid'], $attr['utm_source'],
+                  $attr['utm_medium'], $attr['utm_campaign'], $attr['utm_content'], $attr['utm_term']]);
 } catch (PDOException $e) {
     // Same event_id again (double click / retry): already saved, so don't count or message twice.
     if ($e->getCode() === '23000') json_out(200, ['ok' => true, 'event_id' => $eid]);
@@ -102,12 +126,12 @@ function client_ip() {
     }
     return '';
 }
-function send_meta_lead($eid, $name, $phone, $page) {
+function send_meta_lead($eid, $name, $phone, $page, $attr) {
     $pixel = env('META_PIXEL_ID');
     $token = env('META_CAPI_TOKEN');
     if ($pixel === '' || $token === '') return;
-    $fbc = $_COOKIE['_fbc'] ?? '';
-    if ($fbc === '' && preg_match('/[?&]fbclid=([^&#]+)/', $page, $m)) $fbc = 'fb.1.' . round(microtime(true) * 1000) . '.' . $m[1];
+    $fbc = (string)$attr['fbc'];
+    if ($fbc === '' && $attr['fbclid'] !== null) $fbc = 'fb.1.' . round(microtime(true) * 1000) . '.' . $attr['fbclid'];
     $first = strtolower(trim(explode(' ', trim($name))[0]));
     $user = array_filter([
         'ph' => [hash('sha256', '91' . $phone)],
@@ -115,7 +139,7 @@ function send_meta_lead($eid, $name, $phone, $page) {
         'country' => [hash('sha256', 'in')],
         'client_ip_address' => client_ip(),
         'client_user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-        'fbp' => $_COOKIE['_fbp'] ?? '',
+        'fbp' => (string)$attr['fbp'],
         'fbc' => $fbc,
     ]);
     $payload = ['data' => [[
@@ -137,4 +161,4 @@ function send_meta_lead($eid, $name, $phone, $page) {
     curl_close($ch);
     if ($code < 200 || $code >= 300) error_log("meta capi failed ($code): $res");
 }
-try { send_meta_lead($eid, $lead['name'], $phone, mb_substr((string)($b['page'] ?? ''), 0, 500)); } catch (Throwable $e) { error_log('meta capi error: ' . $e->getMessage()); }
+try { send_meta_lead($eid, $lead['name'], $phone, mb_substr((string)($b['page'] ?? ''), 0, 500), $attr); } catch (Throwable $e) { error_log('meta capi error: ' . $e->getMessage()); }

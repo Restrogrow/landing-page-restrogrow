@@ -63,5 +63,9 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'event_id'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN event_id VARCHAR(64) NULL, ADD COLUMN pixel_fired_at DATETIME NULL, ADD UNIQUE KEY uq_event_id (event_id)");
     }
+    // Ad attribution captured with each lead (where it came from).
+    if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'gclid'")->fetch()) {
+        $pdo->exec("ALTER TABLE leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");
+    }
     return $pdo;
 }

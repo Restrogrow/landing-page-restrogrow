@@ -40,7 +40,7 @@
 <script>
 (function(){
   var $=RG.$,esc=RG.esc,leads=[],filter="";
-  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes"];
+  var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid"];
   try{var p=new URLSearchParams(location.search).get("status");if(p&&RG.STATUSES.indexOf(p)>-1)filter=p}catch(x){}
 
   function chips(){
@@ -61,7 +61,10 @@
       var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
       var ic='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
       var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
-      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div></div></div>'
+      var src=l.gclid?"Google":l.fbclid?"Meta":"";
+      var srcTxt=[l.utm_source,l.utm_campaign].filter(Boolean).join(" / ");
+      var from=(src||srcTxt)?'<div class="mt">'+(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span> ':"")+esc(srcTxt)+'</div>':"";
+      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div>'+from+'</div></div>'
         +'<div class="ph">'+esc(l.phone)+'</div>'
         +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
         +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'

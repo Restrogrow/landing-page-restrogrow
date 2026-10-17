@@ -19,5 +19,8 @@ json_out(200, ['leads' => array_map(function ($r) {
         'time' => str_replace(' ', 'T', $r['created_at']) . 'Z',
         'name' => $r['name'], 'phone' => $r['phone'], 'brand' => $r['brand'], 'location' => $r['location'],
         'outlets' => $r['outlets'], 'orders' => $r['orders_day'], 'turnover' => $r['turnover'], 'budget' => $r['budget'],
+        'utm_source' => (string)$r['utm_source'], 'utm_medium' => (string)$r['utm_medium'], 'utm_campaign' => (string)$r['utm_campaign'],
+        'utm_content' => (string)$r['utm_content'], 'utm_term' => (string)$r['utm_term'],
+        'gclid' => (string)$r['gclid'], 'fbclid' => (string)$r['fbclid'],
     ];
 }, $rows)]);
