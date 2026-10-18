@@ -84,41 +84,7 @@ function save_fallback($lead, $phone, $eid, $b, $attr) {
     }
 }
 
-// Sends the WACRM_TEMPLATE WhatsApp template (restrogrow_demo_confirmation) to the number from the form:
-// {{1}} = customer name, {{2}} = restaurant name. Its "Book Demo" button triggers the RepeatGrow automation,
-// which sends restrogrow_demo_booked (set up inside RepeatGrow, not here).
-// WACRM_BASE_URL is the full messages endpoint, e.g. https://repeatgrow.com/api/v1/messages
-function send_confirmation($name, $brand, $phone) {
-    // Returns [status, note] so the admin can show whether the WhatsApp message went out and why not.
-    if (env('Api') === '' || env('WACRM_BASE_URL') === '') return ['not set up', 'Api key or WACRM_BASE_URL is empty in the server .env'];
-    $payload = [
-        'to' => '91' . $phone,
-        'type' => 'template',
-        'template' => [
-            'name' => env('WACRM_TEMPLATE', 'restrogrow_demo_confirmation'),
-            'language' => env('WACRM_LANG', 'en_US'),
-            'params' => [$name, $brand],   // fills {{1}} and {{2}}
-        ],
-    ];
-    $ch = curl_init(env('WACRM_BASE_URL'));
-    curl_setopt_array($ch, [
-        CURLOPT_POST => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CONNECTTIMEOUT => 5,
-        CURLOPT_TIMEOUT => 15,
-        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . env('Api'), 'Content-Type: application/json'],
-        CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
-    ]);
-    $res = curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $err = curl_error($ch);
-    curl_close($ch);
-    if ($code < 200 || $code >= 300) {
-        error_log("whatsapp send failed ($code): $res $err");
-        return ['failed', 'HTTP ' . $code . ' ' . ($err !== '' ? $err . ' ' : '') . mb_substr((string)$res, 0, 400)];
-    }
-    return ['sent', mb_substr((string)$res, 0, 400)];
-}
+require_once __DIR__ . '/wa.php';
 // Answer the visitor first so the form never waits on the WhatsApp API, then send in the background.
 ignore_user_abort(true);
 @set_time_limit(30);
@@ -134,17 +100,7 @@ flush();
 if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-try {
-    $wa = send_confirmation($lead['name'], $lead['brand'], $phone);
-} catch (Throwable $e) {
-    error_log('whatsapp failed: ' . $e->getMessage());
-    $wa = ['failed', $e->getMessage()];
-}
-try {
-    db()->prepare('UPDATE leads SET wa_status = ?, wa_note = ? WHERE event_id = ?')->execute([$wa[0], $wa[1], $eid]);
-} catch (Throwable $e) {
-    error_log('wa status save failed: ' . $e->getMessage());
-}
+wa_save($eid, wa_send($lead['name'], $lead['brand'], $phone));
 
 // Meta Conversions API: server-side Lead with the same event_id. Ad blockers / iPhone privacy can't hide it,
 // and Meta merges it with the browser Pixel event instead of counting twice.

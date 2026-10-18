@@ -31,6 +31,7 @@
 
   <div class="top"><div><h1>Leads</h1><div class="sub" id="cnt"></div></div></div>
 
+  <div id="waBar" class="x-warn" hidden></div>
   <div class="bar">
     <div class="chips" id="chips"></div>
     <input id="q" type="search" placeholder="Search name, phone, brand, city, notes">
@@ -73,10 +74,26 @@
         +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
         +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
         +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
-        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea><button type="button" class="del">Delete this lead</button></article>';
+        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea>'+(l.wa_status!=="sent"?'<button type="button" class="rs">Resend WhatsApp message</button>':"")+'<button type="button" class="del">Delete this lead</button></article>';
     }).join(""):'<div class="empty card" style="grid-column:1/-1">No leads found.</div>';
   }
-  function render(){leads=RG.leads;chips();list()}
+  // Banner: leads whose WhatsApp confirmation did not go out, with a one-click resend.
+  function waBar(){
+    var bad=leads.filter(function(l){return l.wa_status&&l.wa_status!=="sent"}).length,b=$("waBar");
+    if(!bad){b.hidden=true;return}
+    b.hidden=false;b.innerHTML='<span><b>'+bad+' lead'+(bad>1?'s':'')+'</b> did not get the WhatsApp message.</span><button type="button" class="btn" id="waAll">Resend to all</button>';
+  }
+  function resend(body,btn){
+    if(btn){btn.disabled=true;btn.textContent="Sending..."}
+    body.password=RG.pw;
+    return fetch("../api/lead_resend.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})})
+      .then(function(j){j.results.forEach(function(x){leads.forEach(function(l){if(l.id===x.id){l.wa_status=x.status;l.wa_note=x.note}})});chips();list();waBar();
+        var f=j.results.filter(function(x){return x.status!=="sent"}).length;if(f)alert(f+" message(s) still failed. The reason is shown on the lead card.")})
+      .catch(function(x){alert("Not sent: "+x.message);if(btn){btn.disabled=false;btn.textContent="Resend"}});
+  }
+  $("waBar").addEventListener("click",function(e){if(e.target.id==="waAll")resend({all:true},e.target)});
+  function render(){leads=RG.leads;chips();list();waBar()}
 
   function save(card){
     var l=leads.filter(function(x){return String(x.id)===card.getAttribute("data-id")})[0];if(!l)return;
@@ -91,6 +108,7 @@
   $("q").addEventListener("input",list);
   $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=b.getAttribute("data-f");chips();list()});
   $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest(".lead"))});
+  $("tb").addEventListener("click",function(e){var b=e.target.closest(".rs");if(b)resend({id:+b.closest(".lead").getAttribute("data-id")},b)});
   // Permanently deletes a lead (use for test leads). Its phone number can then be submitted again.
   $("tb").addEventListener("click",function(e){
     var b=e.target.closest(".del");if(!b)return;
