@@ -84,17 +84,19 @@ function save_fallback($lead, $phone, $eid, $b, $attr) {
     }
 }
 
-// Sends the WACRM_TEMPLATE WhatsApp template ({{1}} = name) to the number from the form.
+// Sends the WACRM_TEMPLATE WhatsApp template (restrogrow_demo_confirmation) to the number from the form:
+// {{1}} = customer name, {{2}} = restaurant name. Its "Book Demo" button triggers the RepeatGrow automation,
+// which sends restrogrow_demo_booked (set up inside RepeatGrow, not here).
 // WACRM_BASE_URL is the full messages endpoint, e.g. https://repeatgrow.com/api/v1/messages
-function send_confirmation($name, $phone) {
+function send_confirmation($name, $brand, $phone) {
     if (env('Api') === '' || env('WACRM_BASE_URL') === '') return;
     $payload = [
         'to' => '91' . $phone,
         'type' => 'template',
         'template' => [
-            'name' => env('WACRM_TEMPLATE', 'enquiry_confirmation'),
-            'language' => 'en',
-            'params' => [$name],   // fills {{1}}
+            'name' => env('WACRM_TEMPLATE', 'restrogrow_demo_confirmation'),
+            'language' => env('WACRM_LANG', 'en_US'),
+            'params' => [$name, $brand],   // fills {{1}} and {{2}}
         ],
     ];
     $ch = curl_init(env('WACRM_BASE_URL'));
@@ -126,7 +128,7 @@ flush();
 if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-try { send_confirmation($lead['name'], $phone); } catch (Throwable $e) { error_log('whatsapp failed: ' . $e->getMessage()); }
+try { send_confirmation($lead['name'], $lead['brand'], $phone); } catch (Throwable $e) { error_log('whatsapp failed: ' . $e->getMessage()); }
 
 // Meta Conversions API: server-side Lead with the same event_id. Ad blockers / iPhone privacy can't hide it,
 // and Meta merges it with the browser Pixel event instead of counting twice.
