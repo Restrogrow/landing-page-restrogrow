@@ -50,7 +50,7 @@
     var pk=function(){for(var i=0;i<arguments.length;i++)if(p[arguments[i]])return p[arguments[i]];return ""};
     var parts=[["Campaign",pk("utm_campaign","campaign_name","campaign","campaignid","campaign_id")],["Ad set",pk("adset_name","adset","adgroup","adgroupid","adset_id","utm_content")],["Ad",pk("ad_name","ad","creative","ad_id")],["Placement",pk("placement","site_source_name","network")],["Keyword",pk("utm_term","keyword")]].filter(function(x){return x[1]});
     var all=Object.keys(p);
-    return {line:parts.map(function(x){return x[0]+": "+x[1]}).join(" · "),all:all.length?all.map(function(k){return k+" = "+p[k]}).join("\n"):"",ref:l.referrer||""};
+    return {parts:parts,all:all.length?all.map(function(k){return k+" = "+p[k]}).join("\n"):"",ref:l.referrer||""};
   }
   try{var p=new URLSearchParams(location.search).get("status");if(p&&RG.STATUSES.indexOf(p)>-1)filter=p}catch(x){}
 
@@ -76,10 +76,14 @@
       var srcTxt=[l.utm_source,l.utm_campaign].filter(Boolean).join(" / ");
       var lp=(String(l.page||"").match(/\/lp\/([a-z0-9-]+)/)||[])[1]||"";   /* which landing page the lead came from */
       var ai=adInfo(l);
-      var ad_=(ai.line||ai.all||ai.ref)?'<details class="adx"><summary>Ad details'+(ai.line?': '+esc(ai.line):"")+'</summary><pre>'+esc((ai.all?ai.all+"\n":"")+(ai.ref?"referrer = "+ai.ref+"\n":"")+(l.landing?"landing = "+l.landing:""))+'</pre></details>':"";
-      var wa_=l.wa_status?'<div class="mt" title="'+esc(l.wa_note)+'"><span class="tag" style="'+(l.wa_status==="sent"?"background:#DCFCE7;color:#15803D":"background:#FEE2E2;color:#B91C1C")+'">WhatsApp: '+esc(l.wa_status)+'</span>'+(l.wa_status==="sent"?"":" "+esc(l.wa_note))+'</div>':"";
-      var from=(src||srcTxt||lp)?'<div class="mt">'+(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span> ':"")+(lp?'<span class="tag">Page: '+esc(lp)+'</span> ':"")+esc(srcTxt)+'</div>':"";
-      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div>'+from+wa_+ad_+'</div></div>'
+      // One tidy "Source" panel under the header: network, landing page, ad names as label/value rows, WhatsApp result.
+      var rows=ai.parts.map(function(x){return '<div class="sr"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join("");
+      var all=(ai.all||ai.ref||l.landing)?'<details class="adx"><summary>All ad parameters</summary><pre>'+esc((ai.all?ai.all+"\n":"")+(ai.ref?"referrer = "+ai.ref+"\n":"")+(l.landing?"landing = "+l.landing:""))+'</pre></details>':"";
+      var chipsS=(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span>':'<span class="tag">Direct / other</span>')+(srcTxt&&!rows?'<span class="tag">'+esc(srcTxt)+'</span>':"")+(lp?'<span class="tag">Page: '+esc(lp)+'</span>':'<span class="tag">Page: main</span>');
+      var waCls=l.wa_status==="sent"?"ok":l.wa_status?"bad":"";
+      var wa_=l.wa_status?'<div class="wst '+waCls+'"><b>WhatsApp: '+esc(l.wa_status)+'</b>'+(l.wa_status==="sent"?"":'<span>'+esc(l.wa_note)+'</span>')+'</div>':"";
+      var srcBox='<div class="srcbox"><div class="sch">'+chipsS+'</div>'+(rows?'<div class="srows">'+rows+'</div>':"")+wa_+all+'</div>';
+      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div class="hi"><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div></div></div>'+srcBox
         +'<div class="ph">'+esc(l.phone)+'</div>'
         +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
         +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'

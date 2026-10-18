@@ -85,9 +85,23 @@ select.st[data-s=Called]{background:#DBEAFE;border-color:#93C5FD;color:#1E3A8A}
 select.st[data-s="Not answered"],select.st[data-s="Not interested"]{background:#FEE2E2;border-color:#FCA5A5;color:#7F1D1D}
 select.st[data-s="Follow-up"]{background:#FEF3C7;border-color:#FCD34D;color:#78350F}
 textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
-.adx{margin-top:6px;font-size:.78rem;color:var(--mu)}
-.adx summary{cursor:pointer;line-height:1.4}
-.adx pre{margin:6px 0 0;padding:8px 10px;border-radius:10px;background:var(--track);white-space:pre-wrap;overflow-wrap:anywhere;font:500 .72rem/1.5 ui-monospace,Consolas,monospace;color:var(--tx)}
+.lead .hd{align-items:flex-start}
+.lead .hi{min-width:0;flex:1}
+.lead .av{margin-top:2px}
+.srcbox{display:grid;gap:10px;padding:12px;border-radius:12px;background:var(--track);min-width:0}
+.sch{display:flex;flex-wrap:wrap;gap:6px}
+.srcbox .tag{background:var(--card);max-width:100%;overflow-wrap:anywhere}
+.srows{display:grid;gap:6px}
+.sr{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;align-items:baseline;font-size:.8rem}
+.sr span{color:var(--mu)}
+.sr b{font-weight:600;overflow-wrap:anywhere;line-height:1.35}
+.wst{display:grid;gap:3px;padding:8px 10px;border-radius:10px;font-size:.78rem;overflow-wrap:anywhere}
+.wst.ok{background:#DCFCE7;color:#15803D}
+.wst.bad{background:#FEE2E2;color:#B91C1C}
+.wst span{font-size:.72rem;opacity:.9;line-height:1.35}
+.adx{font-size:.78rem;color:var(--mu)}
+.adx summary{cursor:pointer;line-height:1.4;font-weight:500}
+.adx pre{margin:8px 0 0;padding:8px 10px;border-radius:10px;background:var(--card);white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-all;font:500 .7rem/1.55 ui-monospace,Consolas,monospace;color:var(--tx);max-height:220px;overflow:auto}
 .x-warn{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding:14px 18px;border-radius:14px;background:#FEE2E2;border:1px solid #FCA5A5;color:#7F1D1D}
 .x-warn[hidden]{display:none}
 .x-warn .btn{height:40px}
