@@ -38,6 +38,10 @@
     <section class="card"><div class="h"><h2>Budget range</h2><span>Leads</span></div><div class="rows" id="cb"></div></section>
     <section class="card"><div class="h"><h2>Top cities</h2><span>Leads</span></div><div class="rows" id="cc"></div></section>
     <section class="card"><div class="h"><h2>Turnover</h2><span>Leads</span></div><div class="rows" id="ct"></div></section>
+    <section class="card"><div class="h"><h2>Where leads come from</h2><span>Google, Meta or direct</span></div><div class="rows" id="cn"></div></section>
+    <section class="card"><div class="h"><h2>Top campaigns</h2><span>Leads</span></div><div class="rows" id="ck"></div></section>
+    <section class="card"><div class="h"><h2>Top ads</h2><span>Leads</span></div><div class="rows" id="ca"></div></section>
+    <section class="card"><div class="h"><h2>Landing pages</h2><span>Leads</span></div><div class="rows" id="cl"></div></section>
   </div>
 </div>
 
@@ -102,11 +106,18 @@
     if(rest)top.push(["Other",rest]);
     bars($("cc"),top);
     bars($("ct"),count("turnover"));
+    // Ad attribution: which network, campaign, ad and landing page the leads came from.
+    var ap=function(l){var p={};try{p=JSON.parse(l.ad_params||"{}")||{}}catch(x){}return p};
+    var tally=function(fn){var m={};leads.forEach(function(l){var v=fn(l)||"(none)";m[v]=(m[v]||0)+1});return Object.keys(m).map(function(k){return [k,m[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,6)};
+    bars($("cn"),tally(function(l){return l.gclid?"Google":l.fbclid?"Meta":(l.utm_source?l.utm_source:"Direct / other")}));
+    bars($("ck"),tally(function(l){var p=ap(l);return l.utm_campaign||p.campaign_name||p.campaign||p.campaignid}));
+    bars($("ca"),tally(function(l){var p=ap(l);return p.ad_name||p.ad||l.utm_content||p.ad_id||p.creative}));
+    bars($("cl"),tally(function(l){var m=String(l.page||"").match(/\/lp\/([a-z0-9-]+)/);return m?m[1]:"main page"}));
     drawLine();
   }
 
   $("cs").addEventListener("click",function(e){var b=e.target.closest(".br");if(b)location.href="leads.html?status="+encodeURIComponent(b.getAttribute("data-v"))});
-  ["cs","cb","cc","ct"].forEach(function(id){
+  ["cs","cb","cc","ct","cn","ck","ca","cl"].forEach(function(id){
     $(id).addEventListener("mousemove",function(e){var b=e.target.closest(".br");b?RG.showTip(e,b.getAttribute("data-t")):RG.hideTip()});
     $(id).addEventListener("mouseleave",RG.hideTip);
   });

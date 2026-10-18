@@ -942,8 +942,15 @@
   /* ad tracking: IDs come from api/public_config.php, so a tag stays off while its ID is empty.
      No Lead / conversion here: that fires once, on the thank-you page. */
   var AK=["gclid","fbclid","utm_source","utm_medium","utm_campaign","utm_content","utm_term"],AT={};
-  try{var sp=new URLSearchParams(location.search),old={};try{old=JSON.parse(sessionStorage.getItem("rgAttr")||"{}")}catch(x){}
-    AK.forEach(function(k){var v=sp.get(k);if(v)old[k]=v.slice(0,300)});AT=old;try{sessionStorage.setItem("rgAttr",JSON.stringify(old))}catch(x){}}catch(x){}
+  /* Ad data: every URL parameter of the ad click (campaign, ad set, ad, placement, keyword...) plus referrer and landing URL.
+     A new ad click replaces the old data; otherwise it is kept for 30 days so a later visit still counts for the ad. */
+  try{var sp=new URLSearchParams(location.search),old={},nwT=Date.now();
+    try{old=JSON.parse(sessionStorage.getItem("rgAttr")||localStorage.getItem("rgAttr")||"{}")}catch(x){}
+    var fresh=/[?&](utm_|gclid|gbraid|wbraid|fbclid|msclkid|ttclid)/.test(location.search);
+    if(fresh||!old.ts||nwT-old.ts>2592e6)old={ts:nwT,all:{},ref:(document.referrer||"").slice(0,300),land:location.href.slice(0,500)};
+    var cnt=0;sp.forEach(function(v,k){if(v&&k.length<40&&cnt++<40)old.all[k]=v.slice(0,200)});
+    AK.forEach(function(k){var v=sp.get(k);if(v)old[k]=v.slice(0,300)});AT=old;
+    try{var js=JSON.stringify(old);sessionStorage.setItem("rgAttr",js);localStorage.setItem("rgAttr",js)}catch(x){}}catch(x){}
   var ck=function(n){var m=document.cookie.match(new RegExp("(?:^|; )"+n+"=([^;]*)"));return m?decodeURIComponent(m[1]):""};
   var tg={ready:false,q:[],done:{}};
   function ev(mn,gn){ /* once per page view: Meta custom event + GA4 event */
@@ -985,6 +992,7 @@
     /* ad attribution: Meta cookies, click ids and UTMs kept from the landing URL */
     D.fbp=ck("_fbp");D.fbc=ck("_fbc")||(AT.fbclid?"fb.1."+Date.now()+"."+AT.fbclid:"");
     AK.forEach(function(k){if(AT[k])D[k]=AT[k]});
+    D.ad_params=AT.all&&Object.keys(AT.all).length?JSON.stringify(AT.all):"";D.referrer=AT.ref||document.referrer||"";D.landing=AT.land||location.href;
     var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent="Sending...";
     fetch(API_BASE+"api/submit.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
       .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");F.classList.add("ok");location.href=API_BASE+"thank-you.html?eid="+encodeURIComponent(j.event_id||F._eid)})})

@@ -28,6 +28,17 @@ foreach (['fbp' => 200, 'fbc' => 300, 'gclid' => 300, 'fbclid' => 300, 'utm_sour
     $v = mb_substr(trim((string)($b[$k] ?? '')), 0, $max);
     $attr[$k] = $v === '' ? null : $v;
 }
+// All URL parameters of the ad click (campaign / ad set / ad names and ids, placement, keyword ...) as a small JSON object.
+$ad = json_decode((string)($b['ad_params'] ?? ''), true);
+$clean = [];
+if (is_array($ad)) foreach (array_slice($ad, 0, 40, true) as $k => $v) {
+    if (is_string($k) && is_scalar($v) && strlen($k) < 40) $clean[mb_substr($k, 0, 40)] = mb_substr((string)$v, 0, 200);
+}
+$attr['ad_params'] = $clean ? mb_substr(json_encode($clean, JSON_UNESCAPED_UNICODE), 0, 4000) : null;
+$ref = mb_substr(trim((string)($b['referrer'] ?? '')), 0, 300);
+$land = mb_substr(trim((string)($b['landing'] ?? '')), 0, 500);
+$attr['referrer'] = $ref === '' ? null : $ref;
+$attr['landing'] = $land === '' ? null : $land;
 if ($attr['fbp'] === null && !empty($_COOKIE['_fbp'])) $attr['fbp'] = mb_substr((string)$_COOKIE['_fbp'], 0, 200);
 if ($attr['fbc'] === null && !empty($_COOKIE['_fbc'])) $attr['fbc'] = mb_substr((string)$_COOKIE['_fbc'], 0, 300);
 
@@ -54,13 +65,15 @@ try {
 
 try {
     $st = db()->prepare('INSERT INTO leads (created_at, name, phone, brand, location, outlets, orders_day, turnover, budget, page, event_id,
-                                            fbp, fbc, gclid, fbclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term)
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                                            fbp, fbc, gclid, fbclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
+                                            ad_params, referrer, landing)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $st->execute([gmdate('Y-m-d H:i:s'), $lead['name'], $phone, $lead['brand'], $lead['location'],
                   $lead['outlets'], $lead['orders'], $lead['turnover'], $lead['budget'],
                   mb_substr((string)($b['page'] ?? ''), 0, 300), $eid,
                   $attr['fbp'], $attr['fbc'], $attr['gclid'], $attr['fbclid'], $attr['utm_source'],
-                  $attr['utm_medium'], $attr['utm_campaign'], $attr['utm_content'], $attr['utm_term']]);
+                  $attr['utm_medium'], $attr['utm_campaign'], $attr['utm_content'], $attr['utm_term'],
+                  $attr['ad_params'], $attr['referrer'], $attr['landing']]);
 } catch (PDOException $e) {
     // Same event_id again (double click / retry): already saved, so don't count or message twice.
     if ($e->getCode() === '23000') json_out(200, ['ok' => true, 'event_id' => $eid]);

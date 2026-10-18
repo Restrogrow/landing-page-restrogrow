@@ -95,6 +95,10 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'wa_status'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN wa_status VARCHAR(20) NULL, ADD COLUMN wa_note VARCHAR(500) NULL");
     }
+    // Everything about where the lead came from: all ad URL parameters (JSON), referrer and the first landing URL.
+    if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'ad_params'")->fetch()) {
+        $pdo->exec("ALTER TABLE leads ADD COLUMN ad_params TEXT NULL, ADD COLUMN referrer VARCHAR(300) NULL, ADD COLUMN landing VARCHAR(500) NULL");
+    }
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'gclid'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");
