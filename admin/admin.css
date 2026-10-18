@@ -85,6 +85,8 @@ select.st[data-s=Called]{background:#DBEAFE;border-color:#93C5FD;color:#1E3A8A}
 select.st[data-s="Not answered"],select.st[data-s="Not interested"]{background:#FEE2E2;border-color:#FCA5A5;color:#7F1D1D}
 select.st[data-s="Follow-up"]{background:#FEF3C7;border-color:#FCD34D;color:#78350F}
 textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
+.del{justify-self:start;border:0;background:none;color:var(--mu);font:500 .8rem var(--fb);cursor:pointer;padding:4px 0}
+.del:hover{color:#D92D20;text-decoration:underline}
 .empty{padding:40px;text-align:center;color:var(--mu)}
 @media (max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
 @media (max-width:760px){

@@ -72,7 +72,7 @@
         +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
         +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
         +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
-        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea></article>';
+        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea><button type="button" class="del">Delete this lead</button></article>';
     }).join(""):'<div class="empty card" style="grid-column:1/-1">No leads found.</div>';
   }
   function render(){leads=RG.leads;chips();list()}
@@ -90,6 +90,16 @@
   $("q").addEventListener("input",list);
   $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=b.getAttribute("data-f");chips();list()});
   $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest(".lead"))});
+  // Permanently deletes a lead (use for test leads). Its phone number can then be submitted again.
+  $("tb").addEventListener("click",function(e){
+    var b=e.target.closest(".del");if(!b)return;
+    var card=b.closest(".lead"),id=+card.getAttribute("data-id"),l=leads.filter(function(x){return x.id===id})[0];if(!l)return;
+    if(!confirm("Delete "+l.name+" ("+l.phone+") permanently? This cannot be undone."))return;
+    fetch("../api/lead_delete.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,id:id})})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
+      .then(function(){leads=leads.filter(function(x){return x.id!==id});RG.leads=leads;chips();list()})
+      .catch(function(x){alert("Not deleted: "+x.message)});
+  });
   $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest(".lead"))});
   // Tapping Call marks the lead as Called (unless already Called / Converted / Not interested).
   $("tb").addEventListener("click",function(e){
