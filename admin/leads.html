@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Leads - RestroGrow Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20261019b">
+<link rel="stylesheet" href="admin.css?v=20261019d">
 </head>
 <body>
 <div id="login"><form id="lf">
@@ -29,30 +29,94 @@
     <button class="btn ghost" id="out" type="button">Log out</button>
   </nav>
 
-  <div class="top"><div><h1>Leads</h1><div class="sub" id="cnt"></div></div></div>
+  <div class="top"><div><h1>Leads</h1><div class="sub" id="cnt"></div></div><div class="r" id="demoBtns"></div></div>
 
   <div id="waBar" class="x-warn" hidden></div>
+
+  <details class="fp" id="fp" open>
+    <summary>Filters <b id="fpn"></b></summary>
+    <div class="fg" id="fg"></div>
+    <div class="fa">
+      <label class="gb">Group by
+        <select id="gb"><option value="">No grouping</option><option value="src">Source</option><option value="camp">Campaign</option><option value="adset">Ad set</option><option value="ad">Ad</option><option value="page">Landing page</option><option value="status">Status</option><option value="budget">Budget</option><option value="turnover">Turnover</option><option value="city">City</option></select>
+      </label>
+      <button type="button" class="btn ghost" id="fclr">Clear all filters</button>
+    </div>
+    <div class="fx" id="fx"></div>
+  </details>
+
   <div class="bar">
     <div class="chips" id="chips"></div>
-    <input id="q" type="search" placeholder="Search name, phone, brand, city, notes">
+    <input id="q" type="search" placeholder="Search name, phone, brand, city, notes, campaign">
   </div>
   <div class="leads" id="tb"></div>
 </div>
 
-<script src="common.js?v=20261019b"></script>
+<script src="common.js?v=20261019d"></script>
 <script>
 (function(){
-  var $=RG.$,esc=RG.esc,leads=[],filter="";
+  var $=RG.$,esc=RG.esc,leads=[],filter="",shown=[],groupBy="";
   var COLS=["time","name","phone","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page","ad_params","referrer","landing"];
-  // Pulls the readable ad names out of the ad URL parameters (Meta: {{campaign.name}} {{adset.name}} {{ad.name}}; Google: ValueTrack).
+
+  /* ---------- what each lead tells us about the ad ---------- */
   function adInfo(l){
     var p={};try{p=JSON.parse(l.ad_params||"{}")||{}}catch(x){}
     var pk=function(){for(var i=0;i<arguments.length;i++)if(p[arguments[i]])return p[arguments[i]];return ""};
-    var parts=[["Campaign",pk("utm_campaign","campaign_name","campaign","campaignid","campaign_id")],["Ad set",pk("adset_name","adset","adgroup","adgroupid","adset_id","utm_content")],["Ad",pk("ad_name","ad","creative","ad_id")],["Placement",pk("placement","site_source_name","network")],["Keyword",pk("utm_term","keyword")]].filter(function(x){return x[1]});
+    var f={camp:pk("utm_campaign","campaign_name","campaign","campaignid","campaign_id"),adset:pk("adset_name","adset","adgroup","adgroupid","adset_id","utm_content"),ad:pk("ad_name","ad","creative","ad_id"),place:pk("placement","site_source_name","network"),kw:pk("utm_term","keyword")};
+    var parts=[["Campaign",f.camp],["Ad set",f.adset],["Ad",f.ad],["Placement",f.place],["Keyword",f.kw]].filter(function(x){return x[1]});
     var all=Object.keys(p);
-    return {parts:parts,all:all.length?all.map(function(k){return k+" = "+p[k]}).join("\n"):"",ref:l.referrer||""};
+    return {f:f,parts:parts,all:all.length?all.map(function(k){return k+" = "+p[k]}).join("\n"):"",ref:l.referrer||""};
   }
-  try{var p=new URLSearchParams(location.search).get("status");if(p&&RG.STATUSES.indexOf(p)>-1)filter=p}catch(x){}
+  function srcOf(l){
+    var u=String(l.utm_source||"").toLowerCase();
+    if(/facebook|meta|instagram|^fb$/.test(u))return "Meta";
+    if(/youtube/.test(u))return "YouTube";
+    if(/google/.test(u))return "Google";
+    if(l.fbclid)return "Meta";
+    if(l.gclid)return "Google";
+    return u?u.charAt(0).toUpperCase()+u.slice(1):"Direct / other";
+  }
+  function pageOf(l){return (String(l.page||"").match(/\/lp\/([a-z0-9-]+)/)||[])[1]||"main page"}
+  // One flat record per lead, used by filters and grouping.
+  function fx(l){
+    var a=adInfo(l),d=new Date(l.time),cl=function(v){return v||"(none)"};
+    return {src:srcOf(l),camp:cl(a.f.camp),adset:cl(a.f.adset),ad:cl(a.f.ad),page:pageOf(l),status:l.status,budget:cl(l.budget),turnover:cl(l.turnover),orders:cl(l.orders),outlets:cl(l.outlets),
+      city:cl(String(l.location||"").split(",").pop().trim()),wa:l.wa_status==="sent"?"Sent":l.wa_status==="demo"?"Sent":l.wa_status?"Failed":"Not recorded",data:l.is_demo?"Demo only":"Real only",
+      days:isNaN(d)?9999:(Date.now()-d)/864e5};
+  }
+
+  /* ---------- filters ---------- */
+  var F={};
+  var DEFS=[["date","Date",["Today","Last 7 days","Last 30 days"]],["src","Source"],["camp","Campaign"],["adset","Ad set / group"],["ad","Ad"],["page","Landing page"],["status","Status"],
+            ["budget","Budget"],["turnover","Turnover"],["orders","Orders / day"],["outlets","Outlets"],["city","City"],["wa","WhatsApp"],["data","Data",["Real only","Demo only"]]];
+  function passes(l,f,skip){
+    return DEFS.every(function(d){
+      var k=d[0];if(k===skip||!F[k])return true;
+      if(k==="date"){var n=F.date==="Today"?1:F.date==="Last 7 days"?7:30;return f.days<=n}
+      return f[k]===F[k];
+    });
+  }
+  function buildFilters(){
+    var recs=leads.map(function(l){return fx(l)});
+    $("fg").innerHTML=DEFS.map(function(d){
+      var k=d[0],opts;
+      if(d[2])opts=d[2].map(function(v){return [v,0]});
+      else{var m={};recs.forEach(function(r,i){if(passes(leads[i],r,k))m[r[k]]=(m[r[k]]||0)+1});opts=Object.keys(m).sort(function(a,b){return m[b]-m[a]}).map(function(v){return [v,m[v]]})}
+      if(F[k]&&!opts.some(function(o){return o[0]===F[k]}))opts.unshift([F[k],0]);
+      return '<label class="fl"><span>'+d[1]+'</span><select data-k="'+k+'"><option value="">All</option>'+opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(F[k]===o[0]?" selected":"")+">"+esc(o[0])+(d[2]?"":" ("+o[1]+")")+"</option>"}).join("")+"</select></label>";
+    }).join("");
+    var act=DEFS.filter(function(d){return F[d[0]]});
+    $("fpn").textContent=act.length?"("+act.length+" active)":"";
+    $("fx").innerHTML=act.map(function(d){return '<button type="button" class="fchip" data-k="'+d[0]+'">'+d[1]+": "+esc(F[d[0]])+" ×</button>"}).join("");
+  }
+  $("fg").addEventListener("change",function(e){var s=e.target.closest("select");if(!s)return;F[s.getAttribute("data-k")]=s.value;redraw()});
+  $("fx").addEventListener("click",function(e){var b=e.target.closest(".fchip");if(!b)return;F[b.getAttribute("data-k")]="";redraw()});
+  $("fclr").addEventListener("click",function(){F={};filter="";$("q").value="";redraw()});
+  $("gb").addEventListener("change",function(){groupBy=this.value;list()});
+  function redraw(){buildFilters();chips();list()}
+  if(window.innerWidth<760)$("fp").open=false;   /* on a phone the filter panel starts closed so the leads are visible first */
+
+  try{var p0=new URLSearchParams(location.search).get("status");if(p0&&RG.STATUSES.indexOf(p0)>-1)filter=p0}catch(x){}
 
   function chips(){
     var n=leads.length;
@@ -61,39 +125,67 @@
       return '<button type="button" class="chip'+(filter===s?" on":"")+'" data-f="'+esc(s)+'">'+esc(s)+"<b>"+m+"</b></button>";
     })).join("");
   }
+
+  var IC='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
+  function card(l){
+    var opts=RG.STATUSES.map(function(x){return "<option"+(x===l.status?" selected":"")+">"+esc(x)+"</option>"}).join("");
+    var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
+    var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
+    var src=srcOf(l),ai=adInfo(l);
+    // One tidy "Source" panel under the header: network, landing page, ad names as label/value rows, WhatsApp result.
+    var rows=ai.parts.map(function(x){return '<div class="sr"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join("");
+    var all=(ai.all||ai.ref||l.landing)?'<details class="adx"><summary>All ad parameters</summary><pre>'+esc((ai.all?ai.all+"\n":"")+(ai.ref?"referrer = "+ai.ref+"\n":"")+(l.landing?"landing = "+l.landing:""))+'</pre></details>':"";
+    var chipsS='<span class="tag src '+src.toLowerCase().replace(/[^a-z]/g,"")+'">'+esc(src)+'</span><span class="tag">Page: '+esc(pageOf(l))+'</span>';
+    var waCls=l.wa_status==="sent"||l.wa_status==="demo"?"ok":l.wa_status?"bad":"";
+    var wa_=l.wa_status?'<div class="wst '+waCls+'"><b>WhatsApp: '+esc(l.is_demo?"demo (nothing sent)":l.wa_status)+'</b>'+(waCls==="bad"?'<span>'+esc(l.wa_note)+'</span>':"")+'</div>':"";
+    var srcBox='<div class="srcbox"><div class="sch">'+chipsS+'</div>'+(rows?'<div class="srows">'+rows+'</div>':"")+wa_+all+'</div>';
+    var rs=(!l.is_demo&&l.wa_status!=="sent")?'<button type="button" class="rs">Resend WhatsApp message</button>':"";
+    return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div class="hi"><div class="nm">'+esc(l.name)+(l.is_demo?' <span class="demo">DEMO</span>':"")+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div></div></div>'+srcBox
+      +'<div class="ph">'+esc(l.phone)+'</div>'
+      +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
+      +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+IC+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+      +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
+      +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea>'+rs+'<button type="button" class="del">Delete this lead</button></article>';
+  }
   function list(){
     var q=$("q").value.trim().toLowerCase();
-    var rows=leads.filter(function(l){
-      return (!filter||l.status===filter)&&(!q||COLS.some(function(k){return String(l[k]||"").toLowerCase().indexOf(q)>-1}));
-    });
-    $("cnt").textContent="Showing "+rows.length+" of "+leads.length;
-    $("tb").innerHTML=rows.length?rows.map(function(l){
-      var opts=RG.STATUSES.map(function(x){return "<option"+(x===l.status?" selected":"")+">"+esc(x)+"</option>"}).join("");
-      var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
-      var ic='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
-      var tag=function(k,v){return v?'<span class="tag"><em>'+k+'</em>'+esc(v)+'</span>':""};
-      var src=l.gclid?"Google":l.fbclid?"Meta":"";
-      var srcTxt=[l.utm_source,l.utm_campaign].filter(Boolean).join(" / ");
-      var lp=(String(l.page||"").match(/\/lp\/([a-z0-9-]+)/)||[])[1]||"";   /* which landing page the lead came from */
+    shown=leads.filter(function(l){
+      if(filter&&l.status!==filter)return false;
+      if(!passes(l,fx(l)))return false;
+      if(!q)return true;
       var ai=adInfo(l);
-      // One tidy "Source" panel under the header: network, landing page, ad names as label/value rows, WhatsApp result.
-      var rows=ai.parts.map(function(x){return '<div class="sr"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join("");
-      var all=(ai.all||ai.ref||l.landing)?'<details class="adx"><summary>All ad parameters</summary><pre>'+esc((ai.all?ai.all+"\n":"")+(ai.ref?"referrer = "+ai.ref+"\n":"")+(l.landing?"landing = "+l.landing:""))+'</pre></details>':"";
-      var chipsS=(src?'<span class="tag src '+src.toLowerCase()+'">'+src+'</span>':'<span class="tag">Direct / other</span>')+(srcTxt&&!rows?'<span class="tag">'+esc(srcTxt)+'</span>':"")+(lp?'<span class="tag">Page: '+esc(lp)+'</span>':'<span class="tag">Page: main</span>');
-      var waCls=l.wa_status==="sent"?"ok":l.wa_status?"bad":"";
-      var wa_=l.wa_status?'<div class="wst '+waCls+'"><b>WhatsApp: '+esc(l.wa_status)+'</b>'+(l.wa_status==="sent"?"":'<span>'+esc(l.wa_note)+'</span>')+'</div>':"";
-      var srcBox='<div class="srcbox"><div class="sch">'+chipsS+'</div>'+(rows?'<div class="srows">'+rows+'</div>':"")+wa_+all+'</div>';
-      return '<article class="lead" data-id="'+l.id+'" data-s="'+esc(l.status)+'"><div class="hd"><div class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</div><div class="hi"><div class="nm">'+esc(l.name)+'</div><div class="mt">'+esc(l.brand)+' · '+esc(l.location)+'</div><div class="mt">'+esc(RG.fmt(l.time))+'</div></div></div>'+srcBox
-        +'<div class="ph">'+esc(l.phone)+'</div>'
-        +'<div class="tags">'+tag("Outlets",l.outlets)+tag("Orders/day",l.orders)+tag("Turnover",l.turnover)+tag("Budget",l.budget)+'</div>'
-        +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+ic+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-        +'<select class="st" data-s="'+esc(l.status)+'" aria-label="Status">'+opts+'</select>'
-        +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea>'+(l.wa_status!=="sent"?'<button type="button" class="rs">Resend WhatsApp message</button>':"")+'<button type="button" class="del">Delete this lead</button></article>';
-    }).join(""):'<div class="empty card" style="grid-column:1/-1">No leads found.</div>';
+      return COLS.some(function(k){return String(l[k]||"").toLowerCase().indexOf(q)>-1})||(ai.f.camp+" "+ai.f.adset+" "+ai.f.ad).toLowerCase().indexOf(q)>-1;
+    });
+    $("cnt").textContent="Showing "+shown.length+" of "+leads.length;
+    if(!shown.length){$("tb").innerHTML='<div class="empty card" style="grid-column:1/-1">No leads match these filters. <button type="button" class="btn ghost" id="fclr2" style="margin-left:8px">Clear filters</button></div>';return}
+    if(!groupBy){$("tb").innerHTML=shown.map(card).join("");return}
+    var g={},order=[];shown.forEach(function(l){var v=fx(l)[groupBy];if(!g[v]){g[v]=[];order.push(v)}g[v].push(l)});
+    order.sort(function(a,b){return g[b].length-g[a].length});
+    var label=$("gb").options[$("gb").selectedIndex].text;
+    $("tb").innerHTML=order.map(function(v){return '<h3 class="gh">'+esc(label)+': '+esc(v)+' <b>'+g[v].length+'</b></h3>'+g[v].map(card).join("")}).join("");
   }
+  $("tb").addEventListener("click",function(e){if(e.target.id==="fclr2")$("fclr").click()});
+
+  // Demo data: 10 clearly marked fake leads to try the filters and charts. They send nothing and can be removed in one click.
+  function demoBar(){
+    var has=leads.some(function(l){return l.is_demo});
+    $("demoBtns").innerHTML='<button type="button" class="btn ghost" id="demoAdd">'+(has?"Reset 10 demo leads":"Add 10 demo leads")+'</button>'+(has?'<button type="button" class="btn ghost" id="demoDel">Remove demo leads</button>':"");
+  }
+  $("demoBtns").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;
+    var add=b.id==="demoAdd";
+    if(add&&!confirm("Add 10 fake DEMO leads to your database? No WhatsApp messages are sent. You can remove them any time with one click."))return;
+    if(!add&&!confirm("Remove all demo leads? Your real leads are not touched."))return;
+    b.disabled=true;
+    fetch("../api/demo_leads.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,action:add?"add":"remove"})})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
+      .then(function(){return RG.refresh()})
+      .catch(function(x){alert("Failed: "+x.message);b.disabled=false});
+  });
+
   // Banner: leads whose WhatsApp confirmation did not go out, with a one-click resend.
   function waBar(){
-    var bad=leads.filter(function(l){return l.wa_status&&l.wa_status!=="sent"}).length,b=$("waBar");
+    var bad=leads.filter(function(l){return !l.is_demo&&l.wa_status&&l.wa_status!=="sent"}).length,b=$("waBar");
     if(!bad){b.hidden=true;return}
     b.hidden=false;b.innerHTML='<span><b>'+bad+' lead'+(bad>1?'s':'')+'</b> did not get the WhatsApp message.</span><button type="button" class="btn" id="waAll">Resend to all</button>';
   }
@@ -107,15 +199,15 @@
       .catch(function(x){alert("Not sent: "+x.message);if(btn){btn.disabled=false;btn.textContent="Resend"}});
   }
   $("waBar").addEventListener("click",function(e){if(e.target.id==="waAll")resend({all:true},e.target)});
-  function render(){leads=RG.leads;chips();list();waBar()}
+  function render(){leads=RG.leads;buildFilters();chips();list();waBar();demoBar()}
 
-  function save(card){
-    var l=leads.filter(function(x){return String(x.id)===card.getAttribute("data-id")})[0];if(!l)return;
-    var st=card.querySelector("select").value,nt=card.querySelector("textarea").value;
+  function save(cardEl){
+    var l=leads.filter(function(x){return String(x.id)===cardEl.getAttribute("data-id")})[0];if(!l)return;
+    var st=cardEl.querySelector("select").value,nt=cardEl.querySelector("textarea").value;
     if(st===l.status&&nt===l.notes)return;
     fetch("../api/lead_update.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,id:l.id,status:st,notes:nt})})
       .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
-      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;card.querySelector("select").setAttribute("data-s",st);card.setAttribute("data-s",st);chips();if(ch&&filter)list()})
+      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;cardEl.querySelector("select").setAttribute("data-s",st);cardEl.setAttribute("data-s",st);chips();if(ch)list()})
       .catch(function(x){alert("Not saved: "+x.message)});
   }
 
@@ -126,23 +218,24 @@
   // Permanently deletes a lead (use for test leads). Its phone number can then be submitted again.
   $("tb").addEventListener("click",function(e){
     var b=e.target.closest(".del");if(!b)return;
-    var card=b.closest(".lead"),id=+card.getAttribute("data-id"),l=leads.filter(function(x){return x.id===id})[0];if(!l)return;
+    var cardEl=b.closest(".lead"),id=+cardEl.getAttribute("data-id"),l=leads.filter(function(x){return x.id===id})[0];if(!l)return;
     if(!confirm("Delete "+l.name+" ("+l.phone+") permanently? This cannot be undone."))return;
     fetch("../api/lead_delete.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,id:id})})
       .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
-      .then(function(){leads=leads.filter(function(x){return x.id!==id});RG.leads=leads;chips();list()})
+      .then(function(){leads=leads.filter(function(x){return x.id!==id});RG.leads=leads;buildFilters();chips();list();demoBar()})
       .catch(function(x){alert("Not deleted: "+x.message)});
   });
   $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest(".lead"))});
   // Tapping Call marks the lead as Called (unless already Called / Converted / Not interested).
   $("tb").addEventListener("click",function(e){
     var a=e.target.closest(".cl");if(!a)return;
-    var card=a.closest(".lead"),sel=card.querySelector("select");
-    if(["New","Not answered","Follow-up"].indexOf(sel.value)>-1){sel.value="Called";save(card)}
+    var cardEl=a.closest(".lead"),sel=cardEl.querySelector("select");
+    if(["New","Not answered","Follow-up"].indexOf(sel.value)>-1){sel.value="Called";save(cardEl)}
   });
+  // CSV of what is currently on screen (so filters carry over to the download).
   $("csv").addEventListener("click",function(){
     var q=function(v){return '"'+String(v==null?"":v).replace(/"/g,'""')+'"'};
-    var csv=[COLS.join(",")].concat(leads.map(function(l){return COLS.map(function(k){return q(l[k])}).join(",")})).join("\n");
+    var csv=[COLS.join(",")].concat(shown.map(function(l){return COLS.map(function(k){return q(l[k])}).join(",")})).join("\n");
     var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="restrogrow-leads.csv";a.click();
   });
   RG.start(render);
