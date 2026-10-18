@@ -22,5 +22,6 @@ json_out(200, ['leads' => array_map(function ($r) {
         'utm_source' => (string)$r['utm_source'], 'utm_medium' => (string)$r['utm_medium'], 'utm_campaign' => (string)$r['utm_campaign'],
         'utm_content' => (string)$r['utm_content'], 'utm_term' => (string)$r['utm_term'],
         'gclid' => (string)$r['gclid'], 'fbclid' => (string)$r['fbclid'], 'page' => (string)$r['page'],
+        'wa_status' => (string)$r['wa_status'], 'wa_note' => (string)$r['wa_note'],
     ];
 }, $rows)]);

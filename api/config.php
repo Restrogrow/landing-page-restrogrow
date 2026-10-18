@@ -91,6 +91,10 @@ function db() {
         body MEDIUMTEXT NOT NULL,
         updated_at DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // Result of the WhatsApp confirmation (sent / failed / not set up) so the admin can see why a message did not go.
+    if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'wa_status'")->fetch()) {
+        $pdo->exec("ALTER TABLE leads ADD COLUMN wa_status VARCHAR(20) NULL, ADD COLUMN wa_note VARCHAR(500) NULL");
+    }
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM leads LIKE 'gclid'")->fetch()) {
         $pdo->exec("ALTER TABLE leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");
