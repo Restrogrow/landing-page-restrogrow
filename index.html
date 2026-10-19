@@ -488,7 +488,7 @@
   <div class="head rv"><span class="kick">Find your number</span><h2 class="h2">Loss Calculator</h2><p>See exactly how much Zomato and Swiggy take from you every month. Takes 10 seconds.</p></div>
   <div class="calc">
     <div class="cin rv">
-      <div class="fld"><div class="t"><label for="rgO">Orders per day on Zomato/Swiggy</label><output id="rgOv">300</output></div><input class="rng" type="range" id="rgO" min="0" max="45" step="1" value="26"></div>
+      <div class="fld"><div class="t"><label for="rgO">Orders per day on Zomato/Swiggy</label><output id="rgOv">300</output></div><input class="rng" type="range" id="rgO" min="5" max="2000" step="1" value="300"></div>
       <div class="fld"><div class="t"><label for="rgA">Average order value</label><output id="rgAv">₹400</output></div><input class="rng" type="range" id="rgA" min="100" max="1500" step="10" value="400"></div>
       <div class="fld"><div class="t"><label for="rgC">Commission rate</label><output id="rgCv">25%</output></div><input class="rng" type="range" id="rgC" min="10" max="50" step="1" value="25"><small>Include everything the app deducts: commission, fees, GST and ads.</small></div>
     </div>
@@ -754,12 +754,10 @@
   once($("rgPh"),function(){R.querySelectorAll(".ph").forEach(function(p,i){setTimeout(function(){p.querySelector(".plate i").style.setProperty("--k",p.getAttribute("data-k"))},RM?0:250+i*320)})});
 
   /* calculator */
-  /* orders per day: the slider walks a list, so small numbers move in 5s and big numbers in bigger steps */
-  var OV=[];(function(){var i;for(i=5;i<=50;i+=5)OV.push(i);for(i=60;i<=200;i+=10)OV.push(i);for(i=250;i<=500;i+=50)OV.push(i);for(i=600;i<=2000;i+=100)OV.push(i)})();
   var f=[$("rgO"),$("rgA"),$("rgC")];
   function calc(){
     f.forEach(function(r){r.style.setProperty("--p",(r.value-r.min)/(r.max-r.min)*100+"%")});
-    var o=OV[+f[0].value],a=+f[1].value,c=+f[2].value/100,m=o*a*30*c;
+    var o=+f[0].value,a=+f[1].value,c=+f[2].value/100,m=o*a*30*c;
     $("rgOv").textContent=o.toLocaleString("en-IN");$("rgAv").textContent=inr(a);$("rgCv").textContent=Math.round(c*100)+"%";
     tween($("rgM"),m,inr);tween($("rgY"),m*12,sh);tween($("rgS"),m*12*.3,sh);
     $("rgStL").textContent=sh(m)+" / month";
