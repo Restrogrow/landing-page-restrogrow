@@ -64,7 +64,8 @@ try {
     $w = meet_whatsapp($row['name'], $row['phone'], $m[0]);
     if ($w !== '') $note .= ' | ' . $w;
     $note .= ' | ' . agent_notify(['name' => $row['name'], 'brand' => $row['brand'], 'location' => $row['location'], 'outlets' => $row['outlets'],
-        'orders' => $row['orders_day'], 'turnover' => $row['turnover'], 'budget' => $row['budget']], $row['phone'], $m[0], $label);
+        'orders' => $row['orders_day'], 'turnover' => $row['turnover'], 'budget' => $row['budget'],
+        'email' => (string)($row['email'] ?? ''), 'business' => (string)($row['business_type'] ?? '')], $row['phone'], $m[0], $label);
     db()->prepare('UPDATE v2_leads SET meet_note = ? WHERE event_id = ?')->execute([mb_substr($note, 0, 300), $eid]);
 } catch (Throwable $e) {
     error_log('book messages failed: ' . $e->getMessage());

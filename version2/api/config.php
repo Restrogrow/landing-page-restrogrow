@@ -111,6 +111,10 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'slot_start'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN slot_start DATETIME NULL");
     }
+    // Email and type of food business from the version 2 form.
+    if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'email'")->fetch()) {
+        $pdo->exec("ALTER TABLE v2_leads ADD COLUMN email VARCHAR(200) NULL, ADD COLUMN business_type VARCHAR(50) NULL");
+    }
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'gclid'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");

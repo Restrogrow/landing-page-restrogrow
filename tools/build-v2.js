@@ -18,18 +18,38 @@ const MEET_COLS = [
   "    if (!$pdo->query(\"SHOW COLUMNS FROM leads LIKE 'slot_start'\")->fetch()) {",
   "        $pdo->exec(\"ALTER TABLE leads ADD COLUMN slot_start DATETIME NULL\");",
   "    }",
+  "    // Email and type of food business from the version 2 form.",
+  "    if (!$pdo->query(\"SHOW COLUMNS FROM leads LIKE 'email'\")->fetch()) {",
+  "        $pdo->exec(\"ALTER TABLE leads ADD COLUMN email VARCHAR(200) NULL, ADD COLUMN business_type VARCHAR(50) NULL\");",
+  "    }",
   ""].join("\n");
 const PATCH = {
   config: s => must(s, "    // Ad attribution captured with each lead (where it came from).", MEET_COLS + "    // Ad attribution captured with each lead (where it came from)."),
   submit: s => {
     s = must(s, "require_once __DIR__ . '/wa.php';", "require_once __DIR__ . '/wa.php';\nrequire_once __DIR__ . '/meet.php';");
+    // email + type of food business
+    s = must(s, "$fields = ['name', 'phone', 'brand',", "$fields = ['name', 'phone', 'email', 'business', 'brand',");
+    s = must(s, "\n// One id per real submit.", "\nif (!filter_var($lead['email'], FILTER_VALIDATE_EMAIL)) json_out(400, ['error' => 'Enter a valid email address.']);\n\n// One id per real submit.");
+    s = must(s, "INSERT INTO leads (created_at, name, phone, brand,", "INSERT INTO leads (created_at, name, phone, email, business_type, brand,");
+    s = must(s, "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    s = must(s, "$lead['name'], $phone, $lead['brand'],", "$lead['name'], $phone, $lead['email'], $lead['business'], $lead['brand'],");
     // duplicates allowed in version 2 (same number can be tested again and again)
     s = must(s, "if ($row = $dup->fetch()) {", "if (false && $row = $dup->fetch()) {");
     // one message only: the confirmation with the slot link. Meet link + agent alert wait for the slot.
     s = must(s, "\ntry { agent_save($eid, agent_new_lead($lead, $phone)); } catch (Throwable $e) { error_log('agent alert error: ' . $e->getMessage()); }", '');   // version 2 alerts the agent when the slot is booked instead
     return must(s, "wa_save($eid, wa_send($lead['name'], $lead['brand'], $phone));", "wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));");
   },
-  leads: s => must(s, "        'is_demo' => (int)$r['is_demo'],", "        'is_demo' => (int)$r['is_demo'],\n        'meet_link' => (string)($r['meet_link'] ?? ''), 'meet_note' => (string)($r['meet_note'] ?? ''),\n        'slot_start' => !empty($r['slot_start']) ? str_replace(' ', 'T', $r['slot_start']) . 'Z' : '',"),
+  leads: s => must(s, "        'is_demo' => (int)$r['is_demo'],", "        'is_demo' => (int)$r['is_demo'],\n        'email' => (string)($r['email'] ?? ''), 'business' => (string)($r['business_type'] ?? ''),\n        'meet_link' => (string)($r['meet_link'] ?? ''), 'meet_note' => (string)($r['meet_note'] ?? ''),\n        'slot_start' => !empty($r['slot_start']) ? str_replace(' ', 'T', $r['slot_start']) . 'Z' : '',"),
+};
+// Version 2 form: email right after the WhatsApp number, type of food business after the brand name.
+const BIZ = ['Restaurant', 'Cloud Kitchen', 'Café', 'QSR / Fast Food Outlet', 'Bakery', 'Other'];
+const formV2 = h => {
+  const ph = '<input id="fP" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10 digit number" required></div>';
+  h = must(h, ph, ph + '\n        <div class="fi"><label for="fE">Email</label><input id="fE" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>');
+  const br = '<input id="fB" name="brand" type="text" required></div>';
+  h = must(h, br, br + '\n        <div class="fi"><label for="fY">What type of food business do you operate?</label><select id="fY" name="business" required><option value="">Select</option>' + BIZ.map(b => '<option>' + b + '</option>').join('') + '</select></div>');
+  h = must(h, 'ok=v!=="";if(el.name==="phone"){', 'ok=v!=="";if(el.name==="email")ok=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(v);if(el.name==="phone"){');
+  return must(h, 'M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":', 'M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":bad.name==="email"?"Enter a valid email address.":');
 };
 const budget = s => s.split('\u20b930,000 to \u20b950,000').join('\u20b930,000 to \u20b950,000').split('\u20b925,000 to \u20b950,000').join('\u20b930,000 to \u20b950,000').split('Under \u20b925,000').join('\u20b925,000 to \u20b930,000');
 
@@ -52,13 +72,16 @@ for (const f of API) {
 }
 
 const page = f => read(f).replace('<meta name="viewport"', '<meta name="robots" content="noindex, nofollow">\n<meta name="viewport"');
-write('index.html', budget(page('index.html')));
+write('index.html', formV2(budget(page('index.html'))));
 write('thank-you.html', read('thank-you.html'));
 write('book.html', fs.readFileSync(path.join(__dirname, 'v2', 'book.html'), 'utf8'));
 
 const MEETBOX = `
     var meet_=l.meet_link?'<div class="wst ok"><b>Demo: '+esc(l.slot_start?RG.fmt(l.slot_start):"time not chosen")+'<br>Meet: <a href="'+esc(l.meet_link)+'" target="_blank" rel="noopener">'+esc(l.meet_link.replace("https://",""))+'</a></b></div>':(l.meet_note&&!l.is_demo?'<div class="wst bad"><b>Meet link not made</b><span>'+esc(l.meet_note)+'</span></div>':(l.is_demo?"":'<div class="wst"><b>Demo slot: not chosen yet</b></div>'));`;
-const patchLeads = h => { const k = `(waCls==="bad"?'<span>'+esc(l.wa_note)+'</span>':"")+'</div>':"";`; h = must(h, k, k + MEETBOX); return must(h, '+wa_+all+', '+wa_+meet_+all+'); };
+const patchLeads = h => { const k = `(waCls==="bad"?'<span>'+esc(l.wa_note)+'</span>':"")+'</div>':"";`; h = must(h, k, k + MEETBOX); h = must(h, '+wa_+all+', '+wa_+meet_+all+');
+  h = must(h, `+'<div class="ph">'+esc(l.phone)+'</div>'`, `+'<div class="ph">'+esc(l.phone)+'</div>'+(l.email?'<div class="mt"><a href="mailto:'+esc(l.email)+'">'+esc(l.email)+'</a></div>':"")`);
+  h = must(h, `'<div class="tags">'+tag("Outlets",l.outlets)`, `'<div class="tags">'+tag("Business",l.business)+tag("Outlets",l.outlets)`);
+  return must(h, `var COLS=["time","name","phone",`, `var COLS=["time","name","phone","email","business",`); };
 for (const f of ['index.html', 'leads.html']) write('admin/' + f, (f === 'leads.html' ? patchLeads(read('admin/' + f)) : read('admin/' + f)).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
 for (const f of ['common.js', 'admin.css', '.htaccess']) write('admin/' + f, read('admin/' + f));
 write('.env.example', `# Optional. Version 2 already uses the main site's .env (WhatsApp, Google Meet, agent, admin password).

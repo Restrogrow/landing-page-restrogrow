@@ -170,7 +170,7 @@ function agent_notify($lead, $phone, $link, $when) {
         $r = wa_once($lead['name'], '', substr($to, -10), env('AGENT_TEMPLATE'), [env('AGENT_NAME', 'Nishchay'), $lead['brand'] . ' (' . $lead['name'] . ')', $phone, $lead['location'], $lead['budget'], $link]);
         return 'agent ' . $r[0] . ($r[0] === 'sent' ? '' : ': ' . $r[1]);
     }
-    $body = "Hello Nishchay, demo booked!\nWhen: $when\nName: {$lead['name']}\nRestaurant: {$lead['brand']}\nPhone: +91 $phone\nCity: {$lead['location']}\nOutlets: {$lead['outlets']}\nOrders/day: {$lead['orders']}\nTurnover: {$lead['turnover']}\nBudget: {$lead['budget']}\nMeeting link: $link";
+    $body = "Hello Nishchay, demo booked!\nWhen: $when\nName: {$lead['name']}\nRestaurant: {$lead['brand']}\nBusiness: " . ($lead['business'] ?? '') . "\nPhone: +91 $phone\nEmail: " . ($lead['email'] ?? '') . "\nCity: {$lead['location']}\nOutlets: {$lead['outlets']}\nOrders/day: {$lead['orders']}\nTurnover: {$lead['turnover']}\nBudget: {$lead['budget']}\nMeeting link: $link";
     list($code, $res, $err) = meet_post(env('WACRM_BASE_URL'), ['Authorization: Bearer ' . env('Api'), 'Content-Type: application/json'],
         json_encode(['to' => '+91' . substr($to, -10), 'type' => 'text', 'text' => $body], JSON_UNESCAPED_UNICODE));
     return $code >= 200 && $code < 300 ? 'agent sent' : 'agent failed: HTTP ' . $code . ' ' . $err . ' ' . mb_substr($res, 0, 150);
