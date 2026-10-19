@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Thank You | RestroGrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--o:#FC5301;--o2:#E54A00;--ink:#00000C;--cream:#FBF6F1;--tx:#1A1A26;--mu:#5E5E70;--ln:#ECE6DF}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px 16px;font:400 16px/1.6 'Poppins',system-ui,sans-serif;color:var(--tx);background:radial-gradient(700px 420px at 50% 0%,rgba(252,83,1,.12),transparent 65%),var(--cream)}
+.card{width:100%;max-width:560px;background:#fff;border:1px solid var(--ln);border-radius:24px;padding:clamp(28px,5vw,48px);text-align:center;box-shadow:0 20px 60px rgba(0,0,12,.08)}
+.tick{width:72px;height:72px;margin:0 auto 18px;border-radius:50%;background:var(--o);display:grid;place-items:center}
+.tick svg{width:36px;height:36px}
+h1{font:800 clamp(1.7rem,5vw,2.2rem)/1.2 'Montserrat',system-ui,sans-serif;margin:0 0 8px}
+h2{font:700 clamp(1.05rem,3vw,1.25rem)/1.4 'Montserrat',system-ui,sans-serif;color:var(--o);margin:0 0 18px}
+p{margin:0 0 14px;color:var(--mu)}
+.q{margin-top:26px;font-weight:600;color:var(--tx)}
+.wa{display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:14px;background:#25D366;color:#fff;font-weight:600;text-decoration:none;font-size:1.02rem;margin-top:6px}
+.wa svg{width:22px;height:22px;fill:currentColor}
+.wa:hover{filter:brightness(.95)}
+.num{margin-top:12px;font-size:.95rem}
+.num b{color:var(--tx)}
+.end{margin-top:28px;padding-top:20px;border-top:1px solid var(--ln)}
+.end strong{display:block;font:700 1.05rem 'Montserrat',system-ui,sans-serif;color:var(--tx)}
+.end small{color:var(--mu);font-size:.85rem}
+</style>
+</head>
+<body>
+<main class="card" id="ty" hidden>
+  <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h1>Thank You! 🎉</h1>
+  <h2>Your Restaurant Growth Journey Starts Here!</h2>
+  <p>Thank you for your interest in Restro Grow! Our team will contact you shortly to understand your restaurant's needs and schedule your personalized demo.</p>
+
+  <p class="q">Want to connect with us right away?</p>
+  <p class="num">📱 WhatsApp: <b>+91 78498 38428</b></p>
+  <a class="wa" id="wa" href="https://wa.me/917849838428?text=Hi%20RestroGrow%2C%20I%20just%20booked%20a%20demo." target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.3z"/></svg>
+    Chat With Us on WhatsApp
+  </a>
+
+  <div class="end">
+    <strong>Let's grow your restaurant together! 🚀</strong>
+    <small>Restro Grow — Helping Restaurants Grow Online.</small>
+  </div>
+</main>
+<script>
+/* Count the Lead once: the server hands out the OK for each event_id only the first time,
+   so a refresh or a shared link never fires it again. The same id is sent to Meta from the server. */
+(function(){
+  var eid="",KEY="rgThanks",seen=false;
+  try{eid=new URLSearchParams(location.search).get("eid")||""}catch(x){}
+  try{history.replaceState(null,"",location.pathname)}catch(x){}
+  try{seen=sessionStorage.getItem(KEY)==="1"}catch(x){}
+  var show=function(){document.getElementById("ty").hidden=false};
+  var home=function(){location.replace("index.html")};
+  /* Only a real submit gets here: no valid id and no earlier visit in this tab means go back to the home page. */
+  /* c = public tag IDs. j = the confirm reply, passed only on the one visit that counts the lead (fire:true). */
+  function tags(c,j){
+    if(c.meta_pixel_id){
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      fbq("set","autoConfig",false,c.meta_pixel_id);   /* no automatic button-click events */
+      fbq("init",c.meta_pixel_id,(j&&j.ph_sha256)?{ph:j.ph_sha256}:{});   /* advanced matching, hashed phone */
+      fbq("track","PageView");
+      if(j)fbq("track","Lead",{},{eventID:j.event_id});
+    }
+    var gid=c.ga4_id||c.google_ads_id;
+    if(gid){
+      window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};
+      var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(gid);document.head.appendChild(s);
+      gtag("js",new Date());
+      if(c.ga4_id)gtag("config",c.ga4_id);
+      if(c.google_ads_id)gtag("config",c.google_ads_id);
+      if(j){
+        if(c.google_ads_id&&j.google_ads_lead_label){
+          if(j.ph_e164_sha256)gtag("set","user_data",{sha256_phone_number:j.ph_e164_sha256});   /* enhanced conversions */
+          gtag("event","conversion",{send_to:c.google_ads_id+"/"+j.google_ads_lead_label,transaction_id:j.event_id});   /* transaction_id = Google's dedupe */
+        }
+        if(c.ga4_id)gtag("event","generate_lead",{event_id:j.event_id});
+      }
+    }
+  }
+  /* Refresh / shared link: the page still shows, tags load for PageView only, no conversions. */
+  function again(){
+    if(!seen){home();return}
+    show();
+    fetch("api/public_config.php").then(function(r){return r.json()}).then(function(c){try{tags(c,null)}catch(x){}}).catch(function(){});
+  }
+  document.getElementById("wa").addEventListener("click",function(){
+    try{if(window.fbq)fbq("track","Contact");if(window.gtag)gtag("event","whatsapp_click")}catch(x){}
+  });
+  if(!/^[A-Za-z0-9-]{8,64}$/.test(eid)){again();return}
+  fetch("api/lead_confirm.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({eid:eid})})
+    .then(function(r){return r.json()})
+    .then(function(j){
+      if(!j||!j.valid){again();return}
+      try{sessionStorage.setItem(KEY,"1")}catch(x){}
+      show();
+      try{tags(j,j.fire?j:null)}catch(x){}   /* an ad blocker must never break the page */
+    }).catch(function(){show()});
+})();
+</script>
+</body>
+</html>

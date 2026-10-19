@@ -1,0 +1,4 @@
+# Admin assets change often: always revalidate so a browser never keeps an old copy.
+<FilesMatch "\.(css|js|html)$">
+  Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>V2 RestroGrow Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{if(sessionStorage.getItem("rgAdminPw"))document.documentElement.className="pw"}catch(e){}</script>
+<link rel="stylesheet" href="admin.css?v=20261019e">
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Admin login</h1><p>Enter the password to continue.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab on" href="index.html">Dashboard</a>
+    <a class="tab" href="leads.html">Leads</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="ref" type="button">Refresh</button>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Dashboard</h1><div class="sub" id="cnt"></div></div></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="charts">
+    <section class="card wide"><div class="h"><h2>Leads per day</h2><span>Last 30 days</span></div><div id="line"></div></section>
+    <section class="card"><div class="h"><h2>Pipeline</h2><span>Click a row to open those leads</span></div><div class="rows" id="cs"></div></section>
+    <section class="card"><div class="h"><h2>Budget range</h2><span>Leads</span></div><div class="rows" id="cb"></div></section>
+    <section class="card"><div class="h"><h2>Top cities</h2><span>Leads</span></div><div class="rows" id="cc"></div></section>
+    <section class="card"><div class="h"><h2>Turnover</h2><span>Leads</span></div><div class="rows" id="ct"></div></section>
+    <section class="card"><div class="h"><h2>Where leads come from</h2><span>Google, Meta or direct</span></div><div class="rows" id="cn"></div></section>
+    <section class="card"><div class="h"><h2>Top campaigns</h2><span>Leads</span></div><div class="rows" id="ck"></div></section>
+    <section class="card"><div class="h"><h2>Top ads</h2><span>Leads</span></div><div class="rows" id="ca"></div></section>
+    <section class="card"><div class="h"><h2>Landing pages</h2><span>Leads</span></div><div class="rows" id="cl"></div></section>
+  </div>
+</div>
+
+<script src="common.js?v=20261019e"></script>
+<script>
+(function(){
+  var $=RG.$,esc=RG.esc,leads;
+
+  function count(key,order){
+    var m={};leads.forEach(function(l){var v=l[key]||"—";m[v]=(m[v]||0)+1});
+    var arr=Object.keys(m).map(function(k){return [k,m[k]]});
+    if(order)arr.sort(function(a,b){var i=order.indexOf(a[0]),j=order.indexOf(b[0]);return (i<0?99:i)-(j<0?99:j)});
+    else arr.sort(function(a,b){return b[1]-a[1]});
+    return arr;
+  }
+  function bars(el,arr,go){
+    var max=Math.max.apply(null,arr.map(function(a){return a[1]}).concat([1]));
+    el.innerHTML=arr.length?arr.map(function(a){
+      return '<button type="button" class="br'+(go?" go":"")+'" data-v="'+esc(a[0])+'" data-t="'+esc(a[0]+": "+a[1]+" lead"+(a[1]===1?"":"s"))+'"><span class="nm">'+esc(a[0])+'</span><span class="tr"><span class="fl" style="width:'+(a[1]/max*100)+'%"></span></span><span class="ct">'+a[1]+'</span></button>';
+    }).join(""):'<div class="nodata">No data yet.</div>';
+  }
+  function drawLine(){
+    var box=$("line"),W=box.clientWidth||600,H=190,pl=30,pr=8,pt=10,pb=22;
+    var days=[],i,now=new Date();now.setHours(12,0,0,0);
+    for(i=29;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);days.push({k:RG.dayKey(d),d:d,n:0})}
+    var idx={};days.forEach(function(x,j){idx[x.k]=j});
+    leads.forEach(function(l){var j=idx[RG.dayKey(new Date(l.time))];if(j!=null)days[j].n++});
+    var max=Math.max.apply(null,days.map(function(x){return x.n}).concat([1]));
+    var step=max<=4?1:Math.ceil(max/4),top=Math.ceil(max/step)*step;
+    var X=function(j){return pl+j*(W-pl-pr)/29},Y=function(v){return pt+(H-pt-pb)*(1-v/top)};
+    var lab=function(d){return d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})};
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Leads per day, last 30 days">';
+    for(var g=0;g<=top;g+=step)s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(g)+'" y2="'+Y(g)+'" stroke="var(--ln)"/><text x="'+(pl-6)+'" y="'+(Y(g)+4)+'" text-anchor="end" font-size="10" fill="var(--mu)">'+g+'</text>';
+    [0,7,14,21,29].forEach(function(j){s+='<text x="'+X(j)+'" y="'+(H-6)+'" text-anchor="'+(j===0?"start":j===29?"end":"middle")+'" font-size="10" fill="var(--mu)">'+lab(days[j].d)+'</text>'});
+    var pts=days.map(function(x,j){return X(j)+","+Y(x.n)}).join(" ");
+    s+='<polygon points="'+X(0)+","+Y(0)+" "+pts+" "+X(29)+","+Y(0)+'" fill="var(--series)" opacity=".12"/><polyline points="'+pts+'" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    s+='<g id="hv" style="display:none"><line id="hl" y1="'+pt+'" y2="'+(H-pb)+'" stroke="var(--mu)" stroke-dasharray="3 3"/><circle id="hd" r="4.5" fill="var(--series)" stroke="var(--card)" stroke-width="2"/></g>';
+    s+='<rect id="hr" x="'+pl+'" y="0" width="'+(W-pl-pr)+'" height="'+H+'" fill="transparent"/></svg>';
+    box.innerHTML=s;
+    var r=$("hr");
+    function mv(e){
+      var b=r.getBoundingClientRect(),j=Math.round((e.clientX-b.left)/b.width*29);j=Math.max(0,Math.min(29,j));
+      $("hv").style.display="";$("hl").setAttribute("x1",X(j));$("hl").setAttribute("x2",X(j));$("hd").setAttribute("cx",X(j));$("hd").setAttribute("cy",Y(days[j].n));
+      RG.showTip(e,lab(days[j].d)+": "+days[j].n+" lead"+(days[j].n===1?"":"s"));
+    }
+    r.addEventListener("mousemove",mv);r.addEventListener("touchmove",function(e){mv(e.touches[0])},{passive:true});
+    r.addEventListener("mouseleave",function(){$("hv").style.display="none";RG.hideTip()});
+  }
+  function render(){
+    leads=RG.leads;
+    var today=RG.dayKey(new Date()),n=leads.length;
+    var td=leads.filter(function(l){return RG.dayKey(new Date(l.time))===today}).length;
+    var conv=leads.filter(function(l){return l.status==="Converted"}).length;
+    var todo=leads.filter(function(l){return l.status==="New"||l.status==="Follow-up"}).length;
+    var rate=n?Math.round(conv/n*1000)/10:0;
+    var k=[["Total leads",n,"all time"],["New today",td,"submitted today"],["To contact",todo,"New + Follow-up"],["Converted",conv,rate+"% conversion"]];
+    $("kpis").innerHTML=k.map(function(x){return '<div class="kpi"><div class="l">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="n">'+x[2]+'</div></div>'}).join("");
+    $("cnt").textContent=n+" submission"+(n===1?"":"s");
+    bars($("cs"),count("status",RG.STATUSES),true);
+    bars($("cb"),count("budget"));
+    var c=count("location"),top=c.slice(0,5),rest=c.slice(5).reduce(function(s,a){return s+a[1]},0);
+    if(rest)top.push(["Other",rest]);
+    bars($("cc"),top);
+    bars($("ct"),count("turnover"));
+    // Ad attribution: which network, campaign, ad and landing page the leads came from.
+    var ap=function(l){var p={};try{p=JSON.parse(l.ad_params||"{}")||{}}catch(x){}return p};
+    var tally=function(fn){var m={};leads.forEach(function(l){var v=fn(l)||"(none)";m[v]=(m[v]||0)+1});return Object.keys(m).map(function(k){return [k,m[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,6)};
+    bars($("cn"),tally(function(l){return l.gclid?"Google":l.fbclid?"Meta":(l.utm_source?l.utm_source:"Direct / other")}));
+    bars($("ck"),tally(function(l){var p=ap(l);return l.utm_campaign||p.campaign_name||p.campaign||p.campaignid}));
+    bars($("ca"),tally(function(l){var p=ap(l);return p.ad_name||p.ad||l.utm_content||p.ad_id||p.creative}));
+    bars($("cl"),tally(function(l){var m=String(l.page||"").match(/\/lp\/([a-z0-9-]+)/);return m?m[1]:"main page"}));
+    drawLine();
+  }
+
+  $("cs").addEventListener("click",function(e){var b=e.target.closest(".br");if(b)location.href="leads.html?status="+encodeURIComponent(b.getAttribute("data-v"))});
+  ["cs","cb","cc","ct","cn","ck","ca","cl"].forEach(function(id){
+    $(id).addEventListener("mousemove",function(e){var b=e.target.closest(".br");b?RG.showTip(e,b.getAttribute("data-t")):RG.hideTip()});
+    $(id).addEventListener("mouseleave",RG.hideTip);
+  });
+  var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){if($("app").style.display==="block")drawLine()},120)});
+  RG.start(render);
+})();
+</script>
+</body>
+</html>

@@ -18,7 +18,7 @@
 
   // render() is called once logged in and again after every refresh.
   RG.start=function(render){
-    function show(list){RG.leads=list;$("login").style.display="none";$("app").style.display="block";render()}
+    function show(list){document.documentElement.className="";RG.leads=list;$("login").style.display="none";$("app").style.display="block";render()}
     RG.refresh=function(){return RG.load(RG.pw).then(show)};
     $("lf").addEventListener("submit",function(e){
       e.preventDefault();$("err").textContent="";var p=$("pw").value;
@@ -27,6 +27,6 @@
     $("out").addEventListener("click",function(){try{sessionStorage.removeItem(KEY)}catch(x){}location.reload()});
     if($("ref"))$("ref").addEventListener("click",function(){RG.refresh().catch(function(x){alert(x.message)})});
     var saved="";try{saved=sessionStorage.getItem(KEY)||""}catch(x){}
-    if(saved)RG.load(saved).then(function(l){RG.pw=saved;show(l)}).catch(function(){try{sessionStorage.removeItem(KEY)}catch(x){}});
+    if(saved)RG.load(saved).then(function(l){RG.pw=saved;show(l)}).catch(function(){document.documentElement.className="";try{sessionStorage.removeItem(KEY)}catch(x){}});
   };
 })();

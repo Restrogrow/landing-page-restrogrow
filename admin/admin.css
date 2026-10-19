@@ -149,3 +149,7 @@ textarea.nt{width:100%;height:56px;min-height:44px;padding:8px 10px;border-radiu
   .br{grid-template-columns:minmax(70px,38%) 1fr 30px}
 }
 @media (max-width:420px){.kpi .v{font-size:1.5rem}.kpis{gap:8px}}
+
+/* already signed in: never flash the login form while the leads load */
+html.pw #login{display:none}
+html.pw body::after{content:"Loading...";position:fixed;inset:0;display:grid;place-items:center;color:var(--mu);font-size:.95rem;pointer-events:none}
