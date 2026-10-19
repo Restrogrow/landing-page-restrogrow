@@ -36,7 +36,7 @@ Repo: https://github.com/Restrogrow/landing-page-restrogrow (branch `main`, depl
 3. Browser goes to `thank-you.html?eid=<id>`. The page removes the id from the URL, calls `api/lead_confirm.php`, and only if the server says `fire:true` loads the Meta Pixel and fires `Lead` with `eventID = event_id`. Refreshing or sharing the link never counts again.
 
 ## Form fields (`leads` table columns)
-`name`, `phone` (10 digits), `brand`, `location`, `outlets` (1 / 2 to 3 / 4 to 10 / 10+), `orders_day` (20–30 / 30–50 / 50–100 / 100+ Orders), `turnover` (Below ₹5 Lakhs / ₹5–10 / ₹10–25 / ₹25 Lakhs+), `budget` (Under ₹25,000 / ₹25,000 to ₹50,000 / ₹50,000 to ₹1 L / ₹1 L+), `page`, plus `created_at` (UTC), `status` (New, Called, Not answered, Follow-up, Converted, Not interested), `notes`, `event_id`, `pixel_fired_at`. Columns are added automatically on first use. If you change a dropdown's options, old leads keep their old text.
+`name`, `phone` (10 digits), `brand`, `location`, `outlets` (1 / 2 to 3 / 4 to 10 / 10+), `orders_day` (20–30 / 30–50 / 50–100 / 100+ Orders), `turnover` (Below ₹5 Lakhs / ₹5–10 / ₹10–25 / ₹25 Lakhs+), `budget` (₹25,000 to ₹30,000 / ₹30,000 to ₹50,000 / ₹50,000 to ₹1 L / ₹1 L+), `page`, plus `created_at` (UTC), `status` (New, Called, Not answered, Follow-up, Converted, Not interested), `notes`, `event_id`, `pixel_fired_at`. Columns are added automatically on first use. If you change a dropdown's options, old leads keep their old text.
 
 ## Env vars (`.env` on the server; see `.env.example`)
 `Api` (RepeatGrow API key), `WACRM_BASE_URL`, `WACRM_TEMPLATE`, `ADMIN_PASSWORD`, `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `META_PIXEL_ID`, `META_CAPI_TOKEN`, `META_TEST_EVENT_CODE` (optional, testing only).
