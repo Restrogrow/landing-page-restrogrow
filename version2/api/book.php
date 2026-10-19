@@ -24,15 +24,18 @@ if (!empty($row['slot_start'])) {
     json_out(200, ['ok' => true, 'already' => true, 'label' => slot_label(strtotime($row['slot_start'] . ' UTC')), 'link' => (string)$row['meet_link']]);
 }
 
-list($tok) = google_token();
+list($tok, $tokNote) = google_token();
 $ok = false;
 foreach (slots_free($tok) as $d) foreach ($d['slots'] as $s) if ($s['ts'] === $ts) $ok = true;
 if (!$ok) json_out(409, ['error' => 'Sorry, that slot was just taken. Please pick another one.']);
 
 $m = meet_create($row['name'], $row['brand'], $ts, $tok);
 if ($m[0] === '') {
-    error_log('meet create failed: ' . $m[1]);
-    json_out(502, ['error' => 'Could not book this slot right now. Please try again in a minute.']);
+    // The reason (Google status / "not set up", never a key) goes on the lead so Admin shows why, and back for debugging.
+    $why = $tok === '' ? 'Google ' . $tokNote : $m[1];
+    error_log('meet create failed: ' . $why);
+    try { db()->prepare('UPDATE v2_leads SET meet_note = ? WHERE event_id = ? AND slot_start IS NULL')->execute([mb_substr('booking failed: ' . $why, 0, 300), $eid]); } catch (Throwable $e) {}
+    json_out(502, ['error' => 'Could not book this slot right now. Please try again in a minute.', 'detail' => mb_substr($why, 0, 300)]);
 }
 try {
     $u = db()->prepare('UPDATE v2_leads SET slot_start = ?, meet_link = ?, meet_note = ? WHERE event_id = ? AND slot_start IS NULL');
