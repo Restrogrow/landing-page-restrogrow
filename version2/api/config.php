@@ -107,6 +107,10 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'meet_link'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN meet_link VARCHAR(200) NULL, ADD COLUMN meet_note VARCHAR(300) NULL");
     }
+    // Demo slot the lead picked.
+    if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'slot_start'")->fetch()) {
+        $pdo->exec("ALTER TABLE v2_leads ADD COLUMN slot_start DATETIME NULL");
+    }
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'gclid'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN fbp VARCHAR(200) NULL, ADD COLUMN fbc VARCHAR(300) NULL, ADD COLUMN gclid VARCHAR(300) NULL, ADD COLUMN fbclid VARCHAR(300) NULL, ADD COLUMN utm_source VARCHAR(200) NULL, ADD COLUMN utm_medium VARCHAR(200) NULL, ADD COLUMN utm_campaign VARCHAR(200) NULL, ADD COLUMN utm_content VARCHAR(200) NULL, ADD COLUMN utm_term VARCHAR(200) NULL");

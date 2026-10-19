@@ -55,7 +55,7 @@ if (count(array_unique(str_split($phone))) <= 2 || strpos($seq, $phone) !== fals
 try {
     $dup = db()->prepare('SELECT event_id FROM v2_leads WHERE phone = ? ORDER BY id LIMIT 1');
     $dup->execute([$phone]);
-    if ($row = $dup->fetch()) {
+    if (false && $row = $dup->fetch()) {
         if ((string)$row['event_id'] === $eid) json_out(200, ['ok' => true, 'event_id' => $eid]);
         json_out(409, ['error' => 'This number is already registered. Our team will contact you shortly.']);
     }
@@ -114,8 +114,7 @@ flush();
 if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-wa_save($eid, wa_send($lead['name'], $lead['brand'], $phone));
-try { $m = meet_create($lead['name'], $lead['brand']); $w = meet_whatsapp($lead['name'], $phone, $m[0]); if ($w !== '') $m[1] .= ' | ' . $w; $m[1] .= ' | ' . agent_notify($lead, $phone, $m[0]); meet_save($eid, $m); } catch (Throwable $e) { error_log('meet error: ' . $e->getMessage()); }
+wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));
 
 // Meta Conversions API: server-side Lead with the same event_id. Ad blockers / iPhone privacy can't hide it,
 // and Meta merges it with the browser Pixel event instead of counting twice.

@@ -25,6 +25,7 @@ json_out(200, ['leads' => array_map(function ($r) {
         'ad_params' => (string)$r['ad_params'], 'referrer' => (string)$r['referrer'], 'landing' => (string)$r['landing'],
         'is_demo' => (int)$r['is_demo'],
         'meet_link' => (string)($r['meet_link'] ?? ''), 'meet_note' => (string)($r['meet_note'] ?? ''),
+        'slot_start' => !empty($r['slot_start']) ? str_replace(' ', 'T', $r['slot_start']) . 'Z' : '',
         'wa_status' => (string)$r['wa_status'], 'wa_note' => (string)$r['wa_note'],
     ];
 }, $rows)]);
