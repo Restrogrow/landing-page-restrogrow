@@ -43,7 +43,7 @@ function slot_cfg() {
         'to' => max(1, min(24, (int)env('SLOT_END_HOUR', '19'))),
         'step' => max(5, (int)env('SLOT_STEP_MIN', '15')),
         'len' => max(5, (int)env('SLOT_MINUTES', '30')),
-        'days' => max(1, min(14, (int)env('SLOT_DAYS', '3'))),
+        'days' => max(1, min(14, (int)env('SLOT_DAYS', '8'))),
         'notice' => max(0, (int)env('SLOT_NOTICE_MIN', '30')),
     ];
 }

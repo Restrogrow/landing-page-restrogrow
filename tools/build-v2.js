@@ -86,7 +86,7 @@ write('.env.example', `# Optional. Version 2 already uses the main site's .env (
 #
 # Slot booking (all optional, these are the defaults):
 # WACRM_V2_TEMPLATE=      template with {{1}} name, {{2}} restaurant, {{3}} slot link. Empty = normal confirmation, no link.
-# SLOT_START_HOUR=11  SLOT_END_HOUR=19  SLOT_STEP_MIN=15  SLOT_MINUTES=30  SLOT_DAYS=3  SLOT_NOTICE_MIN=30
+# SLOT_START_HOUR=11  SLOT_END_HOUR=19  SLOT_STEP_MIN=15  SLOT_MINUTES=30  SLOT_DAYS=8  SLOT_NOTICE_MIN=30
 # BOOK_BASE_URL=          full URL of book.html if it is not /version2/book.html on the same host
 `);
 console.log('version2 built');
