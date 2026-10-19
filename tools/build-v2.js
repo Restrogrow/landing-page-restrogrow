@@ -76,13 +76,9 @@ write('index.html', formV2(budget(page('index.html'))));
 write('thank-you.html', read('thank-you.html'));
 write('book.html', fs.readFileSync(path.join(__dirname, 'v2', 'book.html'), 'utf8'));
 
-const MEETBOX = `
-    var meet_=l.meet_link?'<div class="wst ok"><b>Demo: '+esc(l.slot_start?RG.fmt(l.slot_start):"time not chosen")+'<br>Meet: <a href="'+esc(l.meet_link)+'" target="_blank" rel="noopener">'+esc(l.meet_link.replace("https://",""))+'</a></b></div>':(l.meet_note&&!l.is_demo?'<div class="wst bad"><b>Meet link not made</b><span>'+esc(l.meet_note)+'</span></div>':(l.is_demo?"":'<div class="wst"><b>Demo slot: not chosen yet</b></div>'));`;
-const patchLeads = h => { const k = `(waCls==="bad"?'<span>'+esc(l.wa_note)+'</span>':"")+'</div>':"";`; h = must(h, k, k + MEETBOX); h = must(h, '+wa_+all+', '+wa_+meet_+all+');
-  h = must(h, `+'<div class="ph">'+esc(l.phone)+'</div>'`, `+'<div class="ph">'+esc(l.phone)+'</div>'+(l.email?'<div class="mt"><a href="mailto:'+esc(l.email)+'">'+esc(l.email)+'</a></div>':"")`);
-  h = must(h, `'<div class="tags">'+tag("Outlets",l.outlets)`, `'<div class="tags">'+tag("Business",l.business)+tag("Outlets",l.outlets)`);
-  return must(h, `var COLS=["time","name","phone",`, `var COLS=["time","name","phone","email","business",`); };
-for (const f of ['index.html', 'leads.html']) write('admin/' + f, (f === 'leads.html' ? patchLeads(read('admin/' + f)) : read('admin/' + f)).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
+// leads page: version 2 has its own (demo slot first, fewer filters on show)
+write('admin/leads.html', fs.readFileSync(path.join(__dirname, 'v2', 'leads.html'), 'utf8'));
+for (const f of ['index.html']) write('admin/' + f, read('admin/' + f).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
 for (const f of ['common.js', 'admin.css', '.htaccess']) write('admin/' + f, read('admin/' + f));
 write('.env.example', `# Optional. Version 2 already uses the main site's .env (WhatsApp, Google Meet, agent, admin password).
 # Put a line here only to override it, e.g. a separate database:  DB_NAME=...  DB_USER=...  DB_PASS=...
