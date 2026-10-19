@@ -4,71 +4,168 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#00000C">
 <title>Choose Your Demo Slot | RestroGrow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--o:#FC5301;--o2:#E54A00;--ink:#00000C;--cream:#FBF6F1;--tx:#1A1A26;--mu:#5E5E70;--ln:#ECE6DF}
+:root{--o:#FC5301;--o2:#E54A00;--ink:#00000C;--cream:#FBF6F1;--tx:#1A1A26;--mu:#5E5E70;--ln:#ECE6DF;--soft:#FFF1EA}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:24px 16px;font:400 16px/1.6 'Poppins',system-ui,sans-serif;color:var(--tx);background:var(--cream)}
-.card{width:100%;min-width:0;max-width:560px;background:#fff;border:1px solid var(--ln);border-radius:24px;padding:clamp(24px,5vw,40px);box-shadow:0 20px 60px rgba(0,0,12,.08)}
-h1{font:800 clamp(1.5rem,5vw,1.9rem)/1.25 'Montserrat',system-ui,sans-serif;margin:0 0 6px}
-p{margin:0 0 14px;color:var(--mu)}
-.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin:18px 0 14px}
-.d{flex:0 0 auto;padding:10px 16px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;font:600 .92rem 'Poppins',sans-serif;color:var(--tx);cursor:pointer}
-.d.on{border-color:var(--o);background:#FFF1EA;color:var(--o2)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;max-height:300px;overflow-y:auto;padding:2px}
-.s{padding:11px 4px;border:1.5px solid var(--ln);border-radius:10px;background:#fff;font:500 .92rem 'Poppins',sans-serif;color:var(--tx);cursor:pointer}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font:400 16px/1.55 'Poppins',system-ui,sans-serif;color:var(--tx);background:var(--cream)}
+button{font-family:inherit}
+:focus-visible{outline:3px solid #FFB08A;outline-offset:2px}
+.top{display:flex;align-items:center;justify-content:center;padding:18px 16px 4px}
+.brand{font:800 1.25rem 'Montserrat',system-ui,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.brand b{color:var(--o)}
+.wrap{max-width:980px;margin:0 auto;padding:14px 16px 150px}
+.box{display:grid;grid-template-columns:minmax(0,1fr);background:#fff;border:1px solid var(--ln);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,12,.08)}
+.side{background:var(--ink);color:#fff;padding:26px 22px}
+.side h1{font:800 clamp(1.35rem,4.5vw,1.8rem)/1.25 'Montserrat',system-ui,sans-serif;margin:0 0 8px}
+.side h1 span{color:var(--o)}
+.side p{margin:0 0 16px;color:#C9C9D6;font-size:.95rem}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.facts li{display:flex;gap:12px;align-items:center;font-size:.93rem;color:#E8E8F0}
+.facts i{flex:0 0 34px;height:34px;border-radius:10px;background:rgba(252,83,1,.16);display:grid;place-items:center}
+.facts svg{width:18px;height:18px;stroke:#FF8A55;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pick{padding:22px 18px 8px}
+.steps{display:flex;gap:6px;margin:0 0 18px}
+.steps span{flex:1;height:5px;border-radius:3px;background:var(--ln)}
+.steps span.on{background:var(--o)}
+.lbl{font:700 .82rem 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:0 0 10px}
+.days{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px 8px;scroll-snap-type:x proximity;scrollbar-width:thin}
+.d{flex:0 0 auto;scroll-snap-align:start;min-width:84px;padding:10px 12px;border:1.5px solid var(--ln);border-radius:14px;background:#fff;color:var(--tx);cursor:pointer;text-align:center;line-height:1.2;transition:border-color .15s,background .15s}
+.d small{display:block;font-size:.75rem;color:var(--mu);font-weight:500}
+.d strong{display:block;font:700 1.35rem 'Montserrat',sans-serif;margin:2px 0}
+.d em{display:block;font-style:normal;font-size:.72rem;color:var(--mu)}
+.d:hover{border-color:var(--o)}
+.d.on{border-color:var(--o);background:var(--soft)}
+.d.on strong,.d.on small{color:var(--o2)}
+.part{margin:6px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.s{min-height:46px;padding:10px 4px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;color:var(--tx);font:500 .95rem 'Poppins',sans-serif;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
 .s:hover{border-color:var(--o)}
-.s.on{background:var(--o);border-color:var(--o);color:#fff}
-.go{width:100%;height:54px;margin-top:20px;border:0;border-radius:14px;background:var(--o);color:#fff;font:700 1rem 'Montserrat',sans-serif;cursor:pointer}
+.s.on{background:var(--o);border-color:var(--o);color:#fff;font-weight:600}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#fff;border-top:1px solid var(--ln);padding:12px 16px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,12,.07)}
+.bar .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.sum{flex:1;min-width:0;font-size:.88rem;line-height:1.3;color:var(--mu)}
+.sum b{display:block;color:var(--tx);font:700 1rem 'Montserrat',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.go{flex:0 0 auto;height:52px;padding:0 26px;border:0;border-radius:14px;background:var(--o);color:#fff;font:700 1rem 'Montserrat',sans-serif;cursor:pointer;transition:background .15s}
 .go:disabled{background:#d8d0c8;cursor:not-allowed}
 .go:not(:disabled):hover{background:var(--o2)}
-.err{color:#B3261E;font-size:.9rem;margin:12px 0 0;min-height:1.2em}
-.ok{text-align:center}
-.ok .big{font:800 1.3rem 'Montserrat',sans-serif;color:var(--o);margin:6px 0 4px}
-.join{display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 28px;border-radius:14px;background:#1A73E8;color:#fff;font:600 1rem 'Poppins',sans-serif;text-decoration:none;margin-top:8px}
-.note{font-size:.85rem;color:var(--mu);margin-top:14px}
+.err{color:#B3261E;font-size:.9rem;margin:0 0 8px;min-height:1.1em}
+.msg{padding:42px 22px;text-align:center}
+.msg h1{font:800 clamp(1.4rem,5vw,1.8rem)/1.25 'Montserrat',sans-serif;margin:0 0 8px}
+.msg p{color:var(--mu);margin:0 0 14px}
+.tick{width:72px;height:72px;margin:0 auto 16px;border-radius:50%;background:var(--o);display:grid;place-items:center}
+.tick svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.when{display:inline-block;margin:4px 0 16px;padding:12px 20px;border-radius:14px;background:var(--soft);color:var(--o2);font:800 1.15rem 'Montserrat',sans-serif}
+.join{display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 28px;border-radius:14px;background:#1A73E8;color:#fff;font:600 1rem 'Poppins',sans-serif;text-decoration:none}
+.join:hover{filter:brightness(.95)}
+.note{font-size:.85rem;color:var(--mu);margin-top:16px}
+.sk{height:46px;border-radius:12px;background:linear-gradient(90deg,#f3eee8,#fbf8f4,#f3eee8);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:759px){
+  .side{padding:18px 18px 16px}
+  .side h1{font-size:1.3rem;margin-bottom:10px}
+  .side p{display:none}
+  .facts{display:flex;flex-wrap:wrap;gap:8px}
+  .facts li{gap:8px;padding:6px 10px 6px 6px;border-radius:999px;background:rgba(255,255,255,.08);font-size:.78rem}
+  .facts i{flex:0 0 24px;height:24px;border-radius:50%}
+  .facts svg{width:13px;height:13px}
+  .sum b{white-space:normal;font-size:.95rem}
+}
+@media(min-width:760px){
+  .wrap{padding:26px 24px 120px}
+  .box{grid-template-columns:320px minmax(0,1fr)}
+  .side{padding:38px 30px;grid-row:1 / 3}
+  .pick{padding:34px 32px 14px}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .d{min-width:92px}
+  .bar{position:static;box-shadow:none;border:0;border-top:1px solid var(--ln);padding:16px 32px;grid-column:2}
+  .bar .in{max-width:none}
+  .box{position:relative}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main class="card" id="c"><p>Loading your slots...</p></main>
+<div class="top"><div class="brand">Restro<b>Grow</b></div></div>
+<main class="wrap"><div class="box" id="box">
+  <aside class="side">
+    <h1 id="hi">Book your <span>free demo</span></h1>
+    <p>Pick a time that suits you. We will show you how to take more direct orders and keep more of every sale.</p>
+    <ul class="facts">
+      <li><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><span id="mins">About 30 minutes</span></li>
+      <li><i><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></i><span>On Google Meet, no app needed</span></li>
+      <li><i><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></i><span>Free, no obligation</span></li>
+      <li><i><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></i><span>Link also sent on WhatsApp</span></li>
+    </ul>
+  </aside>
+  <section class="pick" id="pick" aria-live="polite">
+    <div class="steps"><span class="on"></span><span></span><span></span></div>
+    <div class="lbl">Loading your slots</div>
+    <div class="grid"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  </section>
+  <div class="bar" id="bar" hidden><div class="in">
+    <div class="sum" id="sum">Pick a day and a time</div>
+    <button type="button" class="go" id="go" disabled>Confirm slot</button>
+  </div></div>
+</div></main>
 <script>
 (function(){
-  var C=document.getElementById("c"),eid=new URLSearchParams(location.search).get("e")||"",sel=0,days=[],day=0;
+  var P=document.getElementById("pick"),BAR=document.getElementById("bar"),SUM=document.getElementById("sum"),GO=document.getElementById("go"),
+      eid=new URLSearchParams(location.search).get("e")||"",sel=0,selLabel="",days=[],day=0,name="",busy=false;
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  function booked(label,link){
-    C.innerHTML='<div class="ok"><h1>Your demo is booked</h1><div class="big">'+esc(label)+'</div><p>We have sent the meeting link on WhatsApp too.</p>'+
+  function istHour(ts){return new Date((ts+19800)*1000).getUTCHours()}
+  function steps(n){var h="";for(var i=1;i<=3;i++)h+='<span'+(i<=n?' class="on"':'')+'></span>';return '<div class="steps">'+h+'</div>'}
+  function done(label,link){
+    BAR.hidden=true;
+    P.innerHTML='<div class="msg"><div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h1>Your demo is booked</h1><div class="when">'+esc(label)+'</div><p>We have also sent the meeting link on WhatsApp.</p>'+
       (link?'<a class="join" href="'+esc(link)+'" target="_blank" rel="noopener">Open Google Meet link</a>':'')+
-      '<p class="note">Please join a minute early. If you need another time, just reply on WhatsApp.</p></div>';
+      '<p class="note">Please join a minute early. Need a different time? Just reply on WhatsApp.</p></div>';
+    window.scrollTo(0,0);
   }
-  function fail(m){C.innerHTML='<h1>Choose your demo slot</h1><p>'+esc(m)+'</p>'}
-  function draw(name,mins){
-    var h='<h1>'+(name?'Hi '+esc(name)+', ':'')+'choose your demo slot</h1><p>Pick a time that suits you. The demo takes about '+mins+' minutes on Google Meet. Times are in IST.</p><div class="days" id="dd">';
-    days.forEach(function(d,i){h+='<button type="button" class="d'+(i===day?' on':'')+'" data-i="'+i+'">'+esc(d.day)+'</button>'});
-    h+='</div><div class="grid" id="gg">';
-    days[day].slots.forEach(function(s){h+='<button type="button" class="s'+(s.ts===sel?' on':'')+'" data-t="'+s.ts+'">'+esc(s.label)+'</button>'});
-    h+='</div><button type="button" class="go" id="go"'+(sel?'':' disabled')+'>Confirm my slot</button><div class="err" id="er"></div>';
-    C.innerHTML=h;
-    document.getElementById("dd").onclick=function(e){var b=e.target.closest(".d");if(!b)return;day=+b.dataset.i;sel=0;draw(name,mins)};
-    document.getElementById("gg").onclick=function(e){var b=e.target.closest(".s");if(!b)return;sel=+b.dataset.t;draw(name,mins)};
-    document.getElementById("go").onclick=function(){
-      var g=this,er=document.getElementById("er");g.disabled=true;g.textContent="Booking...";er.textContent="";
-      fetch("api/book.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({e:eid,ts:sel})})
-        .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Could not book. Please try again.");return j})})
-        .then(function(j){booked(j.label,j.link)})
-        .catch(function(x){g.disabled=false;g.textContent="Confirm my slot";er.textContent=x.message;if(/taken/i.test(x.message))load()});
-    };
+  function fail(m){BAR.hidden=true;P.innerHTML='<div class="msg"><h1>Choose your demo slot</h1><p>'+esc(m)+'</p></div>'}
+  function parts(slots){
+    var g=[["Morning",[]],["Afternoon",[]],["Evening",[]]];
+    slots.forEach(function(s){var h=istHour(s.ts);g[h<12?0:(h<16?1:2)][1].push(s)});
+    return g.filter(function(x){return x[1].length});
   }
-  function load(){
+  function draw(keepScroll){
+    var d=days[day],h=steps(sel?3:2)+'<div class="lbl">1. Choose a day</div><div class="days" id="dd" role="tablist">';
+    days.forEach(function(x,i){var w=x.day.split(" ");h+='<button type="button" role="tab" aria-selected="'+(i===day)+'" class="d'+(i===day?' on':'')+'" data-i="'+i+'"><small>'+esc(w[0])+'</small><strong>'+esc(w[1])+'</strong><em>'+esc(w[2]||"")+'</em></button>'});
+    h+='</div><div class="lbl">2. Pick a time <span style="text-transform:none;letter-spacing:0;font-weight:500">(IST)</span></div><div id="tt">';
+    parts(d.slots).forEach(function(p){h+='<div class="part"><div class="lbl" style="font-weight:600;margin-bottom:8px">'+p[0]+'</div><div class="grid">'+p[1].map(function(s){return '<button type="button" class="s'+(s.ts===sel?' on':'')+'" data-t="'+s.ts+'" data-l="'+esc(d.day+", "+s.label)+'">'+esc(s.label)+'</button>'}).join("")+'</div></div>'});
+    h+='</div><div class="err" id="er" role="alert"></div>';
+    var y=window.pageYOffset;P.innerHTML=h;if(keepScroll)window.scrollTo(0,y);
+    BAR.hidden=false;
+    SUM.innerHTML=sel?'<b>'+esc(selLabel)+' IST</b>Google Meet, about '+mins+' minutes':'Pick a day and a time';
+    GO.disabled=!sel||busy;GO.textContent=busy?"Booking...":"Confirm slot";
+  }
+  var mins=30;
+  P.addEventListener("click",function(e){
+    var b=e.target.closest(".d");if(b){day=+b.getAttribute("data-i");sel=0;selLabel="";draw(false);return}
+    b=e.target.closest(".s");if(b){sel=+b.getAttribute("data-t");selLabel=b.getAttribute("data-l");draw(true)}
+  });
+  GO.addEventListener("click",function(){
+    if(!sel||busy)return;busy=true;GO.disabled=true;GO.textContent="Booking...";var er=document.getElementById("er");if(er)er.textContent="";
+    fetch("api/book.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({e:eid,ts:sel})})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Could not book. Please try again.");return j})})
+      .then(function(j){busy=false;done(j.label,j.link)})
+      .catch(function(x){busy=false;if(/taken/i.test(x.message)){load(x.message)}else{draw(true);var e2=document.getElementById("er");if(e2)e2.textContent=x.message}});
+  });
+  function load(why){
     if(!eid)return fail("This link is not valid.");
     fetch("api/slots.php?e="+encodeURIComponent(eid)).then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Could not load slots.");return j})})
       .then(function(j){
-        if(j.booked)return booked(j.booked.label,j.booked.link);
-        days=j.days||[];sel=0;day=0;
+        name=j.name||"";if(name)document.getElementById("hi").innerHTML='Hi '+esc(name)+',<br>book your <span>free demo</span>';
+        if(j.booked)return done(j.booked.label,j.booked.link);
+        mins=j.minutes||30;document.getElementById("mins").textContent="About "+mins+" minutes";
+        days=j.days||[];sel=0;selLabel="";day=0;
         if(!days.length)return fail("No free slots are open right now. Please reply on WhatsApp and we will fix a time with you.");
-        draw(j.name,j.minutes);
+        draw(false);if(why){var er=document.getElementById("er");if(er)er.textContent=why}
       }).catch(function(x){fail(x.message)});
   }
   load();
