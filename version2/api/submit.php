@@ -114,7 +114,7 @@ flush();
 if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));
+wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));
 
 // Meta Conversions API: server-side Lead with the same event_id. Ad blockers / iPhone privacy can't hide it,
 // and Meta merges it with the browser Pixel event instead of counting twice.

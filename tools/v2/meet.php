@@ -167,7 +167,7 @@ function agent_notify($lead, $phone, $link, $when) {
     $link = $link !== '' ? $link : 'not available';
     require_once __DIR__ . '/wa.php';
     if (env('AGENT_TEMPLATE') !== '') {
-        $r = wa_once($lead['name'], '', substr($to, -10), env('AGENT_TEMPLATE'), [$lead['name'], $lead['brand'], $phone, $lead['location'], $lead['budget'], $link]);
+        $r = wa_once($lead['name'], '', substr($to, -10), env('AGENT_TEMPLATE'), [env('AGENT_NAME', 'Nishchay'), $lead['brand'] . ' (' . $lead['name'] . ')', $phone, $lead['location'], $lead['budget'], $link]);
         return 'agent ' . $r[0] . ($r[0] === 'sent' ? '' : ': ' . $r[1]);
     }
     $body = "Hello Nishchay, demo booked!\nWhen: $when\nName: {$lead['name']}\nRestaurant: {$lead['brand']}\nPhone: +91 $phone\nCity: {$lead['location']}\nOutlets: {$lead['outlets']}\nOrders/day: {$lead['orders']}\nTurnover: {$lead['turnover']}\nBudget: {$lead['budget']}\nMeeting link: $link";

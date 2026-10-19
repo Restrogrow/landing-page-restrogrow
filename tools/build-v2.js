@@ -26,14 +26,10 @@ const PATCH = {
     // duplicates allowed in version 2 (same number can be tested again and again)
     s = must(s, "if ($row = $dup->fetch()) {", "if (false && $row = $dup->fetch()) {");
     // one message only: the confirmation with the slot link. Meet link + agent alert wait for the slot.
+    s = must(s, "\ntry { agent_save($eid, agent_new_lead($lead, $phone)); } catch (Throwable $e) { error_log('agent alert error: ' . $e->getMessage()); }", '');   // version 2 alerts the agent when the slot is booked instead
     return must(s, "wa_save($eid, wa_send($lead['name'], $lead['brand'], $phone));", "wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));");
   },
   leads: s => must(s, "        'is_demo' => (int)$r['is_demo'],", "        'is_demo' => (int)$r['is_demo'],\n        'meet_link' => (string)($r['meet_link'] ?? ''), 'meet_note' => (string)($r['meet_note'] ?? ''),\n        'slot_start' => !empty($r['slot_start']) ? str_replace(' ', 'T', $r['slot_start']) . 'Z' : '',"),
-  wa: s => {
-    s = must(s, "function wa_once($name, $brand, $phone) {", "function wa_once($name, $brand, $phone, $tpl = null, $params = null) {");
-    s = must(s, "'name' => env('WACRM_TEMPLATE', 'restrogrow_demo_confirmation'),", "'name' => $tpl ?: env('WACRM_TEMPLATE', 'restrogrow_demo_confirmation'),");
-    return must(s, "'params' => [$name, $brand],   // fills {{1}} and {{2}}", "'params' => $params ?: [$name, $brand],   // fills {{1}} and {{2}}");
-  },
 };
 const budget = s => s.split('\u20b930,000 to \u20b950,000').join('\u20b930,000 to \u20b950,000').split('\u20b925,000 to \u20b950,000').join('\u20b930,000 to \u20b950,000').split('Under \u20b925,000').join('\u20b925,000 to \u20b930,000');
 
