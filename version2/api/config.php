@@ -103,6 +103,10 @@ function db() {
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'is_demo'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN is_demo TINYINT(1) NOT NULL DEFAULT 0");
     }
+    // Email and type of food business from the form.
+    if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'email'")->fetch()) {
+        $pdo->exec("ALTER TABLE v2_leads ADD COLUMN email VARCHAR(200) NULL, ADD COLUMN business_type VARCHAR(50) NULL");
+    }
     // Google Meet link created for each lead.
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'meet_link'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN meet_link VARCHAR(200) NULL, ADD COLUMN meet_note VARCHAR(300) NULL");
@@ -110,10 +114,6 @@ function db() {
     // Demo slot the lead picked.
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'slot_start'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN slot_start DATETIME NULL");
-    }
-    // Email and type of food business from the version 2 form.
-    if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'email'")->fetch()) {
-        $pdo->exec("ALTER TABLE v2_leads ADD COLUMN email VARCHAR(200) NULL, ADD COLUMN business_type VARCHAR(50) NULL");
     }
     // Ad attribution captured with each lead (where it came from).
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'gclid'")->fetch()) {

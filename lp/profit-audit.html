@@ -884,7 +884,9 @@
       <div class="fg">
         <div class="fi"><label for="fN">Your name</label><input id="fN" name="name" type="text" autocomplete="name" required></div>
         <div class="fi"><label for="fP">WhatsApp number</label><input id="fP" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10 digit number" required></div>
+        <div class="fi"><label for="fE">Email</label><input id="fE" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
         <div class="fi"><label for="fB">Restaurant or brand name</label><input id="fB" name="brand" type="text" required></div>
+        <div class="fi"><label for="fY">What type of food business do you operate?</label><select id="fY" name="business" required><option value="">Select</option><option>Restaurant</option><option>Cloud Kitchen</option><option>Café</option><option>QSR / Fast Food Outlet</option><option>Bakery</option><option>Other</option></select></div>
         <div class="fi"><label for="fL">Location (city / area)</label><input id="fL" name="location" type="text" required></div>
         <div class="fi"><label for="fU">Number of outlets</label><select id="fU" name="outlets" required><option value="">Select</option><option>1</option><option>2 to 3</option><option>4 to 10</option><option>10+</option></select></div>
         <div class="fi"><label for="fO">How many orders do you receive per day on Zomato and Swiggy?</label><select id="fO" name="orders" required><option value="">Select</option><option>20–30 Orders</option><option>30–50 Orders</option><option>50–100 Orders</option><option>100+ Orders</option></select></div>
@@ -960,8 +962,8 @@
   var F=$("rgF"),M=$("rgMsg");
   F.addEventListener("submit",function(e){
     e.preventDefault();var bad=null;
-    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}if(ok)el.removeAttribute("aria-invalid");else el.setAttribute("aria-invalid","true");if(!ok&&!bad)bad=el});
-    if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":"Please fill in all fields.";bad.focus();return}
+    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="email")ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}if(ok)el.removeAttribute("aria-invalid");else el.setAttribute("aria-invalid","true");if(!ok&&!bad)bad=el});
+    if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":bad.name==="email"?"Enter a valid email address.":"Please fill in all fields.";bad.focus();return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
     /* one id per attempt, reused on retry, so a lead is never counted twice */
     if(!F._eid)F._eid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+"-"+Math.random().toString(16).slice(2);

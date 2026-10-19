@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_out(405, ['error' => 'Method not allowed']);
 
 $b = body();
-$fields = ['name', 'phone', 'brand', 'location', 'outlets', 'orders', 'turnover', 'budget'];
+$fields = ['name', 'phone', 'email', 'business', 'brand', 'location', 'outlets', 'orders', 'turnover', 'budget'];
 $lead = [];
 foreach ($fields as $k) $lead[$k] = mb_substr(trim((string)($b[$k] ?? '')), 0, 200);
 
@@ -15,6 +15,8 @@ foreach ($fields as $k) if ($lead[$k] === '') json_out(400, ['error' => 'Please 
 $digits = preg_replace('/\D/', '', $lead['phone']);
 $phone = substr($digits, -10);
 if (!preg_match('/^[6-9]\d{9}$/', $phone)) json_out(400, ['error' => 'Enter a valid 10 digit mobile number.']);
+
+if (!filter_var($lead['email'], FILTER_VALIDATE_EMAIL)) json_out(400, ['error' => 'Enter a valid email address.']);
 
 // One id per real submit. The same id goes to the thank-you page (browser Pixel) and to Meta from here (server),
 // so Meta counts it once.
@@ -64,11 +66,11 @@ try {
 }
 
 try {
-    $st = db()->prepare('INSERT INTO leads (created_at, name, phone, brand, location, outlets, orders_day, turnover, budget, page, event_id,
+    $st = db()->prepare('INSERT INTO leads (created_at, name, phone, email, business_type, brand, location, outlets, orders_day, turnover, budget, page, event_id,
                                             fbp, fbc, gclid, fbclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
                                             ad_params, referrer, landing)
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    $st->execute([gmdate('Y-m-d H:i:s'), $lead['name'], $phone, $lead['brand'], $lead['location'],
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $st->execute([gmdate('Y-m-d H:i:s'), $lead['name'], $phone, $lead['email'], $lead['business'], $lead['brand'], $lead['location'],
                   $lead['outlets'], $lead['orders'], $lead['turnover'], $lead['budget'],
                   mb_substr((string)($b['page'] ?? ''), 0, 300), $eid,
                   $attr['fbp'], $attr['fbc'], $attr['gclid'], $attr['fbclid'], $attr['utm_source'],

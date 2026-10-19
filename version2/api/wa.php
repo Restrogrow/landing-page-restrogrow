@@ -74,7 +74,9 @@ function agent_new_lead($lead, $phone) {
     $body = "Hello Nishchay, new lead!
 Name: {$lead['name']}
 Restaurant: {$lead['brand']}
+Business: " . ($lead['business'] ?? '') . "
 Phone: +91 $phone
+Email: " . ($lead['email'] ?? '') . "
 City: {$lead['location']}
 Outlets: {$lead['outlets']}
 Orders/day: {$lead['orders']}
