@@ -7,7 +7,7 @@
 <title>Leads - RestroGrow Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <script>try{if(sessionStorage.getItem("rgAdminPw"))document.documentElement.className="pw"}catch(e){}</script>
-<link rel="stylesheet" href="admin.css?v=20261021a">
+<link rel="stylesheet" href="admin.css?v=20261021b">
 </head>
 <body>
 <div id="login"><form id="lf">
@@ -22,6 +22,7 @@
     <span class="logo">Restro<b>Grow</b></span>
     <a class="tab" href="index.html">Dashboard</a>
     <a class="tab on" href="leads.html">Leads</a>
+    <a class="tab" href="analyse.html">Analyse</a>
     <a class="tab" href="pages.html">Pages</a>
     <a class="tab" href="../text/">Notes</a>
     <span class="sp"></span>
@@ -53,12 +54,12 @@
   <div class="leads" id="tb"></div>
 </div>
 
-<script src="common.js?v=20261021a"></script>
-<script src="lead-panel.js?v=20261021a"></script>
+<script src="common.js?v=20261021b"></script>
+<script src="lead-panel.js?v=20261021b"></script>
 <script>
 (function(){
   var $=RG.$,esc=RG.esc,leads=[],filter="",shown=[],groupBy="";
-  var COLS=["time","name","phone","email","business","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page","ad_params","referrer","landing","last_call","calls","follow_up"];
+  var COLS=["time","name","phone","email","business","brand","location","outlets","orders","turnover","budget","status","notes","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page","ad_params","referrer","landing","last_call","calls","follow_up","meeting_link"];
 
   /* ---------- what each lead tells us about the ad ---------- */
   function adInfo(l){
@@ -232,6 +233,7 @@
     extra:function(l){return '<div class="sch">'+'<span class="tag">Source: '+esc(srcOf(l))+'</span><span class="tag">Page: '+esc(pageOf(l))+'</span></div>'}});
 
   $("q").addEventListener("input",list);
+  try{var q0=new URLSearchParams(location.search).get("q");if(q0)$("q").value=q0}catch(x){}
   $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=b.getAttribute("data-f");chips();list()});
   $("tb").addEventListener("change",function(e){if(e.target.tagName==="SELECT")save(e.target.closest(".lead"))});
   $("tb").addEventListener("click",function(e){var b=e.target.closest(".rs");if(b)resend({id:+b.closest(".lead").getAttribute("data-id")},b)});

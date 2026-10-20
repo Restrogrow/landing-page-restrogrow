@@ -38,6 +38,11 @@
     var a=(l.log||[]).filter(function(x){return x.kind==="followup"}),f=a[a.length-1];
     return f&&f.detail?new Date(f.detail):null;
   };
+  // Meeting link pasted on the lead (Google Meet, Zoom...), or "".
+  RG.meetLink=function(l){
+    var a=(l.log||[]).filter(function(x){return x.kind==="meet"}),m=a[a.length-1];
+    return m?m.detail:"";
+  };
   // Overdue / Today / Upcoming / Not set. A Converted or Not interested lead has nothing to follow up.
   RG.followState=function(l){
     var d=RG.followUp(l),now=new Date();
@@ -60,7 +65,7 @@
   // CSV / search fields
   RG.derive=function(l){
     var c=RG.calls(l),fu=RG.followUp(l);
-    l.last_call=c.length?RG.fmt(c[c.length-1].time):"";l.calls=c.length;l.follow_up=fu?RG.fmt(fu):"";
+    l.last_call=c.length?RG.fmt(c[c.length-1].time):"";l.calls=c.length;l.follow_up=fu?RG.fmt(fu):"";l.meeting_link=RG.meetLink(l);
   };
   // One line on the card: when it was last called and the next follow-up.
   RG.actLine=function(l){
@@ -68,6 +73,8 @@
     var a=last?'<span>Last call <b>'+esc(RG.fmt(last.time))+'</b> ('+esc(RG.rel(last.time))+')'+(c.length>1?' · '+c.length+' calls':'')+'</span>'
       :'<span class="no">'+(l.status==="New"?"Not called yet":"Call time not recorded")+'</span>';
     if(fs!=="Not set")a+='<span class="fu '+fs.toLowerCase()+'">Follow-up <b>'+esc(RG.fmt(RG.followUp(l)))+'</b>'+(fs==="Overdue"?" · overdue":fs==="Today"?" · today":"")+'</span>';
+    var mt=RG.meetLink(l);
+    if(mt)a+='<a class="mtg" href="'+esc(mt)+'" target="_blank" rel="noopener">Meeting link</a>';
     return '<div class="act">'+a+'</div>';
   };
 
@@ -77,11 +84,19 @@
   function hist(l){
     var a=(l.log||[]).slice().reverse().map(function(x){
       var t=x.kind==="call"?"Called":x.kind==="whatsapp"?"WhatsApp opened":x.kind==="status"?"Status: "+x.detail:x.kind==="note"?"Note saved"
-        :x.kind==="followup"?(x.detail?"Follow-up set for "+RG.fmt(x.detail):"Follow-up cleared"):x.kind;
-      return '<li class="k-'+esc(x.kind)+'"><b>'+esc(t)+'</b>'+(x.kind==="note"&&x.detail?'<small>'+esc(x.detail)+'</small>':"")+'<span>'+esc(RG.fmt(x.time))+' · '+esc(RG.rel(x.time))+'</span></li>';
+        :x.kind==="followup"?(x.detail?"Follow-up set for "+RG.fmt(x.detail):"Follow-up cleared")
+        :x.kind==="meet"?(x.detail?"Meeting link added":"Meeting link removed"):x.kind;
+      return '<li class="k-'+esc(x.kind)+'"><b>'+esc(t)+'</b>'+((x.kind==="note"||x.kind==="meet")&&x.detail?'<small>'+esc(x.detail)+'</small>':"")+'<span>'+esc(RG.fmt(x.time))+' · '+esc(RG.rel(x.time))+'</span></li>';
     });
     a.push('<li class="k-in"><b>Lead came in</b><span>'+esc(RG.fmt(l.time))+' · '+esc(RG.rel(l.time))+'</span></li>');
     return '<ol class="lp-h">'+a.join("")+'</ol>';
+  }
+  // Meeting link: paste it once, then Join or send it to the lead on WhatsApp from here.
+  function meetBox(l){
+    var m=RG.meetLink(l),wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", here is the link for your RestroGrow meeting: "+m);
+    return '<section class="lp-s"><h3>Meeting link</h3>'
+      +(m?'<div class="lp-mt"><a class="btn" href="'+esc(m)+'" target="_blank" rel="noopener">Join meeting</a><a class="btn ghost" data-wa href="'+esc(wa)+'" target="_blank" rel="noopener">Send on WhatsApp</a></div><small class="lp-ml">'+esc(m)+'</small>':"")
+      +'<div class="lp-fr"><input type="url" id="lpMt" placeholder="Paste Google Meet / Zoom link" value="'+esc(m)+'" aria-label="Meeting link"><button type="button" class="btn" data-ms>'+(m?"Update":"Save")+'</button>'+(m?'<button type="button" class="btn ghost" data-mc>Remove</button>':"")+'</div></section>';
   }
   function draw(){
     var l=P.l,i=P.ids.indexOf(l.id),n=P.ids.length,fu=RG.followUp(l),t=$("lpNt"),keep=t?t.value:null,foc=t&&document.activeElement===t;
@@ -99,6 +114,7 @@
       +'<section class="lp-s"><h3>Next follow-up</h3><div class="lp-fu">'+(fu?'<b>'+esc(RG.fmt(fu))+'</b> ('+esc(RG.rel(fu))+')':'Not set')+'</div>'
         +'<div class="lp-fq"><button type="button" data-fq="1h">In 1 hour</button><button type="button" data-fq="ev">Today 6 pm</button><button type="button" data-fq="tm">Tomorrow 11 am</button><button type="button" data-fq="2d">In 2 days</button></div>'
         +'<div class="lp-fr"><input type="datetime-local" id="lpFu" value="'+loc(fu)+'" aria-label="Follow-up date and time"><button type="button" class="btn" data-fs>Set</button>'+(fu?'<button type="button" class="btn ghost" data-fc>Clear</button>':"")+'</div></section>'
+      +meetBox(l)
       +'<section class="lp-s"><h3>Notes <span id="lpSv"></span></h3><textarea id="lpNt" class="nt" maxlength="2000" placeholder="What did they say?">'+esc(l.notes)+'</textarea></section>'
       +'<section class="lp-s"><h3>Details</h3>'+(kv?'<dl class="kv">'+kv+'</dl>':"")+(P.o.extra?P.o.extra(l):"")+'</section>'
       +'<section class="lp-s"><h3>History</h3>'+hist(l)+'</section>'
@@ -120,7 +136,7 @@
     RG.logLead(P.l,"followup",d?d.toISOString():"").then(done).catch(fail);
   }
   function click(e){
-    var b=e.target.closest("[data-x],[data-call],[data-wa],[data-st],[data-fq],[data-fs],[data-fc],[data-nv]");if(!b)return;
+    var b=e.target.closest("[data-x],[data-call],[data-wa],[data-st],[data-fq],[data-fs],[data-fc],[data-ms],[data-mc],[data-nv]");if(!b)return;
     var l=P.l;
     if(b.hasAttribute("data-x"))return close();
     // no redraw inside the click, so the tel: link still opens the dialer
@@ -142,6 +158,13 @@
     }
     if(b.hasAttribute("data-fs")){var v=$("lpFu").value;return setFollow(v?new Date(v):NaN)}
     if(b.hasAttribute("data-fc"))return setFollow(null);
+    if(b.hasAttribute("data-ms")){
+      var u=$("lpMt").value.trim();
+      if(!/^https?:\/\/\S+$/i.test(u)){alert("Paste the full meeting link, starting with https://");return}
+      if(u===RG.meetLink(l))return;
+      return RG.logLead(l,"meet",u).then(done).catch(fail);
+    }
+    if(b.hasAttribute("data-mc"))return RG.logLead(l,"meet","").then(done).catch(fail);
     if(b.hasAttribute("data-nv")){
       saveNote();
       var id=P.ids[P.ids.indexOf(l.id)+(+b.getAttribute("data-nv"))];

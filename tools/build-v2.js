@@ -103,7 +103,7 @@ write('book.html', fs.readFileSync(path.join(__dirname, 'v2', 'book.html'), 'utf
 
 // leads page: version 2 has its own (demo slot first, fewer filters on show)
 write('admin/leads.html', fs.readFileSync(path.join(__dirname, 'v2', 'leads.html'), 'utf8'));
-for (const f of ['index.html']) write('admin/' + f, read('admin/' + f).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
+for (const f of ['index.html']) write('admin/' + f, read('admin/' + f).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="analyse.html">Analyse<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
 for (const f of ['common.js', 'lead-panel.js', 'admin.css', '.htaccess']) write('admin/' + f, read('admin/' + f));
 write('.env.example', `# Optional. Version 2 already uses the main site's .env (WhatsApp, Google Meet, agent, admin password).
 # Put a line here only to override it, e.g. a separate database:  DB_NAME=...  DB_USER=...  DB_PASS=...

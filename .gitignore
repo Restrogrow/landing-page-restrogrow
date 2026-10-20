@@ -3,4 +3,5 @@
 !.env.example
 node_modules/
 
-storage/leads-fallback.jsonl
+# storage/ holds lead backups, call recordings and transcripts: customer data, never commit (the repo is public)
+storage/

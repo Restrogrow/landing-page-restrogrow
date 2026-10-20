@@ -216,3 +216,9 @@ html.lp-open{overflow:hidden}
 .lp-nav span{flex:1;text-align:center;font-size:.8rem;color:var(--mu)}
 .lp-nav .btn{height:40px;padding:0 14px}
 .lp-nav .btn:disabled{opacity:.4;cursor:default}
+/* meeting link */
+.act .mtg{color:#15803D;font-weight:600;text-decoration:none}
+.lp-mt{display:flex;flex-wrap:wrap;gap:8px}
+.lp-mt .btn{height:40px}
+.lp-mt .btn:first-child{background:#15803D}
+.lp-ml{font-size:.74rem;color:var(--mu);overflow-wrap:anywhere}

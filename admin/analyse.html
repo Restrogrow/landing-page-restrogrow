@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Analyse - RestroGrow Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{if(sessionStorage.getItem("rgAdminPw"))document.documentElement.className="pw"}catch(e){}</script>
+<link rel="stylesheet" href="admin.css?v=20261021b">
+<style>
+/* Analyse: Ask (AI chat on the live data), Report (what is going wrong), Calls (recordings + transcripts per lead) */
+.stabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.stabs button{height:40px;padding:0 16px;border-radius:99px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);font:600 .88rem var(--fb);cursor:pointer}
+.stabs button.on{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+.sec[hidden]{display:none}
+/* chat */
+.chat{display:grid;gap:12px;max-width:860px}
+.msgs{display:grid;gap:10px}
+.msg{padding:12px 14px;border-radius:14px;line-height:1.55;font-size:.92rem;overflow-wrap:anywhere;min-width:0}
+.msg.u{justify-self:end;max-width:85%;background:var(--o);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+.msg.m{background:var(--card);border:1px solid var(--ln);border-bottom-left-radius:4px}
+.msg.m .say{margin-top:8px;border:0;background:none;color:var(--mu);font:500 .76rem var(--fb);cursor:pointer;padding:0}
+.msg.err{background:#FEE2E2;color:#7F1D1D}
+.msg.wait{color:var(--mu);font-style:italic}
+.md p{margin:0 0 8px}.md p:last-child{margin:0}
+.md ul,.md ol{margin:0 0 8px;padding-left:20px}.md li{margin:2px 0}
+.md h3,.md h4{margin:12px 0 6px;font:700 .98rem var(--fh)}.md h3:first-child,.md h4:first-child{margin-top:0}
+.sug{display:flex;flex-wrap:wrap;gap:6px}
+.sug button{min-height:34px;padding:4px 12px;border-radius:99px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);font:500 .8rem var(--fb);cursor:pointer;text-align:left}
+.sug button:hover{border-color:var(--o)}
+.ask{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--fln);border-radius:14px;padding:8px}
+.ask:focus-within{border-color:var(--o)}
+.ask textarea{flex:1;min-width:0;border:0;outline:none;resize:none;background:none;font:inherit;color:var(--tx);padding:6px;max-height:160px}
+.ask .ib{flex:none;width:42px;height:42px;border-radius:10px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);cursor:pointer;display:grid;place-items:center}
+.ask .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ask .ib.rec{background:#DC2626;border-color:#DC2626;color:#fff}
+.ask .btn{height:42px}
+.cbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:.8rem;color:var(--mu)}
+.cbar label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.cbar input{height:auto}
+.cbar button{border:0;background:none;color:var(--mu);font:500 .8rem var(--fb);cursor:pointer;padding:0;text-decoration:underline}
+/* report */
+.rep{max-width:860px;font-size:.93rem;line-height:1.6}
+.rep .md h3{font-size:1.1rem;margin-top:20px}
+/* calls */
+.cf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.cf #cq{flex:1 1 220px;max-width:380px;height:40px}
+.clist{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr))}
+.cc{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0;border-left:5px solid var(--ln)}
+.cc[data-v=hot]{border-left-color:#16A34A}.cc[data-v=warm]{border-left-color:#F59E0B}.cc[data-v=cold]{border-left-color:#DC2626}.cc[data-v=none]{border-left-color:#9CA3AF}
+.cc .hd{display:flex;gap:10px;align-items:flex-start}
+.cc .hd .hi{flex:1;min-width:0}
+.cc .nm{font-weight:600;font-size:1.02rem}
+.cc .mt{color:var(--mu);font-size:.8rem;overflow-wrap:anywhere}
+.vb{flex:none;padding:3px 10px;border-radius:99px;font:700 .72rem var(--fb);white-space:nowrap}
+.vb.hot{background:#DCFCE7;color:#14532D}.vb.warm{background:#FEF3C7;color:#78350F}.vb.cold{background:#FEE2E2;color:#7F1D1D}.vb.none{background:var(--track);color:var(--mu)}
+.cc .sm{font-size:.9rem;line-height:1.5}
+.pts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.pts div{background:var(--track);border-radius:10px;padding:8px 10px;font-size:.8rem;min-width:0}
+.pts b{display:block;font-size:.72rem;color:var(--mu);margin-bottom:2px}
+.pts ul{margin:0;padding-left:16px}
+.nx{font-size:.84rem;padding:8px 10px;border-radius:10px;background:#FFEDE3;color:#7C2D12}
+.lf{display:flex;flex-wrap:wrap;gap:6px}
+.lf .tag{max-width:100%;overflow-wrap:anywhere}
+.call{border-top:1px solid var(--ln);padding-top:10px;display:grid;gap:6px}
+.call .ch{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.82rem}
+.call .ch b{font-weight:600}
+.call .cs{font-size:.84rem;color:var(--tx)}
+.call button.pl{height:32px;padding:0 12px;border-radius:8px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);font:600 .78rem var(--fb);cursor:pointer}
+.call audio{width:100%;height:40px}
+.call details summary{cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mu)}
+.tx{margin-top:6px;max-height:340px;overflow:auto;display:grid;gap:4px;font-size:.84rem;line-height:1.45;padding-right:4px}
+.tx p{margin:0;display:grid;grid-template-columns:44px 1fr;gap:8px}
+.tx p a{color:var(--o);font:600 .74rem var(--fb);text-decoration:none;cursor:pointer;padding-top:2px}
+.cc .go{justify-self:start;font-size:.82rem;font-weight:600;color:var(--o);text-decoration:none}
+.none-yet{max-width:640px}
+</style>
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Admin login</h1><p>Enter the password to continue.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab" href="index.html">Dashboard</a>
+    <a class="tab" href="leads.html">Leads</a>
+    <a class="tab on" href="analyse.html">Analyse</a>
+    <a class="tab" href="pages.html">Pages</a>
+    <a class="tab" href="../text/">Notes</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="ref" type="button">Refresh</button>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Analyse</h1><div class="sub" id="cnt"></div></div></div>
+
+  <div class="stabs" role="tablist">
+    <button type="button" class="on" data-t="ask">Ask AI</button>
+    <button type="button" data-t="rep">What is going wrong</button>
+    <button type="button" data-t="calls">Calls <span id="ncalls"></span></button>
+  </div>
+
+  <section class="sec" id="s-ask">
+    <div class="chat">
+      <div class="msgs" id="msgs"></div>
+      <div class="sug" id="sug"></div>
+      <form class="ask" id="af">
+        <textarea id="aq" rows="1" placeholder="Kuch bhi poocho: kitni leads aayi, kaun convert hoga, kya galti ho rahi hai..." aria-label="Your question"></textarea>
+        <button type="button" class="ib" id="mic" title="Speak your question" aria-label="Speak your question" hidden><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        <button class="btn" type="submit" id="send">Ask</button>
+      </form>
+      <div class="cbar"><span>Answers use your live leads, call history and call transcripts.</span><label><input type="checkbox" id="speak"> Read answers aloud</label><button type="button" id="clr">Clear chat</button></div>
+    </div>
+  </section>
+
+  <section class="sec" id="s-rep" hidden><div class="card rep"><div class="md" id="rep"></div></div></section>
+
+  <section class="sec" id="s-calls" hidden>
+    <div class="cf"><div class="chips" id="vchips"></div><input id="cq" type="search" placeholder="Search name, phone, words said in the call"></div>
+    <div class="clist" id="clist"></div>
+  </section>
+</div>
+
+<script src="common.js?v=20261021b"></script>
+<script>
+(function(){
+  var $=RG.$,esc=RG.esc,A={calls:[],leads:{},report:""},chat=[],vf="";
+  var VB={hot:"Likely to buy",warm:"Maybe / needs follow-up",cold:"Not interested",none:"No real conversation"};
+
+  function post(f,b){
+    b.password=RG.pw;
+    return fetch("../api/"+f,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})});
+  }
+  // Small, safe Markdown: text is escaped first, then **bold**, headings, bullet and numbered lists, paragraphs.
+  function md(s){
+    var out=[],list=null;
+    function close(){if(list){out.push("</"+list+">");list=null}}
+    String(s||"").replace(/\r/g,"").split("\n").forEach(function(line){
+      var t=esc(line).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/(^|\s)\*(\S[^*]*?)\*(?=\s|$|[.,])/g,"$1<i>$2</i>");
+      var m;
+      if(m=line.match(/^\s*#{1,6}\s+/)){close();out.push("<h3>"+t.replace(/^\s*#{1,6}\s+/,"")+"</h3>")}
+      else if(/^\s*[-*•]\s+/.test(line)){if(list!=="ul"){close();out.push("<ul>");list="ul"}out.push("<li>"+t.replace(/^\s*[-*•]\s+/,"")+"</li>")}
+      else if(/^\s*\d+[.)]\s+/.test(line)){if(list!=="ol"){close();out.push("<ol>");list="ol"}out.push("<li>"+t.replace(/^\s*\d+[.)]\s+/,"")+"</li>")}
+      else if(!line.trim())close();
+      else{close();out.push("<p>"+t+"</p>")}
+    });
+    close();return out.join("");
+  }
+
+  /* ---------- tabs ---------- */
+  document.querySelector(".stabs").addEventListener("click",function(e){
+    var b=e.target.closest("[data-t]");if(!b)return;
+    [].forEach.call(document.querySelectorAll(".stabs button"),function(x){x.classList.toggle("on",x===b)});
+    ["ask","rep","calls"].forEach(function(t){$("s-"+t).hidden=t!==b.getAttribute("data-t")});
+    try{sessionStorage.setItem("rgAnTab",b.getAttribute("data-t"))}catch(x){}
+  });
+  try{var t0=sessionStorage.getItem("rgAnTab");if(t0)document.querySelector('[data-t="'+t0+'"]').click()}catch(x){}
+
+  /* ---------- Ask AI ---------- */
+  var SUG=["Aaj aur kal kitni leads aayi, aur kitni interested / convert hui?","Leads convert kyu nahi ho rahi? Seedha batao kya galti hai.","Kaun si leads sabse zyada kharid sakti hain? List do.","Kal kis kis ko call karna hai aur kya bolna hai?","Kaun si ad sabse achhi leads la rahi hai?","Calls me hum kya galat bol rahe hain? Better script do.","Offer ya price me kya badlav karun?"];
+  $("sug").innerHTML=SUG.map(function(s){return '<button type="button">'+esc(s)+'</button>'}).join("");
+  $("sug").addEventListener("click",function(e){var b=e.target.closest("button");if(b){$("aq").value=b.textContent;ask()}});
+  try{chat=JSON.parse(sessionStorage.getItem("rgAnChat")||"[]")||[]}catch(x){chat=[]}
+  function keep(){try{sessionStorage.setItem("rgAnChat",JSON.stringify(chat.slice(-30)))}catch(x){}}
+  function drawChat(extra){
+    $("msgs").innerHTML=chat.map(function(m,i){
+      return m.role==="user"?'<div class="msg u">'+esc(m.text)+'</div>':'<div class="msg m"><div class="md">'+md(m.text)+'</div><button type="button" class="say" data-i="'+i+'">Read aloud</button></div>';
+    }).join("")+(extra||"");
+    $("sug").hidden=chat.length>0;
+  }
+  function ask(){
+    var q=$("aq").value.trim();if(!q||$("send").disabled)return;
+    var hist=chat.slice(-12);
+    chat.push({role:"user",text:q});$("aq").value="";fit();
+    drawChat('<div class="msg m wait">Soch raha hoon... (live leads aur calls padh raha hoon)</div>');
+    $("send").disabled=true;
+    post("ask.php",{question:q,history:hist})
+      .then(function(j){chat.push({role:"model",text:j.answer});keep();drawChat();if($("speak").checked)say(j.answer)})
+      .catch(function(x){chat.pop();$("aq").value=q;drawChat('<div class="msg err">'+esc(x.message)+'</div>')})
+      .then(function(){$("send").disabled=false;window.scrollTo(0,document.body.scrollHeight)});
+  }
+  function fit(){var t=$("aq");t.style.height="auto";t.style.height=Math.min(t.scrollHeight,160)+"px"}
+  $("aq").addEventListener("input",fit);
+  $("aq").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask()}});
+  $("af").addEventListener("submit",function(e){e.preventDefault();ask()});
+  $("clr").addEventListener("click",function(){chat=[];keep();drawChat();try{speechSynthesis.cancel()}catch(x){}});
+  // Voice: speak the question (Chrome / Edge / Android), and optionally hear the answer.
+  function say(t){
+    try{
+      speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(String(t).replace(/[*#•]/g,"").slice(0,3000));
+      u.lang=/[ऀ-ॿ]/.test(t)?"hi-IN":"en-IN";speechSynthesis.speak(u);
+    }catch(x){}
+  }
+  $("msgs").addEventListener("click",function(e){var b=e.target.closest(".say");if(b)say(chat[+b.getAttribute("data-i")].text)});
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null;
+  if(SR){
+    $("mic").hidden=false;
+    $("mic").addEventListener("click",function(){
+      if(rec){rec.stop();return}
+      rec=new SR();rec.lang="hi-IN";rec.interimResults=true;
+      var base=$("aq").value?$("aq").value+" ":"";
+      rec.onresult=function(e){var s="";for(var i=0;i<e.results.length;i++)s+=e.results[i][0].transcript;$("aq").value=base+s;fit()};
+      rec.onend=function(){rec=null;$("mic").classList.remove("rec");if($("aq").value.trim())ask()};
+      rec.onerror=function(){};
+      $("mic").classList.add("rec");rec.start();
+    });
+  }
+  drawChat();
+
+  /* ---------- report ---------- */
+  function drawReport(){
+    $("rep").innerHTML=A.report?md(A.report):'<p>No report yet.</p>';
+  }
+
+  /* ---------- calls, one card per lead ---------- */
+  function liveLead(phone){return RG.leads.filter(function(l){return l.phone===phone})[0]}
+  function groups(){
+    var g={},order=[];
+    A.calls.forEach(function(c){var k=c.phone||c.file;if(!g[k]){g[k]=[];order.push(k)}g[k].push(c)});
+    return order.map(function(k){
+      var cs=g[k].sort(function(a,b){return String(a.at).localeCompare(String(b.at))}),an=A.leads[k]||{};
+      return {phone:k,calls:cs,an:an,lead:liveLead(k),name:cs[0].name};
+    }).sort(function(a,b){var o={hot:0,warm:1,cold:2,none:3},r=function(g){return g.an.verdict in o?o[g.an.verdict]:3};return r(a)-r(b)});
+  }
+  function fmtDur(s){s=Math.round(s||0);return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
+  function card(G){
+    var l=G.lead,an=G.an,v=an.verdict||"none";
+    var li=function(a){return a&&a.length?'<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>':'<i>—</i>'};
+    var form=l?[["Status",l.status],["Business",l.business],["Orders/day",l.orders],["Turnover",l.turnover],["Budget",l.budget],["City",l.location]].filter(function(x){return x[1]})
+      .map(function(x){return '<span class="tag"><em>'+x[0]+'</em>'+esc(x[1])+'</span>'}).join(""):'<span class="tag">Lead not found in the database</span>';
+    return '<article class="cc" data-v="'+v+'"><div class="hd"><div class="hi"><div class="nm">'+esc(l?l.name:G.name)+'</div><div class="mt">+91 '+esc(G.phone)+(l?' · '+esc(l.brand)+' · came in '+esc(RG.fmt(l.time)):"")+'</div></div><span class="vb '+v+'">'+esc(VB[v])+'</span></div>'
+      +'<div class="lf">'+form+'</div>'
+      +(l&&l.notes?'<div class="mt">Team note: '+esc(l.notes)+'</div>':"")
+      +(an.summary?'<div class="sm">'+esc(an.summary)+'</div>':"")
+      +((an.signals&&an.signals.length)||(an.objections&&an.objections.length)?'<div class="pts"><div><b>Why they may buy</b>'+li(an.signals)+'</div><div><b>Why they may not</b>'+li(an.objections)+'</div></div>':"")
+      +(an.next?'<div class="nx"><b>Next step:</b> '+esc(an.next)+'</div>':"")
+      +G.calls.map(function(c){
+        return '<div class="call" data-f="'+esc(c.file)+'"><div class="ch"><b>'+esc(c.when)+'</b><span>'+fmtDur(c.dur)+' min</span><button type="button" class="pl">Play recording</button></div>'
+          +(c.summary?'<div class="cs">'+esc(c.summary)+'</div>':"")
+          +(c.segs&&c.segs.length?'<details><summary>Transcript ('+c.segs.length+' lines)</summary><div class="tx">'+c.segs.map(function(s){return '<p><a data-s="'+s.s+'">'+fmtDur(s.s)+'</a><span>'+esc(s.t)+'</span></p>'}).join("")+'</div></details>':'<div class="mt">No speech in this recording.</div>')+'</div>';
+      }).join("")
+      +(l?'<a class="go" href="leads.html?q='+encodeURIComponent(G.phone)+'">Open this lead in Leads →</a>':"")+'</article>';
+  }
+  function drawCalls(){
+    var G=groups(),q=$("cq").value.trim().toLowerCase();
+    var n={};G.forEach(function(g){var v=g.an.verdict||"none";n[v]=(n[v]||0)+1});
+    $("vchips").innerHTML=['<button type="button" class="chip'+(vf?"":" on")+'" data-v="">All<b>'+G.length+'</b></button>'].concat(Object.keys(VB).map(function(k){
+      return '<button type="button" class="chip'+(vf===k?" on":"")+'" data-v="'+k+'">'+VB[k]+'<b>'+(n[k]||0)+'</b></button>'})).join("");
+    var show=G.filter(function(g){
+      if(vf&&(g.an.verdict||"none")!==vf)return false;
+      if(!q)return true;
+      return (g.phone+" "+g.name+" "+(g.lead?g.lead.name+" "+g.lead.brand:"")+" "+(g.an.summary||"")+" "+g.calls.map(function(c){return c.segs.map(function(s){return s.t}).join(" ")}).join(" ")).toLowerCase().indexOf(q)>-1;
+    });
+    $("clist").innerHTML=show.length?show.map(card).join(""):'<div class="empty card" style="grid-column:1/-1">No calls match.</div>';
+  }
+  $("vchips").addEventListener("click",function(e){var b=e.target.closest("[data-v]");if(!b)return;vf=b.getAttribute("data-v");drawCalls()});
+  $("cq").addEventListener("input",drawCalls);
+  // Recordings are fetched with the admin password (they are not public files), then played here.
+  $("clist").addEventListener("click",function(e){
+    var b=e.target.closest(".pl"),s=e.target.closest("[data-s]"),box=e.target.closest(".call");if(!box)return;
+    var au=box.querySelector("audio");
+    if(s&&au){au.currentTime=+s.getAttribute("data-s");au.play();return}
+    if(!b&&!s)return;
+    if(au){au.play();return}
+    var btn=box.querySelector(".pl");btn.disabled=true;btn.textContent="Loading...";
+    fetch("../api/calls.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,action:"audio",file:box.getAttribute("data-f")})})
+      .then(function(r){if(!r.ok)throw new Error(r.status===404?"Recording not uploaded to the server":"Could not load");return r.blob()})
+      .then(function(bl){
+        au=document.createElement("audio");au.controls=true;au.src=URL.createObjectURL(bl);btn.replaceWith(au);
+        if(s)au.currentTime=+s.getAttribute("data-s");au.play();
+      })
+      .catch(function(x){btn.disabled=false;btn.textContent=x.message});
+  });
+
+  function render(){
+    post("calls.php",{action:"list"}).then(function(j){
+      A=j;A.leads=A.leads||{};
+      var hrs=A.calls.reduce(function(a,c){return a+(c.dur||0)},0)/3600;
+      $("cnt").textContent=A.calls.length?A.calls.length+" calls transcribed ("+hrs.toFixed(1)+" h) · "+groups().length+" leads"+(A.updated?" · analysis updated "+A.updated:""):"No call transcripts uploaded yet";
+      $("ncalls").textContent=A.calls.length?"("+groups().length+")":"";
+      drawReport();drawCalls();
+    }).catch(function(x){$("cnt").textContent="Could not load the call analysis: "+x.message});
+  }
+  RG.start(render);
+})();
+</script>
+</body>
+</html>
