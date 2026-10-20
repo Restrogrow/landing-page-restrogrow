@@ -12,11 +12,14 @@
   }
   function load(){
     IN.value="";F._needSlot=false;
+    function none(){put('<p class="slt-n">Send the form and we will send you a link on WhatsApp to pick your demo time.</p>')}
+    /* never stuck on loading: after 12s show the WhatsApp fallback (times that arrive later still show) */
+    var slow=setTimeout(none,12000);
     fetch("api/slots.php").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-      days=j.days||[];day=0;
+      clearTimeout(slow);days=j.days||[];day=0;
       if(!days.length)return put('<p class="slt-n">No demo times are open right now. Send the form and we will fix a time with you on WhatsApp.</p>');
       F._needSlot=true;draw();
-    }).catch(function(){put('<p class="slt-n">Send the form and we will send you a link on WhatsApp to pick your demo time.</p>')});
+    }).catch(function(){clearTimeout(slow);none()});
   }
   S.addEventListener("click",function(e){
     var b=e.target.closest("button");if(!b)return;
