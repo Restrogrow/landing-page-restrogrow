@@ -36,13 +36,13 @@ Repo: https://github.com/Restrogrow/landing-page-restrogrow (branch `main`, depl
 3. Browser goes to `thank-you.html?eid=<id>`. The page removes the id from the URL, calls `api/lead_confirm.php`, and only if the server says `fire:true` loads the Meta Pixel and fires `Lead` with `eventID = event_id`. Refreshing or sharing the link never counts again.
 
 ## Form fields (`leads` table columns)
-`name`, `phone` (10 digits), `brand`, `location`, `outlets` (1 / 2 to 3 / 4 to 10 / 10+), `orders_day` (20–30 / 30–50 / 50–100 / 100+ Orders), `turnover` (Below ₹5 Lakhs / ₹5–10 / ₹10–25 / ₹25 Lakhs+), `budget` (₹25,000 to ₹30,000 / ₹30,000 to ₹50,000 / ₹50,000 to ₹1 L / ₹1 L+), `page`, plus `created_at` (UTC), `status` (New, Called, Not answered, Follow-up, Converted, Not interested), `notes`, `event_id`, `pixel_fired_at`. Columns are added automatically on first use. If you change a dropdown's options, old leads keep their old text.
+`name`, `phone` (10 digits), `brand`, `location`, `outlets` (1 / 2 to 3 / 4 to 10 / 10+), `orders_day` (20–30 / 30–50 / 50–100 / 100+ Orders), `turnover` (Below ₹5 Lakhs / ₹5–10 / ₹10–25 / ₹25 Lakhs+), `budget` (₹25,000 to ₹30,000 / ₹30,000 to ₹50,000 / ₹50,000 to ₹1 L / ₹1 L+), `page`, plus `created_at` (UTC), `status` (New, Called, Not answered, Follow-up, Interested, Converted, Not interested), `notes`, `event_id`, `pixel_fired_at`. Columns are added automatically on first use. If you change a dropdown's options, old leads keep their old text.
 
 ## Env vars (`.env` on the server; see `.env.example`)
 `Api` (RepeatGrow API key), `WACRM_BASE_URL`, `WACRM_TEMPLATE`, `ADMIN_PASSWORD`, `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `META_PIXEL_ID`, `META_CAPI_TOKEN`, `META_TEST_EVENT_CODE` (optional, testing only).
 
 ## Admin
-`/admin/` (dashboard) and `/admin/leads.html`, protected by `ADMIN_PASSWORD`. Tapping **Call** on a lead opens the dialer and sets the status to Called (only if it was New / Not answered / Follow-up).
+`/admin/` (dashboard) and `/admin/leads.html`, protected by `ADMIN_PASSWORD`. Tapping **Call** on a lead opens the dialer and sets the status to Called (only if it was New / Not answered / Follow-up). It also saves the call time and opens the lead panel (`admin/lead-panel.js`: status, follow-up time, notes, history, Previous/Next). History (calls, WhatsApp taps, status changes, notes, follow-ups) lives in its own table `lead_activity` (`v2_lead_activity` for version 2), written by `api/lead_log.php` and `api/lead_update.php`; the leads rows only ever get status and notes. A changed card stays on screen until the filter, search or Refresh is used.
 
 ## Working rules
 - Keep it dependency-free: plain HTML/CSS/JS and PHP. Match the existing style (compact, inline, ES5-style JS in `index.html`).

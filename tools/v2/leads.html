@@ -7,7 +7,7 @@
 <title>V2 Leads - RestroGrow Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <script>try{if(sessionStorage.getItem("rgAdminPw"))document.documentElement.className="pw"}catch(e){}</script>
-<link rel="stylesheet" href="admin.css?v=20261019e">
+<link rel="stylesheet" href="admin.css?v=20261021a">
 <style>
 /* Version 2 leads page: one toolbar, filters tucked away, calm cards. */
 .lh{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
@@ -96,7 +96,7 @@
 
   <div class="tb">
     <button type="button" class="fbtn" id="fbtn" aria-expanded="false" aria-controls="drw"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters<i id="fpn" hidden></i></button>
-    <select class="srt" id="srt" aria-label="Sort"><option value="new">Newest first</option><option value="demo">Upcoming demos first</option><option value="old">Oldest first</option></select>
+    <select class="srt" id="srt" aria-label="Sort"><option value="new">Newest first</option><option value="demo">Upcoming demos first</option><option value="fu">Follow-ups due first</option><option value="old">Oldest first</option></select>
     <div class="chips" id="chips"></div>
   </div>
 
@@ -115,11 +115,12 @@
   <div class="leads" id="tb"></div>
 </div>
 
-<script src="common.js?v=20261019e"></script>
+<script src="common.js?v=20261021a"></script>
+<script src="lead-panel.js?v=20261021a"></script>
 <script>
 (function(){
   var $=RG.$,esc=RG.esc,leads=[],filter="",shown=[],groupBy="",sortBy="new";
-  var COLS=["time","name","phone","email","business","brand","location","outlets","orders","turnover","budget","status","notes","slot_start","meet_link","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page","ad_params","referrer","landing"];
+  var COLS=["time","name","phone","email","business","brand","location","outlets","orders","turnover","budget","status","notes","slot_start","meet_link","utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","fbclid","page","ad_params","referrer","landing","last_call","calls","follow_up"];
 
   /* ---------- what each lead tells us about the ad ---------- */
   function adInfo(l){
@@ -149,14 +150,14 @@
   function fx(l){
     var a=adInfo(l),d=new Date(l.time),cl=function(v){return v||"(none)"};
     return {src:srcOf(l),camp:cl(a.f.camp),adset:cl(a.f.adset),ad:cl(a.f.ad),page:pageOf(l),status:l.status,budget:cl(l.budget),turnover:cl(l.turnover),orders:cl(l.orders),outlets:cl(l.outlets),
-      business:cl(l.business),slot:slotOf(l),
+      business:cl(l.business),slot:slotOf(l),fu:RG.followState(l),calls:RG.callState(l),
       city:cl(String(l.location||"").split(",").pop().trim()),wa:l.wa_status==="sent"||l.wa_status==="demo"?"Sent":l.wa_status?"Failed":"Not recorded",data:l.is_demo?"Demo only":"Real only",
       days:isNaN(d)?9999:(Date.now()-d)/864e5};
   }
 
   /* ---------- filters: the everyday ones on top, the ad ones under "More" ---------- */
   var F={};
-  var MAIN=[["date","Date",["Today","Last 7 days","Last 30 days"]],["slot","Demo slot"],["business","Business type"],["budget","Budget"],["src","Source"],["wa","WhatsApp"]];
+  var MAIN=[["date","Date",["Today","Last 7 days","Last 30 days"]],["fu","Follow-up",["Overdue","Today","Upcoming","Not set"]],["calls","Calls",["Not called yet","Called today","Called earlier","Called (time not recorded)"]],["slot","Demo slot"],["business","Business type"],["budget","Budget"],["src","Source"],["wa","WhatsApp"]];
   var MORE=[["camp","Campaign"],["adset","Ad set / group"],["ad","Ad"],["page","Landing page"],["turnover","Turnover"],["orders","Orders / day"],["outlets","Outlets"],["city","City"],["data","Data",["Real only","Demo only"]]];
   var DEFS=MAIN.concat(MORE);
   function passes(l,f,skip){
@@ -210,9 +211,10 @@
     if(l.meet_note)return '<div class="dm bad">'+CAL+'<div class="tx"><b>Demo booking failed</b><small>'+esc(l.meet_note)+'</small></div></div>';
     return '<div class="dm none">'+CAL+'<div class="tx">Demo slot not chosen yet</div></div>';
   }
+  function waLink(l){return "https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.")}
   function card(l){
     var opts=RG.STATUSES.map(function(x){return "<option"+(x===l.status?" selected":"")+">"+esc(x)+"</option>"}).join("");
-    var wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", this is RestroGrow. Thanks for requesting a demo.");
+    var wa=waLink(l);
     var kv=[["Business",l.business],["Outlets",l.outlets],["Orders / day",l.orders],["Turnover",l.turnover],["Budget",l.budget]].filter(function(x){return x[1]})
       .map(function(x){return '<div><dt>'+x[0]+'</dt><dd>'+esc(x[1])+'</dd></div>'}).join("");
     var ai=adInfo(l),waOk=l.wa_status==="sent"||l.wa_status==="demo";
@@ -225,7 +227,8 @@
       +demoBox(l)
       +'<div class="ct"><a class="p" href="tel:+91'+encodeURIComponent(l.phone)+'">+91 '+esc(l.phone)+'</a>'+(l.email?'<a href="mailto:'+esc(l.email)+'">'+esc(l.email)+'</a>':"")+'</div>'
       +(kv?'<dl class="kv">'+kv+'</dl>':"")
-      +'<div class="acts"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+IC+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+      +RG.actLine(l)
+      +'<div class="acts three"><a class="cl" href="tel:+91'+encodeURIComponent(l.phone)+'">'+IC+'Call</a><a class="wa" href="'+wa+'" target="_blank" rel="noopener">WhatsApp</a><button type="button" class="op">Open</button></div>'
       +'<textarea class="nt" maxlength="2000" placeholder="Add note" aria-label="Notes">'+esc(l.notes)+'</textarea>'+rs
       +'<div class="ft"><span>'+esc(srcOf(l))+' · '+esc(pageOf(l))+'</span><span><i class="dot '+(l.is_demo?"":waOk?"ok":l.wa_status?"bad":"")+'"></i>'+esc(waTxt)+'</span><span class="sp"></span><button type="button" class="del">Delete</button>'
       +(adTxt.trim()?'<details><summary>Ad and tracking details</summary><pre>'+esc(adTxt.trim())+'</pre></details>':"")+'</div></article>';
@@ -233,6 +236,10 @@
   function sorted(a){
     var t=function(l){return new Date(l.time).getTime()||0},now=Date.now();
     if(sortBy==="old")return a.slice().sort(function(x,y){return t(x)-t(y)});
+    if(sortBy==="fu")return a.slice().sort(function(x,y){
+      var f=function(l){var d=RG.followState(l)==="Not set"?null:RG.followUp(l);return d?d.getTime():Infinity};   /* soonest (and overdue) follow-up on top */
+      return f(x)-f(y)||t(y)-t(x);
+    });
     if(sortBy==="demo")return a.slice().sort(function(x,y){
       var sx=x.slot_start?new Date(x.slot_start).getTime():0,sy=y.slot_start?new Date(y.slot_start).getTime():0;
       var ux=sx>=now?0:1,uy=sy>=now?0:1;   /* upcoming demos first (soonest on top), then everyone else newest first */
@@ -245,11 +252,13 @@
     var up=real.filter(function(l){return l.slot_start&&new Date(l.slot_start).getTime()>=now}).length;
     var today=real.filter(function(l){return (now-new Date(l.time))/864e5<=1}).length;
     var nw=real.filter(function(l){return l.status==="New"}).length;
-    $("cnt").innerHTML='<span>Showing <b>'+shown.length+'</b> of '+leads.length+'</span><span><b>'+today+'</b> today</span><span><b>'+nw+'</b> not called yet</span><span><b>'+up+'</b> upcoming demo'+(up===1?"":"s")+'</span>';
+    var due=real.filter(function(l){var s=RG.followState(l);return s==="Overdue"||s==="Today"}).length;
+    $("cnt").innerHTML='<span>Showing <b>'+shown.length+'</b> of '+leads.length+'</span><span><b>'+today+'</b> today</span><span><b>'+nw+'</b> not called yet</span><span><b>'+up+'</b> upcoming demo'+(up===1?"":"s")+'</span>'+(due?'<span><b>'+due+'</b> follow-up'+(due===1?"":"s")+' due</span>':"");
   }
   function list(){
     var q=$("q").value.trim().toLowerCase();
     shown=sorted(leads.filter(function(l){
+      RG.derive(l);
       if(filter&&l.status!==filter)return false;
       if(!passes(l,fx(l)))return false;
       if(!q)return true;
@@ -305,11 +314,21 @@
     var l=leads.filter(function(x){return String(x.id)===cardEl.getAttribute("data-id")})[0];if(!l)return;
     var st=cardEl.querySelector("select.st").value,nt=cardEl.querySelector("textarea").value;
     if(st===l.status&&nt===l.notes)return;
-    fetch("../api/lead_update.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:RG.pw,id:l.id,status:st,notes:nt})})
-      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error")})})
-      .then(function(){var ch=l.status!==st;l.status=st;l.notes=nt;cardEl.querySelector("select.st").setAttribute("data-s",st);cardEl.setAttribute("data-s",st);chips();if(ch)list()})
+    // the card stays where it is (no list redraw), so changing the status never makes it vanish
+    RG.saveLead(l,st,nt)
+      .then(function(){cardEl.querySelector("select.st").setAttribute("data-s",l.status);cardEl.setAttribute("data-s",l.status);var a=cardEl.querySelector(".act");if(a)a.outerHTML=RG.actLine(l);RG.derive(l);chips();stats()})
       .catch(function(x){alert("Not saved: "+x.message)});
   }
+  // After a change, redraw just that card where it is: it stays on screen even if it no longer matches the filter,
+  // until the filter, search, sort or Refresh is used.
+  function touch(l){
+    var c=document.querySelector('.lead[data-id="'+l.id+'"]');
+    if(c){var d=document.createElement("div");d.innerHTML=card(l);c.parentNode.replaceChild(d.firstChild,c)}
+    RG.derive(l);chips();stats();
+  }
+  function byId(id){return leads.filter(function(x){return x.id===+id})[0]}
+  RG.panel({get:byId,list:function(){return shown.map(function(l){return l.id})},changed:touch,wa:waLink,
+    extra:function(l){return demoBox(l)+'<div class="sch"><span class="tag">Source: '+esc(srcOf(l))+'</span><span class="tag">Page: '+esc(pageOf(l))+'</span></div>'}});
 
   $("q").addEventListener("input",list);
   $("chips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=b.getAttribute("data-f");chips();list()});
@@ -326,11 +345,21 @@
       .catch(function(x){alert("Not deleted: "+x.message)});
   });
   $("tb").addEventListener("focusout",function(e){if(e.target.tagName==="TEXTAREA")save(e.target.closest(".lead"))});
-  // Tapping Call (button or number) marks the lead as Called (unless already Called / Converted / Not interested).
+  // Tapping Call (button or number) saves the call time, marks the lead as Called (if it was New / Not answered / Follow-up)
+  // and opens the lead, so after the call you just tap how it went.
   $("tb").addEventListener("click",function(e){
     var a=e.target.closest(".cl,.ct .p");if(!a)return;
-    var cardEl=a.closest(".lead"),sel=cardEl.querySelector("select.st");
-    if(["New","Not answered","Follow-up"].indexOf(sel.value)>-1){sel.value="Called";save(cardEl)}
+    var l=byId(a.closest(".lead").getAttribute("data-id"));if(!l)return;
+    RG.markCalled(l).then(function(){touch(l);RG.panelRedraw()}).catch(function(x){alert("Call time not saved: "+x.message)});
+    setTimeout(function(){RG.openLead(l.id,true)},0);
+  });
+  $("tb").addEventListener("click",function(e){
+    var a=e.target.closest(".wa");if(!a)return;
+    var l=byId(a.closest(".lead").getAttribute("data-id"));if(l)RG.logLead(l,"whatsapp").then(function(){touch(l);RG.panelRedraw()}).catch(function(){});
+  });
+  // Open the lead (Open button, name or picture): everything about it in one panel.
+  $("tb").addEventListener("click",function(e){
+    var a=e.target.closest(".op,.lead .nm,.lead .av");if(a)RG.openLead(+a.closest(".lead").getAttribute("data-id"));
   });
   // CSV of what is currently on screen (so filters carry over to the download).
   $("csv").addEventListener("click",function(){

@@ -1,7 +1,7 @@
 // Shared admin helpers: login, session, data load, small utilities.
 (function(){
   var KEY="rgAdminPw";
-  var RG=window.RG={pw:"",leads:[],STATUSES:["New","Called","Not answered","Follow-up","Converted","Not interested"]};
+  var RG=window.RG={pw:"",leads:[],STATUSES:["New","Called","Not answered","Follow-up","Interested","Converted","Not interested"]};
   var $=RG.$=function(i){return document.getElementById(i)};
   RG.esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
   RG.fmt=function(t){var d=new Date(t);return isNaN(d)?"":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})};

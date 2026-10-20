@@ -13,7 +13,17 @@ try {
     json_out(500, ['error' => 'Could not load leads']);
 }
 
-json_out(200, ['leads' => array_map(function ($r) {
+// History per lead (calls, status changes, follow-ups). If it can't be read the leads still load.
+$acts = [];
+try {
+    foreach (db()->query('SELECT lead_id, created_at, kind, detail FROM lead_activity ORDER BY id')->fetchAll() as $a) {
+        $acts[(int)$a['lead_id']][] = ['time' => str_replace(' ', 'T', $a['created_at']) . 'Z', 'kind' => $a['kind'], 'detail' => $a['detail']];
+    }
+} catch (Throwable $e) {
+    error_log('lead history load failed: ' . $e->getMessage());
+}
+
+json_out(200, ['leads' => array_map(function ($r) use ($acts) {
     return [
         'id' => (int)$r['id'], 'status' => $r['status'], 'notes' => (string)$r['notes'],
         'time' => str_replace(' ', 'T', $r['created_at']) . 'Z',
@@ -26,5 +36,6 @@ json_out(200, ['leads' => array_map(function ($r) {
         'is_demo' => (int)$r['is_demo'],
         'email' => (string)($r['email'] ?? ''), 'business' => (string)($r['business_type'] ?? ''),
         'wa_status' => (string)$r['wa_status'], 'wa_note' => (string)$r['wa_note'],
+        'log' => $acts[(int)$r['id']] ?? [],
     ];
 }, $rows)]);

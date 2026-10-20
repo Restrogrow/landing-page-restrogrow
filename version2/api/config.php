@@ -91,6 +91,16 @@ function db() {
         body MEDIUMTEXT NOT NULL,
         updated_at DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // History per lead for the admin: when it was called, status changes, follow-up dates, notes saved.
+    // Its own table, so the leads rows are never changed by it.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS v2_lead_activity (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        lead_id INT UNSIGNED NOT NULL,
+        created_at DATETIME NOT NULL,
+        kind VARCHAR(20) NOT NULL,
+        detail VARCHAR(300) NOT NULL DEFAULT '',
+        KEY idx_lead (lead_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     // Result of the WhatsApp confirmation (sent / failed / not set up) so the admin can see why a message did not go.
     if (!$pdo->query("SHOW COLUMNS FROM v2_leads LIKE 'wa_status'")->fetch()) {
         $pdo->exec("ALTER TABLE v2_leads ADD COLUMN wa_status VARCHAR(20) NULL, ADD COLUMN wa_note VARCHAR(500) NULL");

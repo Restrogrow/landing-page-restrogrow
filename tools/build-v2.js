@@ -79,13 +79,14 @@ function slotForm(s) {
 
 fs.rmSync(out, { recursive: true, force: true });
 
-const API = ['config', 'submit', 'wa', 'meet', 'lead_confirm', 'leads', 'lead_update', 'lead_delete', 'lead_resend', 'demo_leads', 'public_config', 'slots', 'book'];
+const API = ['config', 'submit', 'wa', 'meet', 'lead_confirm', 'leads', 'lead_update', 'lead_log', 'lead_delete', 'lead_resend', 'demo_leads', 'public_config', 'slots', 'book'];
 const SQL = [/\b(FROM|INTO|UPDATE|TABLE IF NOT EXISTS|TABLE|COLUMNS FROM) leads\b/g, '$1 v2_leads'];
 for (const f of API) {
   let s = ['meet', 'slots', 'book'].includes(f) ? fs.readFileSync(path.join(__dirname, 'v2', f + '.php'), 'utf8') : read('api/' + f + '.php');
   if (PATCH[f]) s = PATCH[f](s);
   if (f === 'demo_leads') s = budget(s);
   s = s.replace(SQL[0], SQL[1]);
+  s = s.replace(/\blead_activity\b/g, 'v2_lead_activity');   // own history table, like v2_leads
   if (f === 'config') {
     // main site's .env (one folder up) gives the keys; an optional version2/.env overrides it, e.g. a separate database
     s = s.replace("env_load(__DIR__ . '/../.env');", "env_load(__DIR__ . '/../../.env');\nenv_load(__DIR__ . '/../.env');");
@@ -103,7 +104,7 @@ write('book.html', fs.readFileSync(path.join(__dirname, 'v2', 'book.html'), 'utf
 // leads page: version 2 has its own (demo slot first, fewer filters on show)
 write('admin/leads.html', fs.readFileSync(path.join(__dirname, 'v2', 'leads.html'), 'utf8'));
 for (const f of ['index.html']) write('admin/' + f, read('admin/' + f).replace(/\s*<a class="tab" href="pages.html">Pages<\/a>/, '').replace(/\s*<a class="tab" href="\.\.\/text\/">Notes<\/a>/, '').replace(/<title>([^<]*)<\/title>/, '<title>V2 $1</title>'));
-for (const f of ['common.js', 'admin.css', '.htaccess']) write('admin/' + f, read('admin/' + f));
+for (const f of ['common.js', 'lead-panel.js', 'admin.css', '.htaccess']) write('admin/' + f, read('admin/' + f));
 write('.env.example', `# Optional. Version 2 already uses the main site's .env (WhatsApp, Google Meet, agent, admin password).
 # Put a line here only to override it, e.g. a separate database:  DB_NAME=...  DB_USER=...  DB_PASS=...
 # Ad tags are always off in version 2.
