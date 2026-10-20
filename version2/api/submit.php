@@ -52,6 +52,12 @@ $seq = '01234567890123456789';
 if (count(array_unique(str_split($phone))) <= 2 || strpos($seq, $phone) !== false || strpos(strrev($seq), $phone) !== false)
     json_out(400, ['error' => 'Enter a valid 10 digit mobile number.']);
 
+// Version 2: demo slot picked in the form (unix seconds). Checked before saving so a taken slot just asks for another one.
+require_once __DIR__ . '/meet.php';
+$slotTs = (int)($b['slot'] ?? 0);
+list($gTok, $gNote) = $slotTs > 0 ? google_token() : ['', ''];
+if ($slotTs > 0 && !slot_is_free($gTok, $slotTs)) json_out(409, ['error' => 'Sorry, that time was just taken. Please pick another one.']);
+
 // A number is accepted once, ever. A retry of the same submit (same event_id) is fine; a different attempt is refused,
 // so no repeat lead, WhatsApp message or ad conversion is paid for.
 try {
@@ -104,7 +110,11 @@ require_once __DIR__ . '/meet.php';
 // Answer the visitor first so the form never waits on the WhatsApp API, then send in the background.
 ignore_user_abort(true);
 @set_time_limit(30);
-$out = json_encode(['ok' => true, 'event_id' => $eid]);
+$booked = ['', ''];
+if ($slotTs > 0) {
+    try { $booked = slot_book($eid, $lead['name'], $lead['brand'], $slotTs, $gTok, $gNote); } catch (Throwable $e) { error_log('form booking failed: ' . $e->getMessage()); }
+}
+$out = json_encode(['ok' => true, 'event_id' => $eid] + ($booked[0] !== '' ? ['label' => $booked[0], 'link' => $booked[1]] : []), JSON_UNESCAPED_UNICODE);
 http_response_code(200);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -116,7 +126,12 @@ flush();
 if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
-wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));
+if ($booked[0] !== '') {
+    wa_save($eid, wa_send($lead['name'], $lead['brand'], $phone));
+    try { slot_booked_messages($eid, $lead, $phone, $booked[1], $booked[0]); } catch (Throwable $e) { error_log('booked messages failed: ' . $e->getMessage()); }
+} else {
+    wa_save($eid, confirm_send($lead['name'], $lead['brand'], $phone, $eid));
+}
 
 // Meta Conversions API: server-side Lead with the same event_id. Ad blockers / iPhone privacy can't hide it,
 // and Meta merges it with the browser Pixel event instead of counting twice.

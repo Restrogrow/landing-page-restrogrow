@@ -2,8 +2,12 @@
 require __DIR__ . '/config.php';
 require __DIR__ . '/meet.php';
 
-// Version 2: free demo slots for one lead. GET ?e=<event_id>  (the secret link sent on WhatsApp)
+// Version 2: free demo slots. GET with no id: for the form. GET ?e=<event_id>: for one lead (the link sent on WhatsApp).
 header('Cache-Control: no-store');
+if (!isset($_GET['e'])) {
+    list($tok) = google_token();
+    json_out(200, ['days' => slots_free($tok), 'minutes' => slot_cfg()['len']]);
+}
 $eid = substr(preg_replace('/[^A-Za-z0-9_-]/', '', (string)($_GET['e'] ?? '')), 0, 64);
 if ($eid === '') json_out(400, ['error' => 'This link is not valid.']);
 try {

@@ -1,7 +1,8 @@
 <?php
 // Version 2 only. Demo slots + Google Meet link.
-// Flow: lead -> one WhatsApp (with a "choose your slot" link) -> lead picks a slot on book.html -> Calendar event with
-// a Meet room at that time -> link on WhatsApp to the lead and an alert to the sales agent.
+// Flow: the lead picks a slot in the form itself (submit.php books it) -> Calendar event with
+// a Meet room at that time -> link on screen and on WhatsApp, alert to the sales agent. If no slot could be picked, the
+// WhatsApp confirmation carries a "choose your slot" link to book.html instead.
 // Needs GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN in .env. Nothing here ever blocks a lead.
 
 const SLOT_TZ = 'Asia/Kolkata';
@@ -174,4 +175,34 @@ function agent_notify($lead, $phone, $link, $when) {
     list($code, $res, $err) = meet_post(env('WACRM_BASE_URL'), ['Authorization: Bearer ' . env('Api'), 'Content-Type: application/json'],
         json_encode(['to' => '+91' . substr($to, -10), 'type' => 'text', 'text' => $body], JSON_UNESCAPED_UNICODE));
     return $code >= 200 && $code < 300 ? 'agent sent' : 'agent failed: HTTP ' . $code . ' ' . $err . ' ' . mb_substr($res, 0, 150);
+}
+
+function slot_is_free($tok, $ts) {
+    foreach (slots_free($tok) as $d) foreach ($d['slots'] as $s) if ($s['ts'] === $ts) return true;
+    return false;
+}
+
+// Makes the Meet link for a lead's slot and saves it. Returns [label, link], or ['', reason] when the link can't be made
+// (the reason is saved on the lead so Admin shows why).
+function slot_book($eid, $name, $brand, $ts, $tok, $tokNote) {
+    $m = meet_create($name, $brand, $ts, $tok);
+    if ($m[0] === '') {
+        $why = $tok === '' ? 'Google ' . $tokNote : $m[1];
+        error_log('meet create failed: ' . $why);
+        try { db()->prepare('UPDATE leads SET meet_note = ? WHERE event_id = ? AND slot_start IS NULL')->execute([mb_substr('booking failed: ' . $why, 0, 300), $eid]); } catch (Throwable $e) {}
+        return ['', $why];
+    }
+    $u = db()->prepare('UPDATE leads SET slot_start = ?, meet_link = ?, meet_note = ? WHERE event_id = ? AND slot_start IS NULL');
+    $u->execute([gmdate('Y-m-d H:i:s', $ts), $m[0], 'booked', $eid]);
+    if ($u->rowCount() === 0) return ['', 'already booked'];
+    return [slot_label($ts), $m[0]];
+}
+
+// After a booking: Meet link to the lead and the alert to the agent, result saved on the lead. Run after answering the visitor.
+function slot_booked_messages($eid, $lead, $phone, $link, $label) {
+    $note = 'booked ' . $label;
+    $w = meet_whatsapp($lead['name'], $phone, $link);
+    if ($w !== '') $note .= ' | ' . $w;
+    $note .= ' | ' . agent_notify($lead, $phone, $link, $label);
+    db()->prepare('UPDATE leads SET meet_note = ? WHERE event_id = ?')->execute([mb_substr($note, 0, 300), $eid]);
 }

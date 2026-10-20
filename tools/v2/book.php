@@ -25,32 +25,22 @@ if (!empty($row['slot_start'])) {
 }
 
 list($tok, $tokNote) = google_token();
-$ok = false;
-foreach (slots_free($tok) as $d) foreach ($d['slots'] as $s) if ($s['ts'] === $ts) $ok = true;
-if (!$ok) json_out(409, ['error' => 'Sorry, that slot was just taken. Please pick another one.']);
+if (!slot_is_free($tok, $ts)) json_out(409, ['error' => 'Sorry, that slot was just taken. Please pick another one.']);
 
-$m = meet_create($row['name'], $row['brand'], $ts, $tok);
-if ($m[0] === '') {
-    // The reason (Google status / "not set up", never a key) goes on the lead so Admin shows why, and back for debugging.
-    $why = $tok === '' ? 'Google ' . $tokNote : $m[1];
-    error_log('meet create failed: ' . $why);
-    try { db()->prepare('UPDATE leads SET meet_note = ? WHERE event_id = ? AND slot_start IS NULL')->execute([mb_substr('booking failed: ' . $why, 0, 300), $eid]); } catch (Throwable $e) {}
-    json_out(502, ['error' => 'Could not book this slot right now. Please try again in a minute.', 'detail' => mb_substr($why, 0, 300)]);
-}
 try {
-    $u = db()->prepare('UPDATE leads SET slot_start = ?, meet_link = ?, meet_note = ? WHERE event_id = ? AND slot_start IS NULL');
-    $u->execute([gmdate('Y-m-d H:i:s', $ts), $m[0], 'booked', $eid]);
-    if ($u->rowCount() === 0) json_out(409, ['error' => 'This demo is already booked.']);
+    $m = slot_book($eid, $row['name'], $row['brand'], $ts, $tok, $tokNote);
 } catch (Throwable $e) {
     error_log('book save failed: ' . $e->getMessage());
     json_out(500, ['error' => 'Something went wrong. Please try again.']);
 }
+if ($m[0] === '' && $m[1] === 'already booked') json_out(409, ['error' => 'This demo is already booked.']);
+if ($m[0] === '') json_out(502, ['error' => 'Could not book this slot right now. Please try again in a minute.', 'detail' => mb_substr($m[1], 0, 300)]);
 
 // Answer the visitor first, then send the WhatsApp messages in the background.
-$label = slot_label($ts);
+$label = $m[0];
 ignore_user_abort(true);
 @set_time_limit(40);
-$out = json_encode(['ok' => true, 'label' => $label, 'link' => $m[0]], JSON_UNESCAPED_UNICODE);
+$out = json_encode(['ok' => true, 'label' => $label, 'link' => $m[1]], JSON_UNESCAPED_UNICODE);
 http_response_code(200);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -63,13 +53,9 @@ if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
 
 try {
-    $note = 'booked ' . $label;
-    $w = meet_whatsapp($row['name'], $row['phone'], $m[0]);
-    if ($w !== '') $note .= ' | ' . $w;
-    $note .= ' | ' . agent_notify(['name' => $row['name'], 'brand' => $row['brand'], 'location' => $row['location'], 'outlets' => $row['outlets'],
+    slot_booked_messages($eid, ['name' => $row['name'], 'brand' => $row['brand'], 'location' => $row['location'], 'outlets' => $row['outlets'],
         'orders' => $row['orders_day'], 'turnover' => $row['turnover'], 'budget' => $row['budget'],
-        'email' => (string)($row['email'] ?? ''), 'business' => (string)($row['business_type'] ?? '')], $row['phone'], $m[0], $label);
-    db()->prepare('UPDATE leads SET meet_note = ? WHERE event_id = ?')->execute([mb_substr($note, 0, 300), $eid]);
+        'email' => (string)($row['email'] ?? ''), 'business' => (string)($row['business_type'] ?? '')], $row['phone'], $m[1], $label);
 } catch (Throwable $e) {
     error_log('book messages failed: ' . $e->getMessage());
 }

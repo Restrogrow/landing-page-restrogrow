@@ -258,6 +258,26 @@
 .rg .msg{font-size:.86rem;color:#D92D20;min-height:1.2em;margin-top:8px;text-align:center}
 .rg .done{display:none;text-align:center;padding:36px 0}
 .rg .done b{display:block;font:700 1.4rem var(--fh);margin-bottom:6px}
+/* version 2: demo time picker inside the form */
+.rg .slt{margin-top:18px;padding-top:16px;border-top:1px solid var(--ln)}
+.rg .slt-h{font-size:.82rem;font-weight:500;color:#33334a;margin-bottom:8px}
+.rg .slt-h span{color:var(--mu);font-weight:400}
+.rg .slt-d{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 6px;scroll-snap-type:x proximity;scrollbar-width:thin}
+.rg .slt-d button{flex:0 0 auto;scroll-snap-align:start;min-width:68px;padding:7px 10px;border:1.5px solid #E4E0EA;border-radius:12px;background:#FAFAFC;color:var(--tx);font:500 .72rem/1.25 var(--fb);cursor:pointer;text-align:center;transition:border-color .15s,background .15s}
+.rg .slt-d strong{display:block;font:700 1.15rem/1.2 var(--fh)}
+.rg .slt-d button:hover,.rg .slt-t button:hover{border-color:var(--o)}
+.rg .slt-d button.on{border-color:var(--o);background:var(--ot);color:var(--o2)}
+.rg .slt-t{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:196px;overflow-y:auto;padding:2px}
+.rg .slt-t button{height:42px;padding:0 4px;border:1.5px solid #E4E0EA;border-radius:10px;background:#FAFAFC;color:var(--tx);font:500 .88rem var(--fb);cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.rg .slt-t button.on{background:var(--o);border-color:var(--o);color:#fff;font-weight:600}
+.rg .slt-n{font-size:.84rem;color:var(--mu);margin:4px 0 0}
+.rg .slt.bad .slt-h{color:#D92D20}
+.rg .slt-sk{height:42px;border-radius:10px;background:#F3EFEA}
+.rg .done .when{display:inline-block;margin:6px 0 14px;padding:10px 18px;border-radius:12px;background:var(--ot);color:var(--o2);font:700 1.05rem var(--fh)}
+.rg .done .join{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 26px;border-radius:12px;background:#1A73E8;color:#fff;font:600 .98rem var(--fb);text-decoration:none}
+.rg .done .join:hover{filter:brightness(.95);color:#fff}
+.rg .done small{display:block;margin-top:12px;font-size:.84rem;color:var(--mu)}
+@media(max-width:480px){.rg .slt-t{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .rg .form.ok .fb{display:none}.rg .form.ok .done{display:block}
 
 /* sticky mobile CTA */
@@ -673,7 +693,7 @@
 <form class="form rv" id="rgF" novalidate>
     <div class="fb">
       <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><input name="hp" type="text" tabindex="-1" autocomplete="off"></div>
-      <h3>Book My Demo</h3><p>Our team will call you to fix a time that suits you.</p>
+      <h3>Book My Demo</h3><p>Fill your details and pick a demo time. You get the Google Meet link straight away.</p>
       <div class="fg">
         <div class="fi"><label for="fN">Your name</label><input id="fN" name="name" type="text" autocomplete="name" required></div>
         <div class="fi"><label for="fP">WhatsApp number</label><input id="fP" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10 digit number" required></div>
@@ -686,6 +706,10 @@
         <div class="fi"><label for="fT">What is your restaurant's average monthly turnover?</label><select id="fT" name="turnover" required><option value="">Select</option><option>Below ₹5 Lakhs</option><option>₹5 Lakhs – ₹10 Lakhs</option><option>₹10 Lakhs – ₹25 Lakhs</option><option>₹25 Lakhs+</option></select></div>
         <!-- >>> EDIT: adjust budget ranges to match your pricing -->
         <div class="fi"><label for="fG">What budget range are you comfortable with?</label><select id="fG" name="budget" required><option value="">Select</option><option>₹25,000 to ₹30,000</option><option>₹30,000 to ₹50,000</option><option>₹50,000 to ₹1 L</option><option>₹1 L+</option></select></div>
+      </div>
+      <div class="slt" id="rgSl" aria-live="polite"><input type="hidden" name="slot" value="">
+        <div class="slt-h">Pick your demo time <span>(IST, on Google Meet)</span></div>
+        <div class="slt-t"><div class="slt-sk"></div><div class="slt-sk"></div><div class="slt-sk"></div><div class="slt-sk"></div></div>
       </div>
       <button class="btn btn-p btn-full" type="submit">Book My Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       <p class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/></svg>3X in 90 days, or 100% of your fee back</p>
@@ -832,8 +856,8 @@
   var F=$("rgF"),M=$("rgMsg");
   F.addEventListener("submit",function(e){
     e.preventDefault();var bad=null;
-    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;var v=el.value.trim(),ok=v!=="";if(el.name==="email")ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}if(ok)el.removeAttribute("aria-invalid");else el.setAttribute("aria-invalid","true");if(!ok&&!bad)bad=el});
-    if(bad){M.textContent=bad.name==="phone"?"Enter a valid 10 digit mobile number.":bad.name==="email"?"Enter a valid email address.":"Please fill in all fields.";bad.focus();return}
+    F.querySelectorAll("input,select").forEach(function(el){if(el.name==="hp")return;if(el.name==="slot"&&!F._needSlot)return;var v=el.value.trim(),ok=v!=="";if(el.name==="email")ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);if(el.name==="phone"){var d=v.replace(/\D/g,"");ok=d.length>=10&&/^[6-9]\d{9}$/.test(d.slice(-10))}if(ok)el.removeAttribute("aria-invalid");else el.setAttribute("aria-invalid","true");if(!ok&&!bad)bad=el});
+    if(bad){if(bad.name==="slot"){$("rgSl").classList.add("bad");$("rgSl").scrollIntoView({block:"center",behavior:"smooth"})}M.textContent=bad.name==="slot"?"Please pick a demo time.":bad.name==="phone"?"Enter a valid 10 digit mobile number.":bad.name==="email"?"Enter a valid email address.":"Please fill in all fields.";bad.focus();return}
     var D={};new FormData(F).forEach(function(v,k){D[k]=String(v).trim()});D.page=location.href;D.time=new Date().toISOString();
     /* one id per attempt, reused on retry, so a lead is never counted twice */
     if(!F._eid)F._eid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+"-"+Math.random().toString(16).slice(2);
@@ -842,10 +866,10 @@
     D.fbp=ck("_fbp");D.fbc=ck("_fbc")||(AT.fbclid?"fb.1."+Date.now()+"."+AT.fbclid:"");
     AK.forEach(function(k){if(AT[k])D[k]=AT[k]});
     D.ad_params=AT.all&&Object.keys(AT.all).length?JSON.stringify(AT.all):"";D.referrer=AT.ref||document.referrer||"";D.landing=AT.land||location.href;
-    var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent="Sending...";
+    var sb=F.querySelector('button[type="submit"]');sb.disabled=true;M.textContent=D.slot?"Booking your demo...":"Sending...";
     fetch(API_BASE+"api/submit.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(D)})
-      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");F.classList.add("ok");location.href=API_BASE+"thank-you.html?eid="+encodeURIComponent(j.event_id||F._eid)})})
-      .catch(function(x){M.textContent=x.message||"Network error. Please try again."})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");if(j.label){window.rgBooked(j);F.classList.add("ok");return}F.classList.add("ok");location.href=API_BASE+"thank-you.html?eid="+encodeURIComponent(j.event_id||F._eid)})})
+      .catch(function(x){M.textContent=x.message||"Network error. Please try again.";if(/taken/i.test(x.message||""))window.rgSlotsReload()})
       .then(function(){sb.disabled=false;if(F.classList.contains("ok"))M.textContent=""});
   });
   F.addEventListener("input",function(e){e.target.removeAttribute("aria-invalid");M.textContent=""});
@@ -878,6 +902,41 @@
   if(IO){var hO=false,dI=false,st=$("rgSt"),u=function(){st.classList.toggle("on",hO&&!dI)};
     new IntersectionObserver(function(e){hO=!e[0].isIntersecting;u()}).observe($("rg-hero"));
     u()}
+})();
+</script>
+<script>
+/* version 2: loads the free demo times into the form. F._needSlot is on only when times loaded, so the form still
+   works without them (the lead then gets the "choose your slot" link on WhatsApp). */
+(function(){
+  var F=document.getElementById("rgF"),S=document.getElementById("rgSl"),IN=S.querySelector('input[name="slot"]'),days=[],day=0;
+  function esc(x){return String(x==null?"":x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function put(h){S.innerHTML="";S.appendChild(IN);S.insertAdjacentHTML("beforeend",h)}
+  function draw(){
+    var h='<div class="slt-h">Pick your demo time <span>(IST, on Google Meet)</span></div><div class="slt-d">';
+    days.forEach(function(d,i){var w=d.day.split(" ");h+='<button type="button" data-i="'+i+'" class="'+(i===day?"on":"")+'" aria-pressed="'+(i===day)+'">'+esc(w[0])+'<strong>'+esc(w[1])+'</strong>'+esc(w[2]||"")+'</button>'});
+    h+='</div><div class="slt-t">'+days[day].slots.map(function(s){var on=String(s.ts)===IN.value;return '<button type="button" data-t="'+s.ts+'" class="'+(on?"on":"")+'" aria-pressed="'+on+'">'+esc(s.label)+'</button>'}).join("")+'</div>';
+    put(h);
+  }
+  function load(){
+    IN.value="";F._needSlot=false;
+    fetch("api/slots.php").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+      days=j.days||[];day=0;
+      if(!days.length)return put('<p class="slt-n">No demo times are open right now. Send the form and we will fix a time with you on WhatsApp.</p>');
+      F._needSlot=true;draw();
+    }).catch(function(){put('<p class="slt-n">Send the form and we will send you a link on WhatsApp to pick your demo time.</p>')});
+  }
+  S.addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;
+    if(b.hasAttribute("data-i")){day=+b.getAttribute("data-i");IN.value="";draw();return}
+    IN.value=b.getAttribute("data-t");S.classList.remove("bad");document.getElementById("rgMsg").textContent="";draw();
+  });
+  window.rgSlotsReload=load;
+  /* booked: the time and the Meet link right in the form */
+  window.rgBooked=function(j){
+    F.querySelector(".done").innerHTML='<b>Your demo is booked</b><span class="when">'+esc(j.label)+'</span><p>We have sent the meeting link on WhatsApp too.</p>'+
+      (j.link?'<a class="join" href="'+esc(j.link)+'" target="_blank" rel="noopener">Open Google Meet link</a>':'')+'<small>Please join a minute early. Need a different time? Just reply on WhatsApp.</small>';
+  };
+  load();
 })();
 </script>
 </body>
