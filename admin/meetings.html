@@ -49,6 +49,36 @@
 .ma .cx{color:#B91C1C}
 .nol{margin-top:26px}
 .nol .mc{grid-template-columns:minmax(0,1fr)}
+/* lead picker: button opens a popup with a search bar and the lead list */
+.lfld{grid-column:1/-1;display:grid;gap:4px;font-size:.74rem;color:var(--mu);font-weight:500;min-width:0}
+.lpk{position:relative;display:flex;gap:6px}
+.lpb{flex:1;min-width:0;height:44px;padding:0 12px 0 14px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);color:var(--tx);font:500 .9rem 'Poppins',sans-serif;display:flex;align-items:center;gap:8px;cursor:pointer;text-align:left}
+.lpb:focus,.lpb[aria-expanded=true]{border-color:var(--o);outline:none}
+.lpb span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lpb .ph{color:var(--mu)}
+.lpb svg{flex:none;width:18px;height:18px;fill:none;stroke:var(--mu);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lpz{flex:none;width:44px;height:44px;border-radius:10px;border:1.5px solid var(--ln);background:var(--card);color:var(--mu);font-size:1.3rem;cursor:pointer}
+.lpz[hidden],.lpp[hidden],.lpbg[hidden]{display:none}
+.lpp{position:absolute;z-index:30;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--ln);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,12,.18);padding:10px;display:grid;gap:8px}
+.lph{display:none}
+.lpp input{width:100%;height:42px}
+.lpo{max-height:320px;overflow-y:auto;overscroll-behavior:contain;display:grid;gap:2px}
+.lpi{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px;border-radius:10px;cursor:pointer;color:var(--tx)}
+.lpi:hover,.lpi.hl{background:var(--track)}
+.lpi.sel{outline:1.5px solid var(--o)}
+.lpi .av{width:36px;height:36px;font-size:.9rem;margin:0}
+.lpi b{display:block;font-weight:600;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lpi small{display:block;font-size:.74rem;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lpi em{font-style:normal;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--track);color:var(--mu);white-space:nowrap}
+.lpn{padding:14px;text-align:center;font-size:.82rem;color:var(--mu)}
+@media (max-width:600px){
+  .lpbg{position:fixed;inset:0;z-index:29;background:rgba(0,0,12,.45)}
+  /* phone: popup at the top so the keyboard never covers the search or the list */
+  .lpp{position:fixed;top:10px;left:10px;right:10px;border-radius:16px;padding:12px 14px 14px}
+  .lph{display:flex;justify-content:space-between;align-items:center;color:var(--tx);font-size:1rem}
+  .lph button{width:36px;height:36px;border:0;background:none;font-size:1.5rem;color:var(--mu);cursor:pointer}
+  .lpo{max-height:45vh}
+}
 @media (max-width:520px){.mc{grid-template-columns:minmax(0,1fr);gap:6px}.mc .tm b{display:inline;margin-right:8px}}
 </style>
 </head>
@@ -81,7 +111,18 @@
   <form class="card nmf" id="nmf" hidden autocomplete="off">
     <div class="card-h"><h2>New Google Meet</h2><div class="hint">Creates the event in Google Calendar with a Meet link. Pick a lead to save the link on that lead too.</div></div>
     <div class="g">
-      <label class="w">Lead (optional)<input id="nl" list="nll" placeholder="Search a lead by name, restaurant or phone"><datalist id="nll"></datalist></label>
+      <div class="w lfld"><span>Lead (optional)</span>
+        <div class="lpk" id="lpk">
+          <button type="button" class="lpb" id="nl" aria-haspopup="listbox" aria-expanded="false"><span id="nlv" class="ph">Select a lead</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <button type="button" class="lpz" id="nlz" hidden aria-label="Clear lead">&times;</button>
+          <div class="lpbg" id="lpbg" hidden></div>
+          <div class="lpp" id="lpp" hidden>
+            <div class="lph"><b>Select a lead</b><button type="button" id="lpx" aria-label="Close">&times;</button></div>
+            <input id="nls" type="search" placeholder="Search name, restaurant, phone, city" aria-label="Search leads" autocomplete="off">
+            <div class="lpo" id="lpo" role="listbox"></div>
+          </div>
+        </div>
+      </div>
       <label class="w">Title<input id="nt" required maxlength="200" placeholder="RestroGrow demo: Restaurant (Name)"></label>
       <label>Date and time<input id="nd" type="datetime-local" required></label>
       <label>Length<select id="nn"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 hour</option><option value="90">1.5 hours</option></select></label>
@@ -206,19 +247,57 @@
 
   /* ---------- new meeting ---------- */
   function leadLabel(l){return l.name+" · "+l.brand+" · "+l.phone}
-  function fillLeads(){
-    $("nll").innerHTML=RG.leads.filter(function(l){return !l.is_demo}).map(function(l){return '<option value="'+esc(leadLabel(l))+'">'}).join("");
-  }
   function setLead(l){
-    pick=l||null;
-    if(!l)return;
+    var was=pick;pick=l||null;
+    $("nlv").textContent=l?leadLabel(l):"Select a lead";$("nlv").className=l?"":"ph";$("nlz").hidden=!l;
+    if(!l){
+      if($("nt").value===autoTitle){$("nt").value="";autoTitle=""}
+      if(was&&was.email&&$("ne").value===was.email)$("ne").value="";
+      return;
+    }
     var t="RestroGrow demo: "+l.brand+" ("+l.name+")";
     if(!$("nt").value||$("nt").value===autoTitle){$("nt").value=t;autoTitle=t}
-    if(!$("ne").value&&l.email)$("ne").value=l.email;
+    if(l.email&&(!$("ne").value||(was&&$("ne").value===was.email)))$("ne").value=l.email;
   }
-  $("nl").addEventListener("input",function(){
-    var v=this.value;setLead(RG.leads.filter(function(l){return leadLabel(l)===v})[0]);
+  // Lead picker popup: search bar + list (newest first), arrow keys / Enter / Esc.
+  var LP={list:[],hl:0};
+  function lpDraw(){
+    var q=$("nls").value.trim().toLowerCase(),all=RG.leads.filter(function(l){return !l.is_demo});
+    var m=all.filter(function(l){return !q||(l.name+" "+l.brand+" "+l.phone+" "+l.location+" "+l.status).toLowerCase().indexOf(q)>-1});
+    LP.list=m.slice(0,60);LP.hl=Math.min(LP.hl,Math.max(0,LP.list.length-1));
+    $("lpo").innerHTML=LP.list.length?LP.list.map(function(l,i){
+      return '<div class="lpi'+(i===LP.hl?" hl":"")+(pick&&pick.id===l.id?" sel":"")+'" role="option" data-i="'+i+'" aria-selected="'+(pick&&pick.id===l.id)+'">'
+        +'<span class="av">'+esc((l.name||"?").trim().charAt(0).toUpperCase())+'</span>'
+        +'<span><b>'+esc(l.name)+'</b><small>'+esc(l.brand)+' · +91 '+esc(l.phone)+(l.location?' · '+esc(l.location):"")+'</small></span>'
+        +'<em>'+esc(l.status)+'</em></div>'}).join("")
+      +(m.length>LP.list.length?'<div class="lpn">'+(m.length-LP.list.length)+' more, type to narrow down</div>':"")
+      :'<div class="lpn">'+(all.length?"No lead matches \""+esc(q)+"\"":"No leads yet")+'</div>';
+  }
+  function lpOpen(){
+    $("lpp").hidden=$("lpbg").hidden=false;$("nl").setAttribute("aria-expanded","true");
+    $("nls").value="";LP.hl=0;lpDraw();$("nls").focus();
+    var s=$("lpo").querySelector(".sel");if(s)s.scrollIntoView({block:"nearest"});
+  }
+  function lpClose(back){
+    if($("lpp").hidden)return;
+    $("lpp").hidden=$("lpbg").hidden=true;$("nl").setAttribute("aria-expanded","false");if(back)$("nl").focus();
+  }
+  function lpPick(i){var l=LP.list[i];if(!l)return;setLead(l);lpClose(true)}
+  $("nl").addEventListener("click",function(){$("lpp").hidden?lpOpen():lpClose(true)});
+  $("nlz").addEventListener("click",function(){setLead(null);$("nl").focus()});
+  $("lpx").addEventListener("click",function(){lpClose(true)});
+  $("lpbg").addEventListener("click",function(){lpClose(true)});
+  $("nls").addEventListener("input",function(){LP.hl=0;lpDraw()});
+  $("nls").addEventListener("keydown",function(e){
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+      e.preventDefault();if(!LP.list.length)return;
+      LP.hl=(LP.hl+(e.key==="ArrowDown"?1:-1)+LP.list.length)%LP.list.length;lpDraw();
+      var h=$("lpo").querySelector(".hl");if(h)h.scrollIntoView({block:"nearest"});
+    }else if(e.key==="Enter"){e.preventDefault();lpPick(LP.hl)}
+    else if(e.key==="Escape"){e.preventDefault();lpClose(true)}
   });
+  $("lpo").addEventListener("click",function(e){var o=e.target.closest("[data-i]");if(o)lpPick(+o.getAttribute("data-i"))});
+  document.addEventListener("mousedown",function(e){if(!$("lpp").hidden&&!e.target.closest("#lpk"))lpClose(false)});
   function nextSlot(){
     var d=new Date(Date.now()+60*6e4);d.setMinutes(d.getMinutes()<30?30:60,0,0);
     var p=function(n){return ("0"+n).slice(-2)};
@@ -235,7 +314,6 @@
     e.preventDefault();$("nm").textContent="";
     var s=new Date($("nd").value);
     if(isNaN(s)){$("nm").textContent="Pick a date and time.";return}
-    if($("nl").value.trim()&&!pick){$("nm").textContent="Pick the lead from the list, or clear the lead box.";return}
     $("ns").disabled=true;$("ns").textContent="Creating...";
     post({action:"create",title:$("nt").value.trim(),start:s.toISOString(),minutes:+$("nn").value,email:$("ne").value.trim(),notes:$("nx").value.trim(),lead_id:pick?pick.id:0})
       .then(function(j){
@@ -246,7 +324,7 @@
           +(ev.link&&pick?'<a class="wp" href="'+esc(waLink(pick.phone,pick.name,when,ev.link))+'" target="_blank" rel="noopener">Send on WhatsApp</a>':"")
           +(ev.url?'<a href="'+esc(ev.url)+'" target="_blank" rel="noopener">Google Calendar</a>':"")+'</div>';
         $("nr").hidden=false;
-        $("nl").value=$("nt").value=$("ne").value=$("nx").value="";$("nd").value=nextSlot();pick=null;autoTitle="";
+        $("nt").value=$("ne").value=$("nx").value="";$("nd").value=nextSlot();autoTitle="";setLead(null);
         return render();
       })
       .catch(function(x){$("nm").textContent=x.message})
@@ -254,12 +332,11 @@
   });
 
   function render(){
-    fillLeads();
     // meetings.html?lead=<id> (from the lead panel): form opens with that lead picked.
     try{
       var id=+new URLSearchParams(location.search).get("lead");
       var l=id&&RG.leads.filter(function(x){return x.id===id})[0];
-      if(l){$("nl").value=leadLabel(l);setLead(l);openForm();history.replaceState(null,"",location.pathname)}
+      if(l){setLead(l);openForm();history.replaceState(null,"",location.pathname)}
     }catch(x){}
     return post({action:"list"}).then(function(j){
       M=j;
