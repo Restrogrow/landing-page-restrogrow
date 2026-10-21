@@ -222,3 +222,4 @@ html.lp-open{overflow:hidden}
 .lp-mt .btn{height:40px}
 .lp-mt .btn:first-child{background:#15803D}
 .lp-ml{font-size:.74rem;color:var(--mu);overflow-wrap:anywhere}
+.lp-sch{font-size:.8rem;font-weight:600;color:var(--o);text-decoration:none}

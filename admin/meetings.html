@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Meetings - RestroGrow Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{if(sessionStorage.getItem("rgAdminPw"))document.documentElement.className="pw"}catch(e){}</script>
+<link rel="stylesheet" href="admin.css?v=20261021c">
+<style>
+/* Meetings: Google Calendar + Meet. New meeting form, then every booked meeting grouped by day. */
+.gw{margin-bottom:14px;padding:12px 16px;border-radius:14px;background:#FEF3C7;border:1px solid #FCD34D;color:#78350F;font-size:.86rem;overflow-wrap:anywhere}
+.gw[hidden],.nmf[hidden],.res[hidden]{display:none}
+.nmf{max-width:860px;margin-bottom:18px;display:grid;gap:12px}
+.nmf .g{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr))}
+.nmf label{display:grid;gap:4px;font-size:.74rem;color:var(--mu);font-weight:500;min-width:0}
+.nmf label.w{grid-column:1/-1}
+.nmf input,.nmf select{width:100%;min-width:0}
+.nmf textarea{width:100%;min-height:64px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--fln);background:var(--field);resize:vertical;outline:none}
+.nmf .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.nmf .msg{font-size:.84rem;color:#D92D20}
+.nmf .hint{font-size:.74rem;color:var(--mu)}
+.res{padding:12px 14px;border-radius:12px;background:#DCFCE7;color:#14532D;display:grid;gap:8px;font-size:.88rem}
+.res a.lk{color:inherit;font-weight:600;overflow-wrap:anywhere}
+.mbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.mbar .chips{flex:1 1 auto}
+.mbar #mq{flex:1 1 220px;max-width:340px;height:40px}
+.day{margin:18px 0 8px;font:700 .98rem 'Montserrat',sans-serif;display:flex;gap:10px;align-items:baseline}
+.day span{font:500 .78rem 'Poppins',sans-serif;color:var(--mu)}
+.mlist{display:grid;gap:10px}
+.mc{background:var(--card);border:1px solid var(--ln);border-left:5px solid var(--ln);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;min-width:0}
+.mc[data-s=mine]{border-left-color:var(--o)}.mc[data-s=v2]{border-left-color:#8B5CF6}.mc[data-s=lead]{border-left-color:#15803D}.mc[data-s=cal]{border-left-color:#4285F4}
+.mc.past{opacity:.72}
+.mc.live{box-shadow:0 0 0 3px rgba(22,163,74,.35)}
+.mc .tm b{display:block;font:700 1rem 'Montserrat',sans-serif}
+.mc .tm span{font-size:.76rem;color:var(--mu)}
+.mc .bd{display:grid;gap:6px;min-width:0}
+.mc .nm{font-weight:600;overflow-wrap:anywhere}
+.mc .mt{font-size:.8rem;color:var(--mu);overflow-wrap:anywhere}
+.mc .ds{font-size:.78rem;color:var(--mu);white-space:pre-wrap;overflow-wrap:anywhere;max-height:3.6em;overflow:hidden}
+.sb{display:inline-block;padding:1px 8px;border-radius:99px;font:600 .7rem 'Poppins',sans-serif;color:#fff}
+.sb.mine{background:var(--o)}.sb.v2{background:#8B5CF6}.sb.lead{background:#15803D}.sb.cal{background:#4285F4}.sb.now{background:#16A34A}
+.ma{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.ma a,.ma button{height:34px;padding:0 12px;border-radius:9px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);font:600 .78rem 'Poppins',sans-serif;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+.ma a:hover,.ma button:hover{border-color:var(--o)}
+.ma .jn{background:#15803D;border-color:#15803D;color:#fff}
+.ma .wp{background:#25D366;border-color:#25D366;color:#fff}
+.ma .cx{color:#B91C1C}
+.nol{margin-top:26px}
+.nol .mc{grid-template-columns:minmax(0,1fr)}
+@media (max-width:520px){.mc{grid-template-columns:minmax(0,1fr);gap:6px}.mc .tm b{display:inline;margin-right:8px}}
+</style>
+</head>
+<body>
+<div id="login"><form id="lf">
+  <h1>Admin login</h1><p>Enter the password to continue.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">Log in</button>
+  <div id="err" role="alert"></div>
+</form></div>
+
+<div id="app">
+  <nav class="nav">
+    <span class="logo">Restro<b>Grow</b></span>
+    <a class="tab" href="index.html">Dashboard</a>
+    <a class="tab" href="leads.html">Leads</a>
+    <a class="tab" href="analyse.html">Analyse</a>
+    <a class="tab on" href="meetings.html">Meetings</a>
+    <a class="tab" href="pages.html">Pages</a>
+    <a class="tab" href="../text/">Notes</a>
+    <span class="sp"></span>
+    <button class="btn ghost" id="ref" type="button">Refresh</button>
+    <button class="btn ghost" id="out" type="button">Log out</button>
+  </nav>
+
+  <div class="top"><div><h1>Meetings</h1><div class="sub" id="cnt">Loading meetings...</div></div><div class="r"><button class="btn" id="nmb" type="button">+ New meeting</button></div></div>
+
+  <div class="gw" id="gw" hidden></div>
+
+  <form class="card nmf" id="nmf" hidden autocomplete="off">
+    <div class="card-h"><h2>New Google Meet</h2><div class="hint">Creates the event in Google Calendar with a Meet link. Pick a lead to save the link on that lead too.</div></div>
+    <div class="g">
+      <label class="w">Lead (optional)<input id="nl" list="nll" placeholder="Search a lead by name, restaurant or phone"><datalist id="nll"></datalist></label>
+      <label class="w">Title<input id="nt" required maxlength="200" placeholder="RestroGrow demo: Restaurant (Name)"></label>
+      <label>Date and time<input id="nd" type="datetime-local" required></label>
+      <label>Length<select id="nn"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 hour</option><option value="90">1.5 hours</option></select></label>
+      <label>Guest email (optional)<input id="ne" type="email" placeholder="Google emails them the invite"></label>
+      <label class="w">Notes (optional)<textarea id="nx" maxlength="2000" placeholder="What the meeting is about"></textarea></label>
+    </div>
+    <div class="row"><button class="btn" type="submit" id="ns">Create meeting</button><button class="btn ghost" type="button" id="nc">Close</button><span class="msg" id="nm"></span></div>
+    <div class="res" id="nr" hidden></div>
+  </form>
+
+  <div class="mbar"><div class="chips" id="mchips"></div><input id="mq" type="search" placeholder="Search name, phone, restaurant, title"></div>
+  <div id="mout"></div>
+</div>
+
+<script src="common.js?v=20261021b"></script>
+<script>
+(function(){
+  var $=RG.$,esc=RG.esc,M={events:[],v2:[],linked:[]},items=[],noTime=[],f="up",pick=null,autoTitle="";
+  var SRC={mine:"Created here",v2:"Booked by lead (form)",lead:"Lead",cal:"Google Calendar"};
+
+  function post(b){
+    b.password=RG.pw;
+    return fetch("../api/meetings.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Error");return j})});
+  }
+  function tm(d){return d.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"})}
+  function dayName(d){
+    var t=new Date();t.setHours(0,0,0,0);var x=new Date(d);x.setHours(0,0,0,0);var n=Math.round((x-t)/864e5);
+    var s=d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short",year:x.getFullYear()!==t.getFullYear()?"numeric":undefined});
+    return n===0?"Today · "+s:n===1?"Tomorrow · "+s:n===-1?"Yesterday · "+s:s;
+  }
+  function waLink(phone,name,when,link){
+    return "https://wa.me/91"+encodeURIComponent(phone)+"?text="+encodeURIComponent("Hi "+name+", your RestroGrow meeting is on "+when+". Join here: "+link);
+  }
+  function copy(t,btn){
+    var ok=function(){var o=btn.textContent;btn.textContent="Copied";setTimeout(function(){btn.textContent=o},1500)};
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,function(){prompt("Copy this link:",t)});else prompt("Copy this link:",t);
+  }
+
+  /* ---------- one list from Google Calendar, version 2 bookings and links saved on leads ---------- */
+  function build(){
+    var byLink={},usedV2={},usedLead={};
+    M.v2.forEach(function(v){if(v.link)byLink[v.link]={v2:v}});
+    M.linked.forEach(function(l){if(l.link)(byLink[l.link]=byLink[l.link]||{}).lead=l});
+    function mainLead(id){var l=RG.leads.filter(function(x){return x.id===id})[0];return l?{id:l.id,name:l.name,phone:l.phone,brand:l.brand,location:l.location}:null}
+    items=M.events.map(function(e){
+      var m=byLink[e.link]||{},lead=null,src=e.mine?"mine":"cal";
+      if(m.v2){usedV2[m.v2.id]=1;lead={name:m.v2.name,phone:m.v2.phone,brand:m.v2.brand,location:m.v2.location,href:"../version2/admin/leads.html?q="+encodeURIComponent(m.v2.phone)};if(!e.mine)src="v2"}
+      var ml=m.lead||(e.lead_id?mainLead(e.lead_id):null);
+      if(ml){usedLead[ml.id]=1;if(!lead)lead={name:ml.name,phone:ml.phone,brand:ml.brand,location:ml.location,href:"leads.html?q="+encodeURIComponent(ml.phone)};if(src==="cal")src="lead"}
+      var s=new Date(e.start),en=new Date(e.end);
+      if(e.all_day){s=new Date(e.start+"T00:00:00");en=new Date(e.end+"T00:00:00")}
+      return {id:e.id,title:e.title,s:s,e:en,all_day:e.all_day,link:e.link,url:e.url,desc:e.desc,guests:e.guests,mine:e.mine,src:src,lead:lead};
+    });
+    // Booked in the form but not found in the calendar (Google not connected, or outside the 30-day / 90-day window).
+    M.v2.forEach(function(v){
+      if(usedV2[v.id])return;var s=new Date(v.start);
+      items.push({title:"RestroGrow demo: "+v.brand+" ("+v.name+")",s:s,e:new Date(+s+30*6e4),link:v.link,src:"v2",guests:v.email?[v.email]:[],
+        lead:{name:v.name,phone:v.phone,brand:v.brand,location:v.location,href:"../version2/admin/leads.html?q="+encodeURIComponent(v.phone)}});
+    });
+    noTime=M.linked.filter(function(l){return !usedLead[l.id]});
+  }
+
+  function card(it){
+    var now=Date.now(),past=+it.e<now,live=!it.all_day&&+it.s<=now&&now<+it.e,L=it.lead;
+    var when=it.all_day?"All day":tm(it.s),mins=Math.round((it.e-it.s)/6e4);
+    var acts=[];
+    if(it.link&&!past)acts.push('<a class="jn" href="'+esc(it.link)+'" target="_blank" rel="noopener">Join</a>');
+    if(it.link)acts.push('<button type="button" data-cp="'+esc(it.link)+'">Copy link</button>');
+    if(it.link&&L&&L.phone&&!past)acts.push('<a class="wp" href="'+esc(waLink(L.phone,L.name,dayName(it.s).replace(/^(Today|Tomorrow) · /,"")+", "+tm(it.s),it.link))+'" target="_blank" rel="noopener">Send on WhatsApp</a>');
+    if(L&&L.phone)acts.push('<a href="tel:+91'+esc(L.phone)+'">Call</a>');
+    if(L&&L.href)acts.push('<a href="'+esc(L.href)+'">Open lead</a>');
+    if(it.url)acts.push('<a href="'+esc(it.url)+'" target="_blank" rel="noopener">Google Calendar</a>');
+    if(it.mine&&!past)acts.push('<button type="button" class="cx" data-cx="'+esc(it.id)+'">Cancel meeting</button>');
+    return '<article class="mc'+(past?" past":"")+(live?" live":"")+'" data-s="'+it.src+'">'
+      +'<div class="tm"><b>'+esc(when)+'</b><span>'+(it.all_day?"":mins+" min")+'</span></div>'
+      +'<div class="bd"><div class="nm">'+esc(it.title)+'</div>'
+      +'<div class="mt">'+(live?'<span class="sb now">Live now</span> ':"")+'<span class="sb '+it.src+'">'+SRC[it.src]+'</span>'
+      +(L?' · <b>'+esc(L.name)+'</b>'+(L.brand?' · '+esc(L.brand):"")+(L.phone?' · +91 '+esc(L.phone):"")+(L.location?' · '+esc(L.location):""):"")
+      +(it.guests&&it.guests.length?' · '+esc(it.guests.join(", ")):"")+'</div>'
+      +(it.link?'':'<div class="mt">No Meet link on this event</div>')
+      +(it.desc&&!L?'<div class="ds">'+esc(it.desc)+'</div>':"")
+      +'<div class="ma">'+acts.join("")+'</div></div></article>';
+  }
+
+  function hay(it){var L=it.lead||{};return (it.title+" "+(L.name||"")+" "+(L.phone||"")+" "+(L.brand||"")+" "+(L.location||"")+" "+(it.guests||[]).join(" ")).toLowerCase()}
+  function draw(){
+    var now=Date.now(),t0=new Date();t0.setHours(0,0,0,0);var t1=+t0+864e5;
+    var F={up:function(i){return +i.e>=now},today:function(i){return +i.s<t1&&+i.e>+t0},booked:function(i){return i.src==="v2"||!!i.lead},past:function(i){return +i.e<now},all:function(){return true}};
+    var names={up:"Upcoming",today:"Today",booked:"Booked with leads",past:"Past",all:"All"};
+    $("mchips").innerHTML=Object.keys(F).map(function(k){
+      return '<button type="button" class="chip'+(f===k?" on":"")+'" data-f="'+k+'">'+names[k]+'<b>'+items.filter(F[k]).length+'</b></button>'}).join("");
+    var q=$("mq").value.trim().toLowerCase();
+    var show=items.filter(F[f]).filter(function(i){return !q||hay(i).indexOf(q)>-1});
+    show.sort(function(a,b){return (f==="past"?-1:1)*(a.s-b.s)});
+    var html="",last="";
+    show.forEach(function(it){
+      var k=RG.dayKey(it.s);
+      if(k!==last){if(last)html+='</div>';var n=show.filter(function(x){return RG.dayKey(x.s)===k}).length;html+='<h3 class="day">'+esc(dayName(it.s))+'<span>'+n+' meeting'+(n>1?"s":"")+'</span></h3><div class="mlist">';last=k}
+      html+=card(it);
+    });
+    if(last)html+='</div>';
+    if(!show.length)html='<div class="empty card">'+(q?"No meetings match your search.":f==="up"?"No upcoming meetings. Use + New meeting to book one.":"No meetings here.")+'</div>';
+    var nt=noTime.filter(function(l){return !q||(l.name+" "+l.phone+" "+l.brand).toLowerCase().indexOf(q)>-1});
+    if(nt.length&&(f==="all"||f==="booked"||f==="up"))html+='<div class="nol"><h3 class="day">Meeting links on leads, no time saved<span>pasted in the lead panel</span></h3><div class="mlist">'
+      +nt.map(function(l){return '<article class="mc" data-s="lead"><div class="bd"><div class="nm">'+esc(l.name)+' · '+esc(l.brand)+'</div><div class="mt">+91 '+esc(l.phone)+' · link saved '+esc(RG.fmt(l.saved))+'</div>'
+        +'<div class="ma"><a class="jn" href="'+esc(l.link)+'" target="_blank" rel="noopener">Join</a><button type="button" data-cp="'+esc(l.link)+'">Copy link</button><a href="tel:+91'+esc(l.phone)+'">Call</a><a href="leads.html?q='+encodeURIComponent(l.phone)+'">Open lead</a></div></div></article>'}).join("")+'</div></div>';
+    $("mout").innerHTML=html;
+    var up=items.filter(F.up).length,td=items.filter(F.today).length;
+    $("cnt").textContent=up+" upcoming · "+td+" today · "+items.length+" in the last 30 days and next 90 days";
+  }
+  $("mchips").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;f=b.getAttribute("data-f");try{sessionStorage.setItem("rgMtF",f)}catch(x){}draw()});
+  try{f=sessionStorage.getItem("rgMtF")||"up"}catch(x){}
+  $("mq").addEventListener("input",draw);
+  document.addEventListener("click",function(e){
+    var c=e.target.closest("[data-cp]");if(c){copy(c.getAttribute("data-cp"),c);return}
+    var x=e.target.closest("[data-cx]");if(!x)return;
+    if(!confirm("Cancel this meeting? It is removed from Google Calendar and the guest gets a cancellation email."))return;
+    x.disabled=true;x.textContent="Cancelling...";
+    post({action:"cancel",id:x.getAttribute("data-cx")}).then(function(){return render()}).catch(function(er){x.disabled=false;x.textContent="Cancel meeting";alert(er.message)});
+  });
+
+  /* ---------- new meeting ---------- */
+  function leadLabel(l){return l.name+" · "+l.brand+" · "+l.phone}
+  function fillLeads(){
+    $("nll").innerHTML=RG.leads.filter(function(l){return !l.is_demo}).map(function(l){return '<option value="'+esc(leadLabel(l))+'">'}).join("");
+  }
+  function setLead(l){
+    pick=l||null;
+    if(!l)return;
+    var t="RestroGrow demo: "+l.brand+" ("+l.name+")";
+    if(!$("nt").value||$("nt").value===autoTitle){$("nt").value=t;autoTitle=t}
+    if(!$("ne").value&&l.email)$("ne").value=l.email;
+  }
+  $("nl").addEventListener("input",function(){
+    var v=this.value;setLead(RG.leads.filter(function(l){return leadLabel(l)===v})[0]);
+  });
+  function nextSlot(){
+    var d=new Date(Date.now()+60*6e4);d.setMinutes(d.getMinutes()<30?30:60,0,0);
+    var p=function(n){return ("0"+n).slice(-2)};
+    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes());
+  }
+  function openForm(){
+    $("nmf").hidden=false;$("nr").hidden=true;$("nm").textContent="";
+    if(!$("nd").value)$("nd").value=nextSlot();
+    $("nmf").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  $("nmb").addEventListener("click",function(){if($("nmf").hidden)openForm();else $("nmf").hidden=true});
+  $("nc").addEventListener("click",function(){$("nmf").hidden=true});
+  $("nmf").addEventListener("submit",function(e){
+    e.preventDefault();$("nm").textContent="";
+    var s=new Date($("nd").value);
+    if(isNaN(s)){$("nm").textContent="Pick a date and time.";return}
+    if($("nl").value.trim()&&!pick){$("nm").textContent="Pick the lead from the list, or clear the lead box.";return}
+    $("ns").disabled=true;$("ns").textContent="Creating...";
+    post({action:"create",title:$("nt").value.trim(),start:s.toISOString(),minutes:+$("nn").value,email:$("ne").value.trim(),notes:$("nx").value.trim(),lead_id:pick?pick.id:0})
+      .then(function(j){
+        var ev=j.event,when=dayName(new Date(ev.start)).replace(/^(Today|Tomorrow) · /,"")+", "+tm(new Date(ev.start));
+        $("nr").innerHTML='<div><b>Meeting booked</b> for '+esc(when)+(j.saved_on_lead?" · link saved on the lead":"")+(ev.guests.length?" · invite emailed to "+esc(ev.guests[0]):"")+'</div>'
+          +(ev.link?'<a class="lk" href="'+esc(ev.link)+'" target="_blank" rel="noopener">'+esc(ev.link)+'</a>':'<div>Google did not return a Meet link for this event.</div>')
+          +'<div class="ma">'+(ev.link?'<button type="button" data-cp="'+esc(ev.link)+'">Copy link</button>':"")
+          +(ev.link&&pick?'<a class="wp" href="'+esc(waLink(pick.phone,pick.name,when,ev.link))+'" target="_blank" rel="noopener">Send on WhatsApp</a>':"")
+          +(ev.url?'<a href="'+esc(ev.url)+'" target="_blank" rel="noopener">Google Calendar</a>':"")+'</div>';
+        $("nr").hidden=false;
+        $("nl").value=$("nt").value=$("ne").value=$("nx").value="";$("nd").value=nextSlot();pick=null;autoTitle="";
+        return render();
+      })
+      .catch(function(x){$("nm").textContent=x.message})
+      .then(function(){$("ns").disabled=false;$("ns").textContent="Create meeting"});
+  });
+
+  function render(){
+    fillLeads();
+    // meetings.html?lead=<id> (from the lead panel): form opens with that lead picked.
+    try{
+      var id=+new URLSearchParams(location.search).get("lead");
+      var l=id&&RG.leads.filter(function(x){return x.id===id})[0];
+      if(l){$("nl").value=leadLabel(l);setLead(l);openForm();history.replaceState(null,"",location.pathname)}
+    }catch(x){}
+    return post({action:"list"}).then(function(j){
+      M=j;
+      $("gw").hidden=j.google==="ok";
+      $("gw").textContent=j.google==="ok"?"":"Google Calendar is not connected, so only demos booked in the form and links saved on leads are shown, and new meetings cannot be created. "+j.google;
+      build();draw();
+    }).catch(function(x){$("cnt").textContent="Could not load meetings: "+x.message});
+  }
+  RG.start(render);
+})();
+</script>
+</body>
+</html>

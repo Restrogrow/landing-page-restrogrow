@@ -19,6 +19,7 @@ Repo: https://github.com/Restrogrow/landing-page-restrogrow (branch `main`, depl
 | `api/lead_update.php` | Admin: saves a lead's status and notes. |
 | `admin/index.html` | Admin **dashboard** (KPIs, charts). |
 | `admin/leads.html` | Admin **leads** page (cards, status chips, search, CSV, Call/WhatsApp buttons). |
+| `admin/meetings.html`, `api/meetings.php`, `api/google.php` | Admin **Meetings**: creates Google Calendar events with a Meet link (optionally for a lead; the link is then added to that lead's `lead_activity`), and lists every meeting: Google Calendar events (30 days back, 90 ahead), demos booked in the version 2 form (`v2_leads.slot_start`, read only) and meeting links saved on leads. Only meetings created there can be cancelled there. Needs `GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN`. |
 | `admin/admin.css`, `admin/common.js` | Shared admin styling, login and data loading. |
 | `legal.php`, `api/legal_lib.php`, `api/legal_defaults.php`, `api/pages_admin.php`, `admin/pages.html` | Legal pages (`/privacy-policy`, `/terms-and-services`, `/refund-policy`, rewritten to `legal.php` in `.htaccess`). Text is stored in the `pages` table and edited in Admin -> Pages; the defaults file is used until a page is saved or if the DB is down. |
 | `text/index.html`, `api/notes.php` | Shared notes board for agents (no password; keep the link private; never post secrets there). |

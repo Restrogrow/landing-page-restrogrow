@@ -96,7 +96,8 @@
     var m=RG.meetLink(l),wa="https://wa.me/91"+encodeURIComponent(l.phone)+"?text="+encodeURIComponent("Hi "+l.name+", here is the link for your RestroGrow meeting: "+m);
     return '<section class="lp-s"><h3>Meeting link</h3>'
       +(m?'<div class="lp-mt"><a class="btn" href="'+esc(m)+'" target="_blank" rel="noopener">Join meeting</a><a class="btn ghost" data-wa href="'+esc(wa)+'" target="_blank" rel="noopener">Send on WhatsApp</a></div><small class="lp-ml">'+esc(m)+'</small>':"")
-      +'<div class="lp-fr"><input type="url" id="lpMt" placeholder="Paste Google Meet / Zoom link" value="'+esc(m)+'" aria-label="Meeting link"><button type="button" class="btn" data-ms>'+(m?"Update":"Save")+'</button>'+(m?'<button type="button" class="btn ghost" data-mc>Remove</button>':"")+'</div></section>';
+      +'<div class="lp-fr"><input type="url" id="lpMt" placeholder="Paste Google Meet / Zoom link" value="'+esc(m)+'" aria-label="Meeting link"><button type="button" class="btn" data-ms>'+(m?"Update":"Save")+'</button>'+(m?'<button type="button" class="btn ghost" data-mc>Remove</button>':"")+'</div>'
+      +'<a class="lp-sch" href="meetings.html?lead='+encodeURIComponent(l.id)+'">Schedule a Google Meet with a date and time →</a></section>';
   }
   function draw(){
     var l=P.l,i=P.ids.indexOf(l.id),n=P.ids.length,fu=RG.followUp(l),t=$("lpNt"),keep=t?t.value:null,foc=t&&document.activeElement===t;
